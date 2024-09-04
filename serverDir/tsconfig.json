@@ -1,0 +1,17 @@
+{
+    "compilerOptions": { 
+        /* 这是一个对象，包含了TypeScript编译器在编译过程中使用的所有选项 */
+        "target": "es6", 
+        /* 这个选项指定了ECMAScript目标版本。）*/
+        "module": "commonjs", 
+        /* 这个选项指定了模块代码生成的类型。在这个例子中，它被设置为"commonjs"，这是Node.js使用的模块系统。这意味着TypeScript将使用CommonJS规范来生成模块代码，这允许你在Node.js环境中直接使用这些模块*/
+        "strict": true, 
+        /* 当设置为true时，TypeScript将启用所有严格类型检查选项。这包括严格的null检查、不允许隐式的any类型等，有助于捕获潜在的错误 */
+        "esModuleInterop": true, 
+        /* 这个选项允许在CommonJS和ES模块之间实现互操作性。它主要通过为所有导入创建命名空间对象来实现，这允许你以默认导入的方式导入CommonJS模块（即使它们没有默认导出）。 */
+        "skipLibCheck": true, 
+        /* 当设置为true时，TypeScript将跳过对声明文件（.d.ts文件）的类型检查。这通常用于加快编译速度，因为声明文件通常是由库作者提供的，并且不需要经常更改 */
+        "forceConsistentCasingInFileNames": true 
+        /* 这个选项要求文件引用中的大小写必须与文件系统中的大小写完全一致。这有助于避免在不同操作系统（如Windows和Linux）之间因大小写敏感性不同而导致的潜在问题 */
+    }
+}
