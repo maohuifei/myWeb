@@ -1,25 +1,18 @@
 import Koa from 'koa'
-import Router from 'koa-router'
 import koaBody from 'koa-body'
+import jsonError from 'koa-json-error'
+
+import userRouter from "./controllers/user"
 
 const app=new Koa()
-const router=new Router({
-    prefix:'/user'
-})
 
 app.use(koaBody({
     json: true,
-}))//这里有顺序要求，必须在前面
+}))
+app.use(jsonError())
 
-router.get('/',async(ctx)=>{
-    ctx.body="user home"
+app.use(userRouter.routes())
+
+app.listen(3000,()=>{
+    console.log("服务运行中……，本地预览：http://localhost:3000")
 })
-router.post('/add',async(ctx)=>{
-    const bdy=ctx.request.body
-    console.log(bdy)
-    ctx.body="user add"
-})
-
-app.use(router.routes())
-
-app.listen(3000)
