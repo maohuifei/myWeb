@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { User } from './src/entity/User';
+import { User } from './src/models/entity/User';
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -7,8 +7,8 @@ export const AppDataSource = new DataSource({
     port: 3306,
     username: 'root',
     password: '88888888',
-    database: 'huafeng',
-    entities: [User],
+    database: 'huafeng',//数据库名
+    entities: [User],//一个数组，用于指定 TypeORM 应该加载哪些实体类
     synchronize: true,
 });
 
