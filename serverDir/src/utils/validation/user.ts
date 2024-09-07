@@ -2,16 +2,26 @@ import Joi from 'joi'
 
 const addUserSchema = Joi.object({
     name: Joi.string().required(),
-    pass: Joi.string().required()
+    pass: Joi.string().required(),
+    category: Joi.string()
 });
 const updateUserSchema = Joi.object({
     id: Joi.number().integer().required(),
     name: Joi.string().required(),
-    pass: Joi.string().required()
+    pass: Joi.string().required(),
+    category: Joi.string()
 });
 
 const deleteUserSchema = Joi.object({
     id: Joi.number().integer().required()
+});
+
+const getUserSchema = Joi.object({
+    id: Joi.number().integer(),
+    name: Joi.string(),
+    category: Joi.string(),
+    page: Joi.number().integer(),
+    pageSize: Joi.number().integer(),
 });
 
 //校验行为
@@ -27,5 +37,6 @@ export {
     addUserSchema,
     updateUserSchema,
     deleteUserSchema,
+    getUserSchema,
     verifyAction
 }

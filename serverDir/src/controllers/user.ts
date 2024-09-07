@@ -1,6 +1,6 @@
 import { Context } from 'koa';//引入koa类型信息，不然ctx会报错
 
-import { addUserSchema, deleteUserSchema, updateUserSchema, verifyAction } from '../utils/validation/user'
+import { addUserSchema, deleteUserSchema, updateUserSchema, getUserSchema,verifyAction } from '../utils/validation/user'
 import  {UserDataService}  from '../models/user';
 
 const userDataService =new UserDataService()
@@ -59,8 +59,9 @@ const userPut = async (ctx: Context) => {
 }
 const userGet = async (ctx: Context) => {
     try {
+        const value = verifyAction(getUserSchema, ctx.query)
         ctx.status = 200
-        ctx.body = await userDataService.getUser()
+        ctx.body = await userDataService.getUser(value)
     } catch (error) {
         if (error instanceof Error) {
             ctx.status = 400;
