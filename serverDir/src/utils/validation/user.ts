@@ -20,8 +20,8 @@ const getUserSchema = Joi.object({
     id: Joi.number().integer(),
     name: Joi.string(),
     category: Joi.string(),
-    page: Joi.number().integer(),
-    pageSize: Joi.number().integer(),
+    page: Joi.number().integer().required(),
+    pageSize: Joi.number().integer().required(),
 });
 
 //校验行为

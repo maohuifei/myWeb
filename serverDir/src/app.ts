@@ -2,6 +2,7 @@ import Koa from 'koa';
 import koaBody from 'koa-body';
 import jsonError from 'koa-json-error';
 import userRouter from './routes/user';
+import ariticleRouter from './routes/article'
 import { AppDataSource } from '../data-source'; // 导入 DataSource 实例
 import cors from 'koa2-cors'
 
@@ -26,6 +27,7 @@ app.use(jsonError());
 AppDataSource.initialize()
     .then(() => {
         app.use(userRouter.routes());
+        app.use(ariticleRouter.routes());
         app.listen(3000, () => {
             console.log("服务运行----，本地预览：http://localhost:3000");
         });

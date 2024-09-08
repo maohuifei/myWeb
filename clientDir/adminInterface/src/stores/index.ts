@@ -22,9 +22,44 @@ export const myStore = defineStore('myStore', {
                 this.isLoading=true
                 this.error=null
                 const response=await axios.get(`${API_URL}/${url}`,{params})
-                return response.data
-                //this.responseData=response.data
                 this.isLoading=false
+                return response.data
+            } catch (error) {
+                this.error=error as Error
+                this.isLoading=false
+            }
+        },
+        async addDataToServer(url:string,body:any){
+            try {
+                this.isLoading=true
+                this.error=null
+                const response=await axios.post(`${API_URL}/${url}`,body)
+                this.isLoading=false
+                return response.data
+            } catch (error) {
+                this.error=error as Error
+                this.isLoading=false
+            }
+        },
+        async putDataToServer(url:string,body:any){
+            try {
+                this.isLoading=true
+                this.error=null
+                const response=await axios.put(`${API_URL}/${url}`,body)
+                this.isLoading=false
+                return response.data
+            } catch (error) {
+                this.error=error as Error
+                this.isLoading=false
+            }
+        },
+        async delDataToServer(url:string,value:any){
+            try {
+                this.isLoading=true
+                this.error=null
+                const response=await axios.delete(`${API_URL}/${url}/${value}`)
+                this.isLoading=false
+                return response.data
             } catch (error) {
                 this.error=error as Error
                 this.isLoading=false

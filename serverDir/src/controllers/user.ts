@@ -60,8 +60,13 @@ const userPut = async (ctx: Context) => {
 const userGet = async (ctx: Context) => {
     try {
         const value = verifyAction(getUserSchema, ctx.query)
+        const {userlist,totalCount}=await userDataService.getUser(value)
         ctx.status = 200
-        ctx.body = await userDataService.getUser(value)
+        ctx.body = {
+            data:userlist,
+            totalCount:totalCount,
+            message:"获取用户列表成功"
+        }
     } catch (error) {
         if (error instanceof Error) {
             ctx.status = 400;

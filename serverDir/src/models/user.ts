@@ -1,5 +1,5 @@
 import { AppDataSource } from '../../data-source'
-import { User } from '../models/entity/User'
+import { User } from './entity/userEntity'
 
 export class UserDataService{
     async addUser(value:any){
@@ -42,6 +42,6 @@ export class UserDataService{
   
     // 如果需要，还可以计算总记录数（用于分页控件等）  
         const totalCount = await userRepository.count();
-        return userlist
+        return {userlist,totalCount}
     }
 }
