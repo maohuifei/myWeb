@@ -1,0 +1,35 @@
+@import './base.css';
+
+:root {  
+  --systemTextColor: #4f452c;  
+  --titleTextColor: #795326;  
+  --elementColor: #a0997c;
+}
+
+#app {
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: var(--systemTextColor);
+  transition: 0.4s;
+  padding: 3px;
+  font-weight: bolder;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: var(--elementColor);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    background-image: url(../../public/bac.jpg);
+    background-position: center; /* 背景图片居中 */  
+  background-repeat: no-repeat; /* 不重复 */  
+  background-size: cover; /* 覆盖整个元素 */  
+  }
+}

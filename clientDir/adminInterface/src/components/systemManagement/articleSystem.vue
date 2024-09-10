@@ -20,7 +20,7 @@
     </div>
     <el-dialog v-model="newcategorywin" title="添加类别">
         <div>
-            <el-input v-model="newcategoryname" placeholder="请输入类别名称" />
+            <!-- <el-input v-model="newcategoryname" placeholder="请输入类别名称" /> -->
             <el-input v-model="newremark" placeholder="请输入描述" />
         </div>
         <template #footer>

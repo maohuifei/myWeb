@@ -21,6 +21,12 @@
                     <span>系统管理</span>
                 </template>
                 <el-menu-item-group>
+                    <el-menu-item index="1-3" @click="toFieldSystemFun">
+                        <el-icon><Finished /></el-icon>
+                        <span>字段配置</span>
+                    </el-menu-item>
+                </el-menu-item-group>
+                <!-- <el-menu-item-group>
                     <el-menu-item index="1-1" @click="toArticeSystemFun">
                         <el-icon><Reading /></el-icon>
                         <span>文章配置</span>
@@ -37,7 +43,7 @@
                         <el-icon><Postcard /></el-icon>
                         <span>网站配置</span>
                     </el-menu-item>
-                </el-menu-item-group>
+                </el-menu-item-group> -->
             </el-sub-menu>
         </el-menu>
     </div>
@@ -47,33 +53,37 @@
 import { myStore } from '@/stores';
 export default {
     setup() {
-        const storeObj = myStore()
+        const store = myStore()
 
         function toHomeFun() {//跳转home
-            storeObj.updataMainStateFun(1)
+            store.updataMainStateFun(1)
         }
         function toArticeFun() {//跳转文章
-            storeObj.updataMainStateFun(2)
+            store.updataMainStateFun(2)
         }
         function toUserFun() {//跳转用户
-            storeObj.updataMainStateFun(3)
+            store.updataMainStateFun(3)
         }
-        function toArticeSystemFun() {//跳转文章配置
-            storeObj.updataMainStateFun(41)
-        }
-        function toWebSystemFun() {//跳转网站配置
-            storeObj.updataMainStateFun(42)
-        }
-        function toUserSystemFun() {//跳转用户配置
-            storeObj.updataMainStateFun(43)
+        // function toArticeSystemFun() {//跳转文章配置
+        //     store.updataMainStateFun(41)
+        // }
+        // function toWebSystemFun() {//跳转网站配置
+        //     store.updataMainStateFun(42)
+        // }
+        // function toUserSystemFun() {//跳转用户配置
+        //     store.updataMainStateFun(43)
+        // }
+        const toFieldSystemFun=()=>{
+            store.updataMainStateFun(44)
         }
         return {
             toHomeFun,
             toArticeFun,
             toUserFun,
-            toArticeSystemFun,
-            toWebSystemFun,
-            toUserSystemFun
+            // toArticeSystemFun,
+            // toWebSystemFun,
+            // toUserSystemFun,
+            toFieldSystemFun
         }
     }
 

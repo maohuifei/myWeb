@@ -6,17 +6,23 @@ export class Article {
     id!: number;//使用非空断言操作符!告诉 TypeScript id 一定会被赋值
 
     @Column()
-    title!: string;
+    title!: string;//标题
 
     @Column('text')//支持长文本
-    content!: string;
+    content!: string;//内容
 
     @Column()
-    category!: string;
+    category!: string;//类别
 
-    // @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    // creationTime!: Date;  
-  
-    // @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
-    // modificationTime!: Date;  
+    @Column()
+    recommend!: boolean;//是否推荐
+
+    @Column()
+    state!: boolean;//状态：上架or下架
+    
+    @CreateDateColumn()
+    created_at!: Date; // 自动填充记录创建时间
+
+    @UpdateDateColumn()
+    updated_at!: Date; // 自动填充记录更新时间
 }

@@ -46,10 +46,6 @@ export class ArticleDataService{
         const articleRepository = AppDataSource.getRepository(Article)
         const waitGetArticleContent = await articleRepository.findOneBy({ id: value.id })
         if (waitGetArticleContent) {
-            waitGetArticleContent.title = value.name
-            waitGetArticleContent.content = value.pass
-            waitGetArticleContent.category = value.category
-            await articleRepository.save(waitGetArticleContent)
             return waitGetArticleContent
         }else{
             throw new Error('文章未找到');

@@ -19,7 +19,9 @@
         <div>
             <el-input v-model="userinfo.name" placeholder="请输入用户名" />
             <el-input v-model="userinfo.pass" placeholder="请输入密码" />
-            <el-input v-model="userinfo.category" placeholder="请输入用户类别" />
+            <el-select v-model="userinfo.category" placeholder="请选择用户类别" size="large" @change="selectGroupKeyFun">
+                <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
+            </el-select>
         </div>
         <template #footer>
             <span class="dialog-footer">
@@ -31,7 +33,6 @@
 </template>
 
 <script lang="ts">
-import { Edit, Delete } from '@element-plus/icons-vue';
 import { ref, onMounted } from 'vue';
 import { myStore } from '@/stores'
 import { ElMessage } from 'element-plus'
@@ -39,6 +40,11 @@ import { ElMessage } from 'element-plus'
 
 export default {
     setup() {
+        //页面挂载执行
+        onMounted(async () => {
+            getUser()
+        })
+        const options=ref()
         const stores = myStore()//商店实例化
         const newuseerwin = ref(false);//弹窗开关状态
         const newUserTitle = ref("")//弹窗标题
@@ -63,7 +69,8 @@ export default {
             }
         }
         //根据点击哪个按钮，判断弹出框标题
-        const userUperation = (value?) => {
+        const userUperation = (value?: any) => {
+            getConfigurationList()
             if (!value) {
                 newuseerwin.value = true,
                     newUserTitle.value = '新增用户',
@@ -80,10 +87,9 @@ export default {
                 userinfo.value = value
             }
         }
-        const delUser = async (value) => {
-            const result = await stores.delDataToServer('user/delete', value.id)
+        const delUser = async (value: any) => {
             try {
-                // const result=await stores.delDataToServer('user/del',value.id)
+                await stores.delDataToServer('user/delete', value.id)
                 newuseerwin.value = false
                 ElMessage({
                     message: '删除用户成功',
@@ -97,7 +103,7 @@ export default {
         //修改用户请求
         const putUser = async () => {
             try {
-                const result = await stores.putDataToServer('user/put', userinfo.value)
+                await stores.putDataToServer('user/put', userinfo.value)
                 newuseerwin.value = false
                 ElMessage({
                     message: '修改用户成功',
@@ -117,7 +123,7 @@ export default {
                     pass: userinfo.value.pass,
                     category: userinfo.value.category,
                 }
-                const result = await stores.addDataToServer('user/add', dataToSend)
+                await stores.addDataToServer('user/add', dataToSend)
                 newuseerwin.value = false
                 ElMessage({
                     message: '添加用户成功',
@@ -136,19 +142,21 @@ export default {
             totalCount.value = getData.totalCount
             console.log(getData)
         }
-        //页面挂载执行
-        onMounted(async () => {
-            getUser()
-        })
+
         //分页按钮的触发事件
         const handleCurrentChange = async (value: number) => {
             parameter.value.page = value
             getUser()
         };
-
-        const username = ref('');
-        const category = ref('');
+        const getConfigurationList = async () => {
+            const response = await stores.getDataToServer('configuration/list', {type:"user_category"})
+            options.value=response.data
+        }
+        const selectGroupKeyFun=(value:any)=>{
+            userinfo.value.category=value
+        }
         return {
+            options,
             newUserTitle,
             userUperation,
             newuseerwin,
@@ -161,7 +169,9 @@ export default {
             addUser,
             putUser,
             delUser,
-            yesBtn
+            yesBtn,
+            getConfigurationList,
+            selectGroupKeyFun,
         }
     }
 }

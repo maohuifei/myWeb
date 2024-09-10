@@ -31,9 +31,7 @@ export class UserDataService{
     }
     async getUser(value:any){
         const userRepository = AppDataSource.getRepository(User)
-        // const userlist = await userRepository.find();
         const { page, pageSize } = value;  
-        console.log(value)
         const skip = (page - 1) * pageSize;  
         const userlist = await userRepository.createQueryBuilder('user')  
       .skip(skip) // 跳过指定数量的记录  
