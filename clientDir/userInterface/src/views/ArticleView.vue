@@ -3,11 +3,12 @@
         <el-card class="card_class" v-for="(article, index) in articleList" shadow="hover" key="index">
             <h2>{{ article.title }}</h2>
             <span>更新时间：{{ article.updated_at }}</span>
-            <span class="content_box">{{ article.content }}</span>
+            <p class="abstract_box">{{ article.abstract||"此处为摘要" }}</p>
+            <el-button class="all_btn" color="#a0997c" :bg="false" style="color: white;">阅读</el-button>
         </el-card>
     </div>
     <div class="page_box">
-        <el-pagination background layout="prev, pager, next" :total="totalCount" />
+        <el-pagination :background="true" layout="prev, pager, next" :total="totalCount" @current-change="handleCurrentChange" :default-page-size="20"/>
     </div>
 </template>
 
@@ -24,12 +25,16 @@ export default {
         const utils = new Utils()
         const pageQuery = ref({
             page: 1,
-            pageSize: 10
+            pageSize: 20
         })
         const totalCount = ref()
         onMounted(async () => {
             getArticleList()
         })
+        const handleCurrentChange=(value:number)=>{
+            pageQuery.value.page=value
+            getArticleList()
+        }
         const getArticleList = async () => {
             try {
                 const returned = await stores.getDataToServer('article/list', pageQuery.value)
@@ -53,6 +58,7 @@ export default {
             }
         }
         return {
+            handleCurrentChange,
             getArticleList,
             articleList,
             totalCount,
@@ -62,22 +68,25 @@ export default {
 </script>
 
 <style scoped>
-.content_box{
-    display: -webkit-box;    
--webkit-box-orient: vertical;    
--webkit-line-clamp: 8;  
+.all_btn{
+    color: var(--elementColor);
+    background-color: none;
+}
+.abstract_box {
+    height: 160px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 8;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 .page_box {
     display: flex;
     justify-content: center;
 }
 
-.article_box {
-    display: flex;
-    flex-wrap: wrap;
-}
+
 
 .card_class {
     width: 243px;
@@ -85,5 +94,14 @@ export default {
     margin: 10px;
     background: transparent;
     border-color: var(--elementColor);
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+.article_box {
+    display: flex;
+    flex-wrap: wrap;
+    color: var(--textColor);
 }
 </style>

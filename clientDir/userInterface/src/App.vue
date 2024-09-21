@@ -55,5 +55,6 @@ import { RouterLink, RouterView } from 'vue-router'
   align-items: center;
   padding-top: 15px;
   margin: 0 auto;
+  color: var(--textColor);
 }
 </style>

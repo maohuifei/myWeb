@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column ,CreateDateColumn,UpdateDateColumn} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Article {
@@ -8,18 +8,21 @@ export class Article {
     @Column()
     title!: string;//标题
 
+    // @Column()
+    // abstract!: string;//摘要
+
     @Column('text')//支持长文本
     content!: string;//内容
 
     @Column()
     category!: string;//类别
 
-    @Column()
-    recommend!: boolean;//是否推荐
+    // @Column()
+    // recommend!: boolean;//是否推荐
 
-    @Column()
-    state!: boolean;//状态：上架or下架
-    
+    // @Column()
+    // state!: boolean;//状态：上架or下架
+
     @CreateDateColumn()
     created_at!: Date; // 自动填充记录创建时间
 

@@ -1,5 +1,5 @@
 <template>
-    <el-input v-model="articleInfo.title" />
+    <el-input v-model="articleInfo.title"  placeholder="请输入标题"/>
     <!-- <el-input v-model="articleInfo.category" /> -->
     <el-select v-model="articleInfo.category" placeholder="请选择文章类别" size="large" @change="selectGroupKeyFun">
         <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
@@ -26,7 +26,7 @@ export default {
     setup() {
         const store = myStore()
         const articleInfo = ref({
-            title: "请输入标题",
+            title: "",
             category: "",
             content: ""
         })
