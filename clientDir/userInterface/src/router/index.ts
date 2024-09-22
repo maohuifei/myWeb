@@ -4,6 +4,8 @@ import { createRouter, createWebHistory } from 'vue-router'
  import AboutView from '@/views/AboutView.vue'
  import ArticleView from '@/views/ArticleView.vue'
 
+ import ArticleParticulars from '@/components/ArticleParticulars.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -18,6 +20,11 @@ const router = createRouter({
       component: ArticleView
     },
     {
+      path:'/articleParticulars',
+      name:"文章详情",
+      component:ArticleParticulars
+    },
+    {
       path: '/about',
       name: '关于',
       component: AboutView
@@ -27,14 +34,6 @@ const router = createRouter({
       name: '隐私政策',
       component: PrivacyView
     },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue')
-    // }
   ]
 })
 

@@ -21,7 +21,6 @@ import { RouterLink, RouterView } from 'vue-router'
   <div class="foot_box">
     <p>© 2024 画风huafeng 版权所有</p>
     <p>备案号：京ICP备XXXXXXXX号-X </p>
-    <p>邮箱：info@xyzcompany.com  </p>
   </div>
 </template>
 

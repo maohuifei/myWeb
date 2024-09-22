@@ -4,7 +4,7 @@
             <h2>{{ article.title }}</h2>
             <span>更新时间：{{ article.updated_at }}</span>
             <p class="abstract_box">{{ article.abstract||"此处为摘要" }}</p>
-            <el-button class="all_btn" color="#a0997c" :bg="false" style="color: white;">阅读</el-button>
+            <el-button class="all_btn" color="#a0997c" :bg="false" style="color: white;" @click="ToParticulars(article.id)">阅读</el-button>
         </el-card>
     </div>
     <div class="page_box">
@@ -17,6 +17,7 @@ import { ref, onMounted } from 'vue';
 import { myStore } from '@/stores/counter';
 import { ElMessage } from 'element-plus';
 import { Utils } from '@/utils';
+import { useRouter } from 'vue-router';
 
 export default {
     setup() {
@@ -57,7 +58,15 @@ export default {
                 ElMessage.error('获取列表失败')
             }
         }
+        const router=useRouter()
+        const ToParticulars=(articleId:number)=>{
+            router.push({
+                path:'/articleParticulars',
+                query:{articleId}
+            })
+        }
         return {
+            ToParticulars,
             handleCurrentChange,
             getArticleList,
             articleList,
