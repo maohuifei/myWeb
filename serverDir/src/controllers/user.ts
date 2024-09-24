@@ -1,9 +1,11 @@
 import { Context } from 'koa';//引入koa类型信息，不然ctx会报错
 
-import { addUserSchema, deleteUserSchema, updateUserSchema, getUserSchema,verifyAction } from '../utils/validation/user'
-import  {UserDataService}  from '../models/user';
+import { addUserSchema, deleteUserSchema, updateUserSchema, getUserSchema, verifyAction,registerSchema,loginSchema } from '../utils/validation/user'
+import { UserDataService } from '../models/user';
 
-const userDataService =new UserDataService()
+import { signToken } from '../utils/jwt';
+
+const userDataService = new UserDataService()
 const userAdd = async (ctx: Context) => {
     try {
         //校验参数
@@ -60,12 +62,12 @@ const userPut = async (ctx: Context) => {
 const userGet = async (ctx: Context) => {
     try {
         const value = verifyAction(getUserSchema, ctx.query)
-        const {userlist,totalCount}=await userDataService.getUser(value)
+        const { userlist, totalCount } = await userDataService.getUser(value)
         ctx.status = 200
         ctx.body = {
-            data:userlist,
-            totalCount:totalCount,
-            message:"获取用户列表成功"
+            data: userlist,
+            totalCount: totalCount,
+            message: "获取用户列表成功"
         }
     } catch (error) {
         if (error instanceof Error) {
@@ -78,10 +80,65 @@ const userGet = async (ctx: Context) => {
     }
 
 }
+//登录
+const loginPot = async (ctx:Context) => {
+    try {
+        const value = verifyAction(loginSchema, ctx.request.body)
+        const data=await userDataService.potLogin(value)
+        const token = signToken(data.id,data.username,data.password)
+        ctx.status = 200
+        ctx.body = {
+            message: "登录成功",
+            token:token
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            ctx.status = 400;
+            ctx.body = `Error错误：${error}`
+        } else {
+            ctx.status = 400;
+            ctx.body = `其他错误：${error}`
+        }
+    }
+    
+}
+//注册
+// const registerPot = async (ctx:Context) => {
+//     try {
+        
+//     } catch (error) {
+//         if (error instanceof Error) {
+//             ctx.status = 400;
+//             ctx.body = `Error错误：${error}`
+//         } else {
+//             ctx.status = 400;
+//             ctx.body = `其他错误：${error}`
+//         }
+//     }
+    
+// }
+// //更新token
+// const updataTokenPot = async (ctx:Context) => {
+//     try {
+        
+//     } catch (error) {
+//         if (error instanceof Error) {
+//             ctx.status = 400;
+//             ctx.body = `Error错误：${error}`
+//         } else {
+//             ctx.status = 400;
+//             ctx.body = `其他错误：${error}`
+//         }
+//     }
+    
+// }
 
 export {
     userAdd,
     userDel,
     userPut,
-    userGet
+    userGet,
+    loginPot,
+    // registerPot,
+    // updataTokenPot,
 }

@@ -3,7 +3,7 @@
         <!-- <h1 class="title_class">用户管理</h1> -->
         <el-button type="success" @click="userUperation()">新增用户</el-button>
         <el-table :data="userList" height="530" :style="{ width: '100%' }">
-            <el-table-column prop="name" label="用户名" />
+            <el-table-column prop="username" label="用户名" />
             <el-table-column prop="category" label="类别" />
             <el-table-column label="操作">
                 <template #default="scope">
@@ -17,10 +17,10 @@
     </div>
     <el-dialog v-model="newuseerwin" :title="newUserTitle">
         <div>
-            <el-input v-model="userinfo.name" placeholder="请输入用户名" />
-            <el-input v-model="userinfo.pass" placeholder="请输入密码" />
+            <el-input v-model="userinfo.username" placeholder="请输入用户名" />
+            <el-input v-model="userinfo.password" placeholder="请输入密码" />
             <el-select v-model="userinfo.category" placeholder="请选择用户类别" size="large" @change="selectGroupKeyFun">
-                <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
+                <el-option v-for="item in options" :key="item.id" :label="item.username" :value="item.username" />
             </el-select>
         </div>
         <template #footer>
@@ -56,8 +56,8 @@ export default {
         })
         const userinfo = ref({//用户信息
             id: 0,
-            name: "",
-            pass: "",
+            username: "",
+            password: "",
             category: ""
         })
         //弹出框-确认按钮事件
@@ -76,8 +76,8 @@ export default {
                     newUserTitle.value = '新增用户',
                     userinfo.value = {//用户信息
                         id: 0,
-                        name: "",
-                        pass: "",
+                        username: "",
+                        password: "",
                         category: ""
                     }
             } else {
@@ -119,11 +119,11 @@ export default {
             //清除表单缓存
             try {
                 const dataToSend = {
-                    name: userinfo.value.name,
-                    pass: userinfo.value.pass,
+                    username: userinfo.value.username,
+                    password: userinfo.value.password,
                     category: userinfo.value.category,
                 }
-                await stores.addDataToServer('user/add', dataToSend)
+                await stores.postDataToServer('user/add', dataToSend)
                 newuseerwin.value = false
                 ElMessage({
                     message: '添加用户成功',

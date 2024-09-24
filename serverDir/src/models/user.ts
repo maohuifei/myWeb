@@ -21,8 +21,8 @@ export class UserDataService{
         const userRepository = AppDataSource.getRepository(User)
         const waitPutUser = await userRepository.findOneBy({ id: value.id })
         if (waitPutUser) {
-            waitPutUser.name = value.name
-            waitPutUser.pass = value.pass
+            waitPutUser.username = value.username
+            waitPutUser.password = value.password
             waitPutUser.category = value.category
             await userRepository.save(waitPutUser)
         }else{
@@ -42,4 +42,18 @@ export class UserDataService{
         const totalCount = await userRepository.count();
         return {userlist,totalCount}
     }
+    async potLogin(value:any){
+        const userRepository = AppDataSource.getRepository(User)
+        const waitPutUser = await userRepository.findOneBy({ username: value.username })
+        if (waitPutUser) {
+            if(waitPutUser.password==value.password){
+                return waitPutUser
+            }else{
+                throw new Error('密码错误');
+            }
+        }else{
+            throw new Error('用户未找到');
+        }
+    }
+
 }

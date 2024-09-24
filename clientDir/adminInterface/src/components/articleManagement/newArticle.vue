@@ -101,7 +101,7 @@ export default {
                 delete parameter.created_at;
                 delete parameter.updated_at;
                 try {
-                    await store.addDataToServer('article/add', parameter)
+                    await store.postDataToServer('article/add', parameter)
                     setTimeout(() => {
                         store.updataMainStateFun(2)
                     }, 1000)

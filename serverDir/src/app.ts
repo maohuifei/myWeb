@@ -6,8 +6,13 @@ import ariticleRouter from './routes/article'
 import systemRouter from './routes/system'
 import { AppDataSource } from '../data-source'; // 导入 DataSource 实例
 import cors from 'koa2-cors'
+import { authenticate } from './utils/tokenAuth';
 
 const app = new Koa();
+
+app.use(async (ctx, next) => {  
+      await authenticate(ctx, next);
+  }); 
 
 app.use(koaBody({
     json: true,
@@ -16,6 +21,7 @@ app.use(cors({
     origin: function (ctx) {  
       // 动态设置允许跨域的域名，这里以允许所有域名为例  
       return '*';
+    // return 'http://localhost:5174','http://localhost:5173';
     },  
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'], // 允许的HTTP方法  
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'], // 需要暴露给客户端的头部  
@@ -23,6 +29,7 @@ app.use(cors({
     maxAge: 5, // 预检请求的缓存时间（秒）  
     credentials: true, // 是否允许发送Cookie  
   }));  
+
 app.use(jsonError());
 // 初始化 DataSource
 AppDataSource.initialize()

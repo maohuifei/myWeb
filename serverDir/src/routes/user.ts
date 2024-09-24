@@ -1,6 +1,6 @@
 import Router from 'koa-router'
 
-import { userAdd,userDel,userPut,userGet } from '../controllers/user';
+import { userAdd,userDel,userPut,userGet,loginPot} from '../controllers/user';
 
 const router = new Router({
     prefix: '/user'
@@ -23,5 +23,20 @@ router.put('/put', async (ctx) => {
 router.get('/list', async (ctx) => {
     await userGet(ctx)
 })
+
+//登录
+router.post('/login', async (ctx) => {
+    await loginPot(ctx)
+})
+
+// //注册
+// router.post('/register', async (ctx) => {
+//     await registerPot(ctx)
+// })
+
+// //更新token
+// router.post('/updataToken', async (ctx) => {
+//     await updataTokenPot(ctx)
+// })
 
 export default router

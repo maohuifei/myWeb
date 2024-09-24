@@ -79,7 +79,7 @@ export default {
         })
         const addFun = async () => {
             try {
-                await stores.addDataToServer('configuration/add', addSystemData.value)
+                await stores.postDataToServer('configuration/add', addSystemData.value)
                 ElMessage({
                     message: '添加成功',
                     type: 'success',

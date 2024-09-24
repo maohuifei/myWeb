@@ -1,14 +1,14 @@
 import Joi from 'joi'
 
 const addUserSchema = Joi.object({
-    name: Joi.string().required(),
-    pass: Joi.string().required(),
+    username: Joi.string().required(),
+    password: Joi.string().required(),
     category: Joi.string()
 });
 const updateUserSchema = Joi.object({
     id: Joi.number().integer().required(),
-    name: Joi.string().required(),
-    pass: Joi.string().required(),
+    username: Joi.string().required(),
+    password: Joi.string().required(),
     category: Joi.string()
 });
 
@@ -18,10 +18,20 @@ const deleteUserSchema = Joi.object({
 
 const getUserSchema = Joi.object({
     id: Joi.number().integer(),
-    name: Joi.string(),
+    username: Joi.string(),
     category: Joi.string(),
     page: Joi.number().integer().required(),
     pageSize: Joi.number().integer().required(),
+});
+
+const loginSchema = Joi.object({
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+});
+
+const registerSchema = Joi.object({
+    username: Joi.string().required(),
+    password: Joi.string().required(),
 });
 
 //校验行为
@@ -38,5 +48,7 @@ export {
     updateUserSchema,
     deleteUserSchema,
     getUserSchema,
-    verifyAction
+    verifyAction,
+    loginSchema,
+    registerSchema,
 }
