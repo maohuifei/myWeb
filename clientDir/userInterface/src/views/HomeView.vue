@@ -31,7 +31,7 @@ export default {
         const pageQuery = ref({
             page: 1,
             pageSize: 10,
-            // recommend:true
+            recommend:true
         })
         const articleList = ref()
         onMounted(async () => {

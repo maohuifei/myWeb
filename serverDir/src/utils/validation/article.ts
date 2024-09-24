@@ -2,14 +2,20 @@ import Joi from 'joi'
 
 const addArticleSchema = Joi.object({
     title: Joi.string().required(),
-    content: Joi.string().required(),
+    content: Joi.string(),
     category: Joi.string().required(),
+    abstract: Joi.string(),
+    recommend: Joi.boolean(),
+    state:Joi.boolean(),
 });
 const putArticleSchema = Joi.object({
     id: Joi.number().integer().required(),
     title: Joi.string(),
     content: Joi.string(),
     category: Joi.string(),
+    abstract: Joi.string(),
+    recommend: Joi.boolean(),
+    state:Joi.boolean(),
 });
 
 const delArticleSchema = Joi.object({
@@ -20,6 +26,8 @@ const getArticleSchema = Joi.object({
     id: Joi.number().integer(),
     title: Joi.string(),
     category: Joi.string(),
+    recommend: Joi.boolean(),
+    state:Joi.boolean(),
     page: Joi.number().integer().required(),
     pageSize: Joi.number().integer().required(),
 });

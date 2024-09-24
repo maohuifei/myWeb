@@ -8,20 +8,20 @@ export class Article {
     @Column()
     title!: string;//标题
 
-    // @Column()
-    // abstract!: string;//摘要
+    @Column()
+    abstract: string="暂无摘要";//摘要
 
     @Column('text')//支持长文本
-    content!: string;//内容
+    content: string="";//内容
 
     @Column()
     category!: string;//类别
 
-    // @Column()
-    // recommend!: boolean;//是否推荐
+    @Column()
+    recommend: boolean=false;//是否推荐
 
-    // @Column()
-    // state!: boolean;//状态：上架or下架
+    @Column()
+    state: boolean=true;//状态：上架or下架
 
     @CreateDateColumn()
     created_at!: Date; // 自动填充记录创建时间

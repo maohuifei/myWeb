@@ -26,7 +26,8 @@ export default {
         const utils = new Utils()
         const pageQuery = ref({
             page: 1,
-            pageSize: 20
+            pageSize: 20,
+            state:true,
         })
         const totalCount = ref()
         onMounted(async () => {
