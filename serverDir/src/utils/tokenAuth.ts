@@ -17,18 +17,18 @@ export async function authenticate(ctx: any, next: any) {
 
     const authorization = ctx.headers.authorization;  
     if (!authorization) {  
-        ctx.throw(401, '未携带token');  
+        ctx.throw(405, '未携带token');  
     }  
 
     const parts = authorization.split(' ');  
     if (parts.length !== 2 || parts[0] !== 'Bearer') {  
-        ctx.throw(401, '无效的token格式');  
+        ctx.throw(405, '无效的token格式');  
     }  
 
     const token = parts[1];  
     const decoded = verifyToken(token);  
     if (!decoded) {  
-        ctx.throw(401, 'token验证错误');  
+        ctx.throw(405, 'token验证错误');  
     }  
 
     ctx.state.userId = decoded.user_id; // 注意这里使用 decoded.user_id 而不是 decoded.id  

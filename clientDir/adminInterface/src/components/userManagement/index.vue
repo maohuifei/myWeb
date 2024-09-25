@@ -138,6 +138,7 @@ export default {
         //获取用户列表请求
         const getUser = async () => {
             // const getData = await stores.getDataToServer('user/list', parameter.value)
+            // console.log(localStorage.getItem('auth_token'));
             const getData=await http.get('user/list', {
                 params:parameter.value
             })

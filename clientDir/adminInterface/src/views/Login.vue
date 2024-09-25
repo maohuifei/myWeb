@@ -32,12 +32,13 @@ export default {
         const loginFun = async () => {
             try {
                 const data = await stores.postDataToServer('user/login', form)
-                console.log(data);
-                stores.token=data.token
+                // console.log(data);
+                localStorage.setItem('auth_token', data.token);
                 ElMessage({
                     message: '登录成功',
                     type: 'success',
                 })
+                
                 setTimeout(() => {
                     router.push('./home')
                 }, 1000);

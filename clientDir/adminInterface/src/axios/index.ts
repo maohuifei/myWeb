@@ -9,7 +9,7 @@ const service = axios.create({
 service.interceptors.request.use(  
   (config) => {  
     // 判断是否存在token，如果存在的话，则每个http header都加上token  
-    const token = localStorage.getItem('token'); // 假设token存储在localStorage中  
+    const token = localStorage.getItem('auth_token'); // 假设token存储在localStorage中  
     if (token) {  
       config.headers['Authorization'] = `Bearer ${token}`;  
     }  
