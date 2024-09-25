@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   routes: [
     {
-      path:'/',//设置初始界面为login
+      path:'/',//设置初始界面
       redirect:'/home'
     },
     {

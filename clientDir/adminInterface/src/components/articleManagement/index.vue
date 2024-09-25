@@ -25,6 +25,7 @@
 import { ref, onMounted } from 'vue';
 import { myStore } from '@/stores';
 import { ElMessage } from 'element-plus'
+import http from '@/axios'
 
 export default {
     setup() {
@@ -49,12 +50,14 @@ export default {
         })
         const totalCount = ref(0)//数据总条数
         const getActive = async () => {
-            const getData = await store.getDataToServer('article/list', parameter.value)
-            tableData.value = getData.data
-            totalCount.value = getData.totalCount
+            const getData = await http.get('article/list', {
+                params:parameter.value
+            })
+            tableData.value = getData.data.data
+            totalCount.value = getData.data.totalCount
         }
         const deleBtn = async (value:any) => {
-            await store.delDataToServer('article/delete', value.id)
+            await http.delete(`article/delete/${value.id}`)
             try {
                 ElMessage({
                     message: '删除文章成功',
@@ -69,13 +72,13 @@ export default {
             parameter.value.page = value
             getActive()
         };
-        const stateBtn= async(value)=>{
+        const stateBtn= async(value:any)=>{
             try {
                     const parameter={
                         id:value.id,
                         state:!value.state
                     }
-                    await store.putDataToServer('article/put', parameter)
+                    await http.put('article/put', parameter)
                     ElMessage({
                         message: '修改成功',
                         type: 'success',
@@ -87,13 +90,13 @@ export default {
                     ElMessage.error('修改失败')
                 }
         }
-        const recommendBtn=async(value)=>{
+        const recommendBtn=async(value: { id: any; recommend: any; })=>{
             try {
                     const parameter={
                         id:value.id,
                         recommend:!value.recommend
                     }
-                    await store.putDataToServer('article/put', parameter)
+                    await http.put('article/put', parameter)
                     ElMessage({
                         message: '修改成功',
                         type: 'success',

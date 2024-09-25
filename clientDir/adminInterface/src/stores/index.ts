@@ -16,22 +16,22 @@ export const myStore = defineStore('myStore', {
         updataMainStateFun(newState: number) {
             this.mainState = newState
         },
-        async getDataToServer(url: string, params?: any) {
-            const response = await axios.get(`${this.API_URL}/${url}`, { params })
-            return response.data
-        },
-        async postDataToServer(url: string, body: any) {
-            const response = await axios.post(`${this.API_URL}/${url}`, body)
-            return response.data
-        },
-        async putDataToServer(url: string, body: any) {
-            const response = await axios.put(`${this.API_URL}/${url}`, body)
-            return response.data
-        },
-        async delDataToServer(url: string, value: any) {
-            const response = await axios.delete(`${this.API_URL}/${url}/${value}`)
-            return response.data
-        }
+        // async getDataToServer(url: string, params?: any) {
+        //     const response = await axios.get(`${this.API_URL}/${url}`, { params })
+        //     return response.data
+        // },
+        // async postDataToServer(url: string, body: any) {
+        //     const response = await axios.post(`${this.API_URL}/${url}`, body)
+        //     return response.data
+        // },
+        // async putDataToServer(url: string, body: any) {
+        //     const response = await axios.put(`${this.API_URL}/${url}`, body)
+        //     return response.data
+        // },
+        // async delDataToServer(url: string, value: any) {
+        //     const response = await axios.delete(`${this.API_URL}/${url}/${value}`)
+        //     return response.data
+        // }
     },
     getters: {
         //定义计算属性

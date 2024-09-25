@@ -20,7 +20,7 @@
             <el-input v-model="userinfo.username" placeholder="请输入用户名" />
             <el-input v-model="userinfo.password" placeholder="请输入密码" />
             <el-select v-model="userinfo.category" placeholder="请选择用户类别" size="large" @change="selectGroupKeyFun">
-                <el-option v-for="item in options" :key="item.id" :label="item.username" :value="item.username" />
+                <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
             </el-select>
         </div>
         <template #footer>
@@ -44,7 +44,7 @@ export default {
         onMounted(async () => {
             getUser()
         })
-        const options=ref()
+        const options = ref()
         const stores = myStore()//商店实例化
         const newuseerwin = ref(false);//弹窗开关状态
         const newUserTitle = ref("")//弹窗标题
@@ -89,7 +89,7 @@ export default {
         }
         const delUser = async (value: any) => {
             try {
-                await stores.delDataToServer('user/delete', value.id)
+                await http.delete(`user/delete/${value.id}`)
                 newuseerwin.value = false
                 ElMessage({
                     message: '删除用户成功',
@@ -103,7 +103,7 @@ export default {
         //修改用户请求
         const putUser = async () => {
             try {
-                await stores.putDataToServer('user/put', userinfo.value)
+                await http.put('user/put', userinfo.value)
                 newuseerwin.value = false
                 ElMessage({
                     message: '修改用户成功',
@@ -123,7 +123,7 @@ export default {
                     password: userinfo.value.password,
                     category: userinfo.value.category,
                 }
-                await stores.postDataToServer('user/add', dataToSend)
+                await http.post('user/add', dataToSend)
                 newuseerwin.value = false
                 ElMessage({
                     message: '添加用户成功',
@@ -137,14 +137,11 @@ export default {
         }
         //获取用户列表请求
         const getUser = async () => {
-            // const getData = await stores.getDataToServer('user/list', parameter.value)
-            // console.log(localStorage.getItem('auth_token'));
-            const getData=await http.get('user/list', {
-                params:parameter.value
+            const getData = await http.get('user/list', {
+                params: parameter.value
             })
-            userList.value = getData.data
-            totalCount.value = getData.data.totalCount
-            console.log("get的数据：",getData)
+            userList.value = getData.data.data
+            totalCount.value = getData.data.data.totalCount
         }
 
         //分页按钮的触发事件
@@ -152,12 +149,13 @@ export default {
             parameter.value.page = value
             getUser()
         };
+        //获取用户类别列表
         const getConfigurationList = async () => {
-            const response = await stores.getDataToServer('configuration/list', {type:"user_category"})
-            options.value=response.data
+            const response = await http.get('configuration/list', { params: { type: "user_category" } })
+            options.value = response.data.data
         }
-        const selectGroupKeyFun=(value:any)=>{
-            userinfo.value.category=value
+        const selectGroupKeyFun = (value: any) => {
+            userinfo.value.category = value
         }
         return {
             options,

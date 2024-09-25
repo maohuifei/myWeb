@@ -19,6 +19,7 @@ import { reactive } from "vue";
 import { useRouter } from "vue-router"
 import { myStore } from '@/stores';
 import { ElMessage } from 'element-plus'
+import http from "@/axios"
 
 export default {
     setup() {
@@ -31,9 +32,9 @@ export default {
         const stores = myStore()
         const loginFun = async () => {
             try {
-                const data = await stores.postDataToServer('user/login', form)
+                const data = await http.post('user/login', form)
                 // console.log(data);
-                localStorage.setItem('auth_token', data.token);
+                localStorage.setItem('auth_token', data.data.token);
                 ElMessage({
                     message: '登录成功',
                     type: 'success',

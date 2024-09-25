@@ -1,6 +1,5 @@
 <template>
     <el-input v-model="articleInfo.title" placeholder="请输入标题" />
-    <!-- <el-input v-model="articleInfo.category" /> -->
     <el-select v-model="articleInfo.category" placeholder="请选择文章类别" style="width: 240px" @change="selectGroupKeyFun">
         <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
     </el-select>
@@ -25,31 +24,32 @@ import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { myStore } from '@/stores';
 import { ElMessage } from 'element-plus'
+import http from '@/axios'
 
 export default {
     components: { Editor, Toolbar },
     setup() {
         const store = myStore()
         const articleInfo = ref({
-            title: "",
-            abstract: "",
-            category: "",
-            content: "",
-            recommend: false,
-            state: true,
+            title: '',
+            category:'',
+            abstract:'',
+            recommend:false,
+            state:false,
+            content:''
         })
-        // const content=ref("")
         onMounted(async () => {
             if (store.articleNewOrEdit) {
                 const parameter = {
                     id: store.articleNewOrEdit
                 }
                 try {
-                    const getData = await store.getDataToServer('article/content', parameter)
-                    articleInfo.value = getData.data
-                    // articleInfo.value.content = getData.data.content
-                    // articleInfo.value.title = getData.data.title
-                    // articleInfo.value.category = getData.data.category
+                    const getData = await http.get('article/content', {
+                        params: parameter
+                    })
+                    articleInfo.value = getData.data.data
+                    console.log(articleInfo.value);
+
                 } catch (error) {
                     ElMessage.error('获取文章失败')
                 }
@@ -79,10 +79,14 @@ export default {
             if (store.articleNewOrEdit) {
                 //修改
                 const parameter = articleInfo.value
-                delete parameter.created_at; 
-                delete parameter.updated_at;
+                if (articleInfo.value && 'created_at' in articleInfo.value) {
+                    delete articleInfo.value.created_at;
+                }
+                if (articleInfo.value && 'updated_at' in articleInfo.value) {
+                    delete articleInfo.value.updated_at;
+                }
                 try {
-                    await store.putDataToServer('article/put', parameter)
+                    await http.put('article/put', parameter)
                     ElMessage({
                         message: '修改文章成功',
                         type: 'success',
@@ -98,10 +102,14 @@ export default {
             } else {
                 //新建
                 const parameter = articleInfo.value
-                delete parameter.created_at;
-                delete parameter.updated_at;
+                if (articleInfo.value && 'created_at' in articleInfo.value) {
+                    delete articleInfo.value.created_at;
+                }
+                if (articleInfo.value && 'updated_at' in articleInfo.value) {
+                    delete articleInfo.value.updated_at;
+                }
                 try {
-                    await store.postDataToServer('article/add', parameter)
+                    await http.post('article/add', parameter)
                     setTimeout(() => {
                         store.updataMainStateFun(2)
                     }, 1000)
@@ -116,11 +124,13 @@ export default {
             }
         }
         const selectGroupKeyFun = (value: any) => {
-            articleInfo.value.category = value
+            if (articleInfo.value && 'category' in articleInfo.value) {
+                articleInfo.value.category = value
+            }
         }
         const getConfigurationList = async () => {
-            const response = await store.getDataToServer('configuration/list', { type: "article_category" })
-            options.value = response.data
+            const response = await http.get('configuration/list', { params: { type: "article_category" } })
+            options.value = response.data.data
         }
         return {
             // content,

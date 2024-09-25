@@ -35,6 +35,8 @@ import { ref, onMounted } from 'vue';
 import { Plus, Delete } from '@element-plus/icons-vue';
 import { myStore } from '@/stores';
 import { ElMessage } from 'element-plus';
+import http from '@/axios';
+
 export default {
     setup() {
         const stores = myStore()
@@ -46,17 +48,17 @@ export default {
         // const options = ref([]);
         const options = ref()
         const getTypeList=async()=>{
-            const response = await stores.getDataToServer('configuration/typeList')
-            options.value=response.data
+            const response = await http.get('configuration/typeList')
+            options.value=response.data.data
         }
         const getList = async (value?: any) => {
-            const response = await stores.getDataToServer('configuration/list', value)
-            tableData.value = response.data;
+            const response = await http.get('configuration/list', {params:value})
+            tableData.value = response.data.data;
         }
         const value = ref('')
         const deleBtn = async(value: number) => {
             try {
-                await stores.delDataToServer('configuration/delete',value)
+                await http.delete(`configuration/delete/${value}`)
                 ElMessage({
                     message: '删除成功',
                     type: 'success',
@@ -79,7 +81,7 @@ export default {
         })
         const addFun = async () => {
             try {
-                await stores.postDataToServer('configuration/add', addSystemData.value)
+                await http.post('configuration/add', addSystemData.value)
                 ElMessage({
                     message: '添加成功',
                     type: 'success',
