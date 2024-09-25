@@ -10,25 +10,36 @@ import { authenticate } from './utils/tokenAuth';
 
 const app = new Koa();
 
-app.use(async (ctx, next) => {  
-      await authenticate(ctx, next);
-  }); 
+app.use(async (ctx, next) => {
+    await authenticate(ctx, next);
+});
 
 app.use(koaBody({
     json: true,
 }));
-app.use(cors({  
-    origin: function (ctx) {  
-      // 动态设置允许跨域的域名，这里以允许所有域名为例  
-      return '*';
-    // return 'http://localhost:5174','http://localhost:5173';
-    },  
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'], // 允许的HTTP方法  
-    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'], // 需要暴露给客户端的头部  
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept'], // 允许客户端发送的头部  
-    maxAge: 5, // 预检请求的缓存时间（秒）  
-    credentials: true, // 是否允许发送Cookie  
-  }));  
+
+// 定义允许的域名
+const allowedOrigins = [
+   'http://localhost:5173',
+    'http://localhost:5174',
+  ];
+// 配置 CORS 选项
+const corsOptions = {
+    origin: (ctx:any) => {
+      const origin = ctx.request.headers.origin;
+      if (allowedOrigins.includes(origin)) {
+        return origin; // 允许的域名
+      }
+      return null; // 不允许的域名
+    },
+    // allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 允许的请求方法
+    // allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    credentials: true,
+    maxAge: 5,
+  };
+
+// 使用 CORS 中间件
+app.use(cors(corsOptions));
 
 app.use(jsonError());
 // 初始化 DataSource

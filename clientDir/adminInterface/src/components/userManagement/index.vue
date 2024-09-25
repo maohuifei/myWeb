@@ -36,7 +36,7 @@
 import { ref, onMounted } from 'vue';
 import { myStore } from '@/stores'
 import { ElMessage } from 'element-plus'
-
+import http from '@/axios'
 
 export default {
     setup() {
@@ -137,10 +137,13 @@ export default {
         }
         //获取用户列表请求
         const getUser = async () => {
-            const getData = await stores.getDataToServer('user/list', parameter.value)
+            // const getData = await stores.getDataToServer('user/list', parameter.value)
+            const getData=await http.get('user/list', {
+                params:parameter.value
+            })
             userList.value = getData.data
-            totalCount.value = getData.totalCount
-            console.log(getData)
+            totalCount.value = getData.data.totalCount
+            console.log("get的数据：",getData)
         }
 
         //分页按钮的触发事件
