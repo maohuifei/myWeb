@@ -23,27 +23,3 @@ service.interceptors.request.use(
 );  
   
 export default service;
-// import axios from 'axios';  
-  
-// export function createRequest() {  
-//     const request = axios.create({  
-//         baseURL:"http://locahost/3000",  
-//         timeout: 20000,  
-//     });  
-  
-//     request.interceptors.request.use(  
-//         (config) => {  
-//             const token =localStorage.getItem('userToken');
-//             if (token) {  
-//                 config.headers.Authorization = `Bearer ${token}`;  
-//             }  
-//             return config;  
-//         },  
-//         (error) => {  
-//             // console.log("拦截器报错");
-//             return Promise.reject(error); 
-//         }  
-//     );  
-  
-//     return request;  
-// }
