@@ -27,10 +27,10 @@ a,
 }
 
 @media (min-width: 1024px) {
-  body {
+  /* body {
     background-image: url(../../public/bac.jpg);
-    background-position: center; /* 背景图片居中 */  
-  background-repeat: no-repeat; /* 不重复 */  
-  background-size: cover; /* 覆盖整个元素 */  
-  }
+    background-position: center; 
+  background-repeat: no-repeat; 
+  background-size: cover;
+  } */
 }

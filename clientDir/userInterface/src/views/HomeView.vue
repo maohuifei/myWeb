@@ -1,8 +1,33 @@
 <template>
     <div class="home_box">
-        <div class="left_box">
-            <h1>左边</h1>
+        <div class="web_introduction_box">
+            <h1>欢迎来到huafeng，我的在线知识库</h1>
+            <p>
+                这个网站是我个人学习、生活感悟及技术实践的记录空间，并非公开宣传的站点。如果你偶然间访问到了这里，那或许就是一种奇妙的缘分
+            </p>
+            <p>
+                网站设计遵循“崇尚极简、简洁纯粹”的原则，这也是我的生活哲学
+            </p>
+            <p>
+                对于意外到访的你，如果有任何建议或想法，欢迎通过关于界面的联系方式与我沟通
+            </p>
+            <p>
+                再次感谢你的到访，愿你我都能在知识的道路上不断前行
+            </p>
         </div>
+        <div class="my_introduction_box">
+            <h1>关于我</h1>
+            <p>你好，我是Wen Jiang，huafeng的创始人与维护者
+
+            </p>
+            <p>
+                我崇尚简洁纯粹的生活哲学，追求技术与艺术的完美结合
+            </p>
+            <p>
+                huafeng，就是我这一理念的集中体现，它包含了我的思想理念，记录了我的成长轨迹，也见证了我与众多先行者思想的碰撞与共鸣
+            </p>
+        </div>
+        <h1>推荐文章</h1>
         <div class="middle_box">
             <div class="card_class" v-for="(article, index) in articleList" key="index">
                 <h2>{{ article.title }}</h2>
@@ -12,8 +37,13 @@
                     @click="ToParticulars(article.id)">阅读</el-button>
             </div>
         </div>
-        <div class="right_box">
-            <h1>右边</h1>
+        <h1>网站使用的技术</h1>
+        <div class="technique_box">
+            <div class="card_class" v-for="(technique, index) in techniqueList" key="index">
+                <div>icon</div>
+                <p>{{ technique.name }}</p>
+                <p>{{ technique.versions }}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -31,7 +61,7 @@ export default {
         const pageQuery = ref({
             page: 1,
             pageSize: 10,
-            recommend:true
+            recommend: true
         })
         const articleList = ref()
         onMounted(async () => {
@@ -66,7 +96,24 @@ export default {
                 query: { articleId }
             })
         }
+        const techniqueList = [{
+            name: "TypeScript",
+            versions: "1.0.0"
+        },
+        {
+            name: "vue3",
+            versions: "2.0.0"
+        },
+        {
+            name: "Koa",
+            versions: "3.0.0"
+        },
+        {
+            name: "mySQL",
+            versions: "4.0.0"
+        }]
         return {
+            techniqueList,
             pageQuery,
             getArticleList,
             articleList,
@@ -79,25 +126,36 @@ export default {
 <style scoped lang="less">
 .home_box {
     display: flex;
-    width: 100%;
+    flex-direction: column;
+    justify-content: center;
 
-    .left_box {
-        width: 25%;
+    h1 {
+        text-align: center;
+    }
+
+    .web_introduction_box,
+    .my_introduction_box {
+        text-align: center;
     }
 
     .middle_box {
-        width: 50%;
-        padding: 10px;
-        border-left: 2px solid var(--elementColor);
-        border-right: 2px solid var(--elementColor);
-        .card_class{
-            padding: 20px;
-           border-bottom: 1px solid var(--elementColor)
-        }
+        width: 90%;
+        display: flex;
+
+        .card_class {}
     }
 
-    .right_box {
-        width: 25%;
+    .technique_box {
+        display: flex;
+        width: 50%;
+
+        .card_class {
+            background-color: rgb(121, 121, 239);
+            margin: 10px;
+            padding: 10px;
+            text-align: center;
+            width: 20%;
+        }
     }
 }
 </style>

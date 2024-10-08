@@ -4,15 +4,15 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header class="title_img">
-    <img alt="Vue logo" class="logo" src="/titleimg.jpg" width="100%" />
+    <!-- <img alt="Vue logo" class="logo" src="/titleimg.jpg" width="100%" /> -->
   </header>
   <div class="tage_box">
     <RouterLink to="/">首页</RouterLink>
-    <img src="/titleBoxIcon.png" alt="">
+    <!-- <img src="/titleBoxIcon.png" alt=""> -->
     <RouterLink to="/article">文章</RouterLink>
-   <img src="/titleBoxIcon.png" alt="">
+   <!-- <img src="/titleBoxIcon.png" alt=""> -->
     <RouterLink to="/about">关于</RouterLink>
-    <img src="/titleBoxIcon.png" alt="">
+    <!-- <img src="/titleBoxIcon.png" alt=""> -->
     <RouterLink to="/privacy">隐私政策</RouterLink>
   </div>
   <div class="content_box">
