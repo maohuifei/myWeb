@@ -3,49 +3,86 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header class="title_img">
-    <!-- <img alt="Vue logo" class="logo" src="/titleimg.jpg" width="100%" /> -->
-  </header>
   <div class="tage_box">
-    <RouterLink to="/">首页</RouterLink>
-    <!-- <img src="/titleBoxIcon.png" alt=""> -->
-    <RouterLink to="/article">文章</RouterLink>
-   <!-- <img src="/titleBoxIcon.png" alt=""> -->
-    <RouterLink to="/about">关于</RouterLink>
-    <!-- <img src="/titleBoxIcon.png" alt=""> -->
-    <RouterLink to="/privacy">隐私政策</RouterLink>
+    <div class="logo_box">
+      <img class="logo_class" src="/portrait.jpg" />
+    </div>
+    <div class="nav_box">
+      <RouterLink to="/">首页</RouterLink>
+      <RouterLink to="/article">文章</RouterLink>
+      <RouterLink to="/about">关于</RouterLink>
+      <RouterLink to="/privacy">隐私政策</RouterLink>
+    </div>
+    <div class="icon_box">
+      <svg class="icon" aria-hidden="true">
+        <use href="#icon-sousuo"></use>
+      </svg>
+      <svg class="icon" aria-hidden="true">
+        <use href="#icon-shengyin"></use>
+      </svg>
+      <svg class="icon" aria-hidden="true">
+        <use href="#icon-taiyang"></use>
+      </svg>
+      <svg class="icon" aria-hidden="true">
+        <use href="#icon-dingyue"></use>
+      </svg>
+    </div>
   </div>
+  <div style="height: 60px;"></div>
   <div class="content_box">
     <RouterView />
   </div>
   <div class="foot_box">
-    <p>© 2024 画风huafeng 版权所有</p>
-    <p>备案号：京ICP备XXXXXXXX号-X </p>
+    <p>© 2024 huafeng 版权所有</p>
+    <p>备案号：鲁ICP备2024118017号 </p>
   </div>
 </template>
 
-<style scoped>
-.tage_box{
-  width: 90%;
-  height: 50px;
-  border-bottom: 2px solid var(--elementColor);
-  border-top: 2px solid var(--elementColor);
+<style scoped lang="less">
+.tage_box {
+  width: 100%;
+  height: 60px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin: 0 auto;
+  position: fixed;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, .7);
+  padding: 0 40px;
+
+  .logo_box,
+  .nav_box,
+  .icon_box {
+    width: 33%;
+  }
+
+  .logo_box {
+    .logo_class {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .nav_box {
+    text-align: center;
+  }
+
+  .icon_box {
+    text-align: right;
+    .icon {
+      margin: 0 10px;
+      fill: var(--systemTextColor);
+    }
+  }
 }
-.tage_box img{
-  width: 30px;
-  height: 30px;
-  margin: 0 10px;
-}
-.content_box{
+
+.content_box {
   width: 90%;
   height: 100%;
-  margin: 10px auto;
+  margin: 0px auto;
 }
-.foot_box{
+
+.foot_box {
   width: 90%;
   height: 150px;
   border-top: 2px solid var(--elementColor);

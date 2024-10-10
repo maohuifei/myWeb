@@ -1,10 +1,10 @@
 @import './base.css';
 
-:root {  
-  --systemTextColor: #4f452c;  
-  --titleTextColor: #795326;  
+:root {
+  --systemTextColor: #4f452c;
+  --titleTextColor: #795326;
   --elementColor: #a0997c;
-  --textColor:#50483d;
+  --textColor: black;
 }
 
 #app {
@@ -33,4 +33,9 @@ a,
   background-repeat: no-repeat; 
   background-size: cover;
   } */
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
 }

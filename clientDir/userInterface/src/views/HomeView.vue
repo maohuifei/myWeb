@@ -1,7 +1,7 @@
 <template>
     <div class="home_box">
+        <h1>欢迎来到huafeng，我的在线知识库</h1>
         <div class="web_introduction_box">
-            <h1>欢迎来到huafeng，我的在线知识库</h1>
             <p>
                 这个网站是我个人学习、生活感悟及技术实践的记录空间，并非公开宣传的站点。如果你偶然间访问到了这里，那或许就是一种奇妙的缘分
             </p>
@@ -11,12 +11,10 @@
             <p>
                 对于意外到访的你，如果有任何建议或想法，欢迎通过关于界面的联系方式与我沟通
             </p>
-            <p>
-                再次感谢你的到访，愿你我都能在知识的道路上不断前行
-            </p>
         </div>
+        <h1>关于我</h1>
         <div class="my_introduction_box">
-            <h1>关于我</h1>
+            
             <p>你好，我是Wen Jiang，huafeng的创始人与维护者
 
             </p>
@@ -134,27 +132,33 @@ export default {
     }
 
     .web_introduction_box,
-    .my_introduction_box {
+    .my_introduction_box,
+    .middle_box,
+    .technique_box
+     {
         text-align: center;
-    }
-
-    .middle_box {
+        height: 700px;
         width: 90%;
+        padding: 20px;
         display: flex;
-
+        margin: 0px auto;
+    }
+.web_introduction_box,
+.my_introduction_box{
+    flex-direction: column;
+}
+    .middle_box {
         .card_class {}
     }
 
     .technique_box {
-        display: flex;
-        width: 50%;
-
         .card_class {
             background-color: rgb(121, 121, 239);
             margin: 10px;
             padding: 10px;
             text-align: center;
-            width: 20%;
+            width: 10%;
+            height: 20%;
         }
     }
 }

@@ -10,6 +10,8 @@ import axios from 'axios'
 import App from './App.vue'
 import router from './router'
 
+import './assets/icon/iconfont.js'
+
 const app = createApp(App)
 
 app.use(axios)
