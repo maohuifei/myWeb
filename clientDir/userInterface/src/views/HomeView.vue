@@ -1,21 +1,25 @@
 <template>
     <div class="home_box">
-        <h1>欢迎来到huafeng，我的在线知识库</h1>
         <div class="web_introduction_box">
+            <h1>欢迎来到huafeng，我的在线知识库</h1>
             <p>
                 这个网站是我个人学习、生活感悟及技术实践的记录空间，并非公开宣传的站点。如果你偶然间访问到了这里，那或许就是一种奇妙的缘分
             </p>
             <p>
-                网站设计遵循“崇尚极简、简洁纯粹”的原则，这也是我的生活哲学
+                网站设计遵循
+                <span class="significant">"更简单、更纯粹"</span>
+                的原则，这也是我的生活哲学
             </p>
             <p>
                 对于意外到访的你，如果有任何建议或想法，欢迎通过关于界面的联系方式与我沟通
             </p>
         </div>
-        <h1>关于我</h1>
+
         <div class="my_introduction_box">
-            
-            <p>你好，我是Wen Jiang，huafeng的创始人与维护者
+            <h1>关于我</h1>
+            <p>你好，我是
+                <span class="significant">Wen Jiang</span>
+                ，huafeng的创始人与维护者
 
             </p>
             <p>
@@ -25,23 +29,31 @@
                 huafeng，就是我这一理念的集中体现，它包含了我的思想理念，记录了我的成长轨迹，也见证了我与众多先行者思想的碰撞与共鸣
             </p>
         </div>
-        <h1>推荐文章</h1>
+
         <div class="middle_box">
-            <div class="card_class" v-for="(article, index) in articleList" key="index">
-                <h2>{{ article.title }}</h2>
-                <span>更新时间：{{ article.updated_at }}</span>
-                <p class="abstract_box">{{ article.abstract || "此处为摘要" }}</p>
-                <el-button class="all_btn" color="#a0997c" :bg="false" style="color: white;"
-                    @click="ToParticulars(article.id)">阅读</el-button>
+            <h1>推荐文章</h1>
+            <div class="card_box">
+                <div class="card_class" v-for="(article, index) in articleList" key="index">
+                    <h2>{{ article.title }}</h2>
+                    <span>更新时间：{{ article.updated_at }}</span>
+                    <p class="abstract_box">{{ article.abstract || "此处为摘要" }}</p>
+                    <el-button class="all_btn" color="#a0997c" :bg="false" style="color: white;"
+                        @click="ToParticulars(article.id)">阅读</el-button>
+                </div>
             </div>
         </div>
-        <h1>网站使用的技术</h1>
         <div class="technique_box">
-            <div class="card_class" v-for="(technique, index) in techniqueList" key="index">
-                <div>icon</div>
-                <p>{{ technique.name }}</p>
-                <p>{{ technique.versions }}</p>
+            <h1>网站构成</h1>
+            <div class="card_box">
+                <div class="card_class" v-for="(technique, index) in techniqueList" key="index">
+                    <svg class="icon technique_icon" aria-hidden="true">
+                        <use :href=technique.icon></use>
+                    </svg>
+                    <p>{{ technique.name }}</p>
+                    <p>{{ technique.versions }}</p>
+                </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -95,20 +107,39 @@ export default {
             })
         }
         const techniqueList = [{
+            icon: "#icon-typescript",
             name: "TypeScript",
             versions: "1.0.0"
         },
         {
-            name: "vue3",
-            versions: "2.0.0"
+            icon: "#icon-Vue",
+            name: "Vue3",
+            versions: "3.4.29"
         },
         {
-            name: "Koa",
+            icon: "#icon-ElementUI",
+            name: "elementPlus",
+            versions: "2.8.2"
+        },
+        {
+            icon: "#icon-Nodejs",
+            name: "Node.js",
             versions: "3.0.0"
         },
         {
+            icon: "#icon-ic_taskedit_kafka",
+            name: "Koa.js",
+            versions: "2.15.3"
+        },
+        {
+            icon: "#icon-mysql",
             name: "mySQL",
-            versions: "4.0.0"
+            versions: "3.11.0"
+        },
+        {
+            icon: "#icon-pinia",
+            name: "Pinia",
+            versions: "2.1.7"
         }]
         return {
             techniqueList,
@@ -125,41 +156,55 @@ export default {
 .home_box {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-
-    h1 {
-        text-align: center;
-    }
-
     .web_introduction_box,
     .my_introduction_box,
     .middle_box,
-    .technique_box
-     {
+    .technique_box {
         text-align: center;
-        height: 700px;
         width: 90%;
+        height: 666px;
         padding: 20px;
-        display: flex;
         margin: 0px auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 .web_introduction_box,
 .my_introduction_box{
-    flex-direction: column;
+    .significant{
+        font-size: 20px;
+        font-weight: bold;
+    }
 }
     .middle_box {
-        .card_class {}
+        .card_box{
+            .card_class {}
+        }
+        
     }
 
     .technique_box {
-        .card_class {
-            background-color: rgb(121, 121, 239);
+        .card_box{
+            display: flex;
+            .card_class {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(157, 189, 229);
             margin: 10px;
             padding: 10px;
             text-align: center;
-            width: 10%;
-            height: 20%;
+            width: 120px;
+            height: 150px;
+
+            .technique_icon {
+                width: 60px;
+                height: 60px;
+            }
         }
+        }
+        
     }
 }
 </style>
