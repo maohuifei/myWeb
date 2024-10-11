@@ -34,16 +34,16 @@
             <h1>推荐文章</h1>
             <div class="card_box">
                 <div class="card_class" v-for="(article, index) in articleList" key="index">
-                    <h2>{{ article.title }}</h2>
-                    <span>更新时间：{{ article.updated_at }}</span>
+                    <h2 class="title_txt">{{ article.title }}</h2>
+                    <span class="updata_txt">更新时间：{{ article.updated_at }}</span>
                     <p class="abstract_box">{{ article.abstract || "此处为摘要" }}</p>
-                    <el-button class="all_btn" color="#a0997c" :bg="false" style="color: white;"
+                    <el-button class="all_btn" color="var(--txtColor)"
                         @click="ToParticulars(article.id)">阅读</el-button>
                 </div>
             </div>
         </div>
         <div class="technique_box">
-            <h1>网站构成</h1>
+            <h1>网站技术</h1>
             <div class="card_box">
                 <div class="card_class" v-for="(technique, index) in techniqueList" key="index">
                     <svg class="icon technique_icon" aria-hidden="true">
@@ -156,6 +156,7 @@ export default {
 .home_box {
     display: flex;
     flex-direction: column;
+
     .web_introduction_box,
     .my_introduction_box,
     .middle_box,
@@ -168,43 +169,84 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
     }
-.web_introduction_box,
-.my_introduction_box{
-    .significant{
-        font-size: 20px;
-        font-weight: bold;
-    }
-}
-    .middle_box {
-        .card_box{
-            .card_class {}
+
+    .web_introduction_box,
+    .my_introduction_box {
+        .significant {
+            font-size: 20px;
+            font-weight: bold;
         }
-        
+    }
+
+    .middle_box {
+        .card_box {
+            display: flex;
+            flex-wrap: wrap;
+
+            .card_class {
+                // border-radius: 10px;
+                width: 18%;
+                height: 250px;
+                margin: 10px;
+                display: flex;
+                text-align: center;
+                flex-direction: column;
+                border: 1px solid var(--systemColor);
+                padding: 20px;
+
+                .title_txt {
+                    font-weight: bold
+                }
+
+                .updata_txt {
+                    font-size: smaller;
+                    font-weight: bolder;
+                    margin: 5px 0
+                }
+
+                .abstract_box {
+                    font-size: small;
+                    height: 150px;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 8;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .all_btn {
+                    width: 60px;
+                    margin: 0 auto;
+                }
+            }
+        }
+
     }
 
     .technique_box {
-        .card_box{
+        .card_box {
             display: flex;
             .card_class {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: rgb(157, 189, 229);
-            margin: 10px;
-            padding: 10px;
-            text-align: center;
-            width: 120px;
-            height: 150px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+               border: 1px solid var(--systemColor);
+                margin: 10px;
+                padding: 10px;
+                text-align: center;
+                width: 120px;
+                height: 150px;
 
-            .technique_icon {
-                width: 60px;
-                height: 60px;
+                .technique_icon {
+                    width: 60px;
+                    height: 60px;
+                }
             }
         }
-        }
-        
+
     }
 }
 </style>

@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from 'vue-router'
 <template>
   <div class="tage_box">
     <div class="logo_box">
-      <img class="logo_class" src="/portrait.jpg" />
+      <img class="logo_class" src="/portrait.png" />
     </div>
     <div class="nav_box">
       <RouterLink to="/">首页</RouterLink>
@@ -17,7 +17,7 @@ import { RouterLink, RouterView } from 'vue-router'
       <svg class="icon" aria-hidden="true">
         <use href="#icon-sousuo"></use>
       </svg>
-      <svg class="icon" aria-hidden="true">
+      <!-- <svg class="icon" aria-hidden="true">
         <use href="#icon-shengyin"></use>
       </svg>
       <svg class="icon" aria-hidden="true">
@@ -25,7 +25,7 @@ import { RouterLink, RouterView } from 'vue-router'
       </svg>
       <svg class="icon" aria-hidden="true">
         <use href="#icon-dingyue"></use>
-      </svg>
+      </svg> -->
     </div>
   </div>
   <div style="height: 60px;"></div>
@@ -58,8 +58,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
   .logo_box {
     .logo_class {
-      width: 30px;
-      height: 30px;
+      width: 130px;
     }
   }
 
@@ -71,7 +70,7 @@ import { RouterLink, RouterView } from 'vue-router'
     text-align: right;
     .icon {
       margin: 0 10px;
-      fill: var(--systemTextColor);
+      fill: var(--systemColor);
     }
   }
 }
@@ -85,12 +84,12 @@ import { RouterLink, RouterView } from 'vue-router'
 .foot_box {
   width: 90%;
   height: 150px;
-  border-top: 2px solid var(--elementColor);
+  border-top: 2px solid var(--systemColor);
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 15px;
   margin: 0 auto;
-  color: var(--textColor);
+  color: var(--txtColor);
 }
 </style>

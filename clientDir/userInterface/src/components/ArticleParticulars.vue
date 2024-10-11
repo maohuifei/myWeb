@@ -1,5 +1,5 @@
 <template>
-    <el-button @click="backBtn">返回上一页</el-button>
+    <el-button @click="backBtn"  color="var(--txtColor)">返回上一页</el-button>
     <div class="particulars_box">
         <h1>{{ particulars.title }}</h1>
         <div class="content_box">

@@ -1,21 +1,40 @@
 <template>
     <div class="about_box">
         <div class="user_box">
-            <img class="portrait" src="/portrait.jpg" />
-            <h1>HuaFeng</h1>
+            <h1>Wen Jiang</h1>
             <h3>神秘IT男</h3>
             <p>更简单、更纯粹</p>
         </div>
         <div class="contact_box">
-            <el-button type="success" icon="ChatRound" circle />
-            <el-button type="primary" icon="Message" circle />
-            <el-button type="info" icon="Close" circle />
-            <el-button type="primary" icon="Position" circle />
+            <a href="mailto:jzwbuer@163.com">
+                <el-button color="var(--elementColor)">
+                <svg class="icon" aria-hidden="true">
+                    <use href="#icon-youjian"></use>
+                </svg>
+            </el-button>
+            </a>
+           <a href="https://www.baidu.com">
+            <el-button color="var(--elementColor)"> 
+                <svg class="icon" aria-hidden="true">
+                    <use href="#icon-weixin"></use>
+                </svg>
+            </el-button>
+           </a>
+            <a href="https://github.com/maohuifei">
+                <el-button color="var(--elementColor)">
+                <svg class="icon" aria-hidden="true">
+                    <use href="#icon-github"></use>
+                </svg>
+            </el-button>
+            </a>
+           <a href="https://www.baidu.com">
+            <el-button color="var(--elementColor)">
+                 <svg class="icon" aria-hidden="true">
+                    <use href="#icon-telegram"></use>
+                </svg>
+            </el-button>
+           </a>
         </div>
-        <!-- <div class="project_box">
-            <h2>我的项目</h2>
-        </div> -->
-
     </div>
 </template>
 
@@ -29,7 +48,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+a,a:hover{
+    background-color:#fff;
+}
+.icon{
+    fill: white;
+}
 .about_box {
     width: 80%;
     margin: 20px auto;
@@ -37,19 +62,22 @@ export default {
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    color: var(--textColor);
+    color: var(--txtColor);
 }
-.user_box{
+
+.user_box {
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
 }
+
 .portrait {
     width: 100px;
     height: 100px;
 }
-.contact_box{
+
+.contact_box {
     margin-top: 50px;
 }
 </style>

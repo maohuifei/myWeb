@@ -1,10 +1,9 @@
 @import './base.css';
 
 :root {
-  --systemTextColor: #4f452c;
-  --titleTextColor: #795326;
-  --elementColor: #a0997c;
-  --textColor: black;
+  --elementColor: black;
+  --txtColor:black;
+  --systemColor:black;
 }
 
 #app {
@@ -14,7 +13,7 @@
 a,
 .green {
   text-decoration: none;
-  color: var(--systemTextColor);
+  color: var(--systemColor);
   transition: 0.4s;
   padding: 3px;
   font-weight: bolder;
@@ -22,7 +21,8 @@ a,
 
 @media (hover: hover) {
   a:hover {
-    background-color: var(--elementColor);
+    background-color: var(--systemColor);
+    color: #fff;
   }
 }
 
@@ -39,3 +39,7 @@ a,
   width: 20px;
   height: 20px;
 }
+
+.el-pager li.is-active, .el-pager li:hover{
+  color: var(--txtColor) !important;
+  }

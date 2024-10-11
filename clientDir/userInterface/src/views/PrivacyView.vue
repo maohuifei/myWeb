@@ -51,7 +51,7 @@ export default {
 <style scoped>
 .content_box{
     text-align:center;
-    color: var(--textColor);
+    color: var(--systemColor);
 }
 h1 h2{
     margin: 20px 0;

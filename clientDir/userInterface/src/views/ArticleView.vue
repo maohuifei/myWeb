@@ -4,11 +4,11 @@
             <h2>{{ article.title }}</h2>
             <span>更新时间：{{ article.updated_at }}</span>
             <p class="abstract_box">{{ article.abstract||"此处为摘要" }}</p>
-            <el-button class="all_btn" color="#a0997c" :bg="false" style="color: white;" @click="ToParticulars(article.id)">阅读</el-button>
+            <el-button class="all_btn"  color="var(--txtColor)" @click="ToParticulars(article.id)">阅读</el-button>
         </el-card>
     </div>
     <div class="page_box">
-        <el-pagination :background="true" layout="prev, pager, next" :total="totalCount" @current-change="handleCurrentChange" :default-page-size="20"/>
+        <el-pagination size="large" layout="prev, pager, next" :total="totalCount" @current-change="handleCurrentChange" :default-page-size="20"/>
     </div>
 </template>
 
@@ -78,10 +78,6 @@ export default {
 </script>
 
 <style scoped>
-.all_btn{
-    color: var(--elementColor);
-    background-color: none;
-}
 .abstract_box {
     height: 160px;
     display: -webkit-box;
@@ -94,16 +90,15 @@ export default {
 .page_box {
     display: flex;
     justify-content: center;
+    margin: 10px;
 }
-
-
 
 .card_class {
     width: 243px;
     height: 300px;
     margin: 10px;
     background: transparent;
-    border-color: var(--elementColor);
+    border-color: var(--systemColor);
     display: flex;
     justify-content: center;
     text-align: center;
@@ -112,6 +107,6 @@ export default {
 .article_box {
     display: flex;
     flex-wrap: wrap;
-    color: var(--textColor);
+    color: var(--txtColor);
 }
 </style>

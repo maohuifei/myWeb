@@ -7,10 +7,27 @@
     </div>
 </template>
 
-<script setup lang="ts">
-import Aside from '@/components/inHome/Aside.vue';
-import Header from '@/components/inHome/Header.vue';
-import Main from '@/components/inHome/Main.vue';
+<script lang="ts">  
+import Aside from '@/components/inHome/Aside.vue';  
+import Header from '@/components/inHome/Header.vue';  
+import Main from '@/components/inHome/Main.vue';  
+import { defineComponent,onMounted } from 'vue';  
+import { useRouter } from 'vue-router';  
+  
+export default defineComponent({ // 使用 defineComponent 来定义组件  
+  setup() {  
+    const router = useRouter();  
+    onMounted(() => {  
+      const token = localStorage.getItem('token'); // 在这里添加了分号，尽管它不是必需的  
+  
+      if (!token) {  
+        router.push({ name: 'login' }); // 跳转到登录页面  
+      }  
+    });  
+  
+    return {}; // 这里通常可以返回一些在模板中使用的响应式数据或函数  
+  }  
+});  
 </script>
 
 <style lang="less">
