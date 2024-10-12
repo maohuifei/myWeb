@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-const API_URL = 'http://localhost:3000'
+const API_URL = 'http://111.229.189.189/api'
 
 export const myStore = defineStore('myStore', {
     state: () => ({

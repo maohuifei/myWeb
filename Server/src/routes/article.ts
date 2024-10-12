@@ -3,7 +3,7 @@ import Router from 'koa-router'
 import { articleAdd,articleDel,articlePut,articleGet,articleContentGet } from '../controllers/article';
 
 const router = new Router({
-    prefix: '/article'
+    prefix: '/api/article'
 })
 
 //增

@@ -19,7 +19,7 @@ import { reactive } from "vue";
 import { useRouter } from "vue-router"
 import { myStore } from '@/stores';
 import { ElMessage } from 'element-plus'
-import http from "@/axios"
+import http from "@/axios/out"
 
 export default {
     setup() {
@@ -27,23 +27,19 @@ export default {
             username: '',
             password: ''
         });
-
         const router = useRouter();
         const stores = myStore()
         const loginFun = async () => {
             try {
                 const data = await http.post('user/login', form)
-                // console.log(data);
                 localStorage.setItem('auth_token', data.data.token);
                 ElMessage({
                     message: '登录成功',
                     type: 'success',
                 })
-                
-                setTimeout(() => {
-                    router.push('./home')
-                }, 1000);
-                
+                console.log('登录成功，准备跳转...');
+                router.push('/home')
+
             } catch (error) {
                 ElMessage.error('登录失败')
             }

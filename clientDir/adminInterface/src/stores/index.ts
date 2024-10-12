@@ -9,7 +9,7 @@ export const myStore = defineStore('myStore', {
         articleNewOrEdit: 0,//新建文章：0，编辑文章：id
         responseData: null,
         token: "",
-        API_URL: 'http://localhost:3000'
+        API_URL: 'http://111.229.189.189/api'
     }),
     actions: {
         //定义修改状态的方法

@@ -2,7 +2,7 @@ import Router from 'koa-router'
 import { addSystem, delSystem, getSystem,getTypeListSystem } from '../controllers/system'
 
 const router = new Router({
-    prefix: '/configuration'
+    prefix: '/api/configuration'
 })
 
 router.get('/list', async (ctx) => {

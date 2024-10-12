@@ -3,7 +3,7 @@ import Router from 'koa-router'
 import { userAdd,userDel,userPut,userGet,loginPot} from '../controllers/user';
 
 const router = new Router({
-    prefix: '/user'
+    prefix: '/api/user'
 })
 
 //增
