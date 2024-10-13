@@ -1,0 +1,123 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 4705788 */
+  src: url('iconfont.woff2?t=1728820568345') format('woff2'),
+       url('iconfont.woff?t=1728820568345') format('woff'),
+       url('iconfont.ttf?t=1728820568345') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ubuntu:before {
+  content: "\e605";
+}
+
+.icon-macos:before {
+  content: "\e6bb";
+}
+
+.icon-ks:before {
+  content: "\e603";
+}
+
+.icon-Nginx:before {
+  content: "\e604";
+}
+
+.icon-mysql1:before {
+  content: "\e83b";
+}
+
+.icon-element-plus:before {
+  content: "\e690";
+}
+
+.icon-J:before {
+  content: "\e602";
+}
+
+.icon-jiami:before {
+  content: "\e636";
+}
+
+.icon-cors:before {
+  content: "\e60a";
+}
+
+.icon-wangeditor-menu-img-:before {
+  content: "\e611";
+}
+
+.icon-less:before {
+  content: "\e63c";
+}
+
+.icon-eslint:before {
+  content: "\e69b";
+}
+
+.icon-axios:before {
+  content: "\e601";
+}
+
+.icon-Vue:before {
+  content: "\e799";
+}
+
+.icon-Nodejs:before {
+  content: "\e79b";
+}
+
+.icon-ic_taskedit_kafka:before {
+  content: "\e703";
+}
+
+.icon-typescript:before {
+  content: "\e6a3";
+}
+
+.icon-pinia:before {
+  content: "\e60c";
+}
+
+.icon-dingyue:before {
+  content: "\e600";
+}
+
+.icon-github:before {
+  content: "\e677";
+}
+
+.icon-youjian:before {
+  content: "\e75d";
+}
+
+.icon-weixin:before {
+  content: "\e647";
+}
+
+.icon-sousuo:before {
+  content: "\e8b9";
+}
+
+.icon-telegram:before {
+  content: "\e9ac";
+}
+
+.icon-moon:before {
+  content: "\e6c2";
+}
+
+.icon-taiyang:before {
+  content: "\e68a";
+}
+
+.icon-shengyin:before {
+  content: "\e8b8";
+}
+

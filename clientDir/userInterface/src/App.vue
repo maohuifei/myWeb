@@ -5,13 +5,15 @@ import { RouterLink, RouterView } from 'vue-router'
 <template>
   <div class="tage_box">
     <div class="logo_box">
-      <img class="logo_class" src="/portrait.png" />
+      <RouterLink to="/">
+        <img class="logo_class" src="/portrait.png" alt="Logo" />
+      </RouterLink>
     </div>
     <div class="nav_box">
       <RouterLink to="/">首页</RouterLink>
       <RouterLink to="/article">文章</RouterLink>
       <RouterLink to="/about">关于</RouterLink>
-      <RouterLink to="/privacy">隐私政策</RouterLink>
+      <RouterLink to="/privacy">公告</RouterLink>
     </div>
     <div class="icon_box">
       <svg class="icon" aria-hidden="true">
@@ -57,6 +59,9 @@ import { RouterLink, RouterView } from 'vue-router'
   }
 
   .logo_box {
+    a:hover{
+      background-color:transparent;
+    }
     .logo_class {
       width: 130px;
     }
@@ -68,6 +73,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
   .icon_box {
     text-align: right;
+
     .icon {
       margin: 0 10px;
       fill: var(--systemColor);

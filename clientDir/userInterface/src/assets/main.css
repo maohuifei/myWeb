@@ -2,6 +2,7 @@
 
 :root {
   --elementColor: black;
+  --outElementColor:white;
   --txtColor:black;
   --systemColor:black;
 }
@@ -12,8 +13,8 @@
 
 a,
 .green {
+  color: var(--elementColor);
   text-decoration: none;
-  color: var(--systemColor);
   transition: 0.4s;
   padding: 3px;
   font-weight: bolder;
@@ -22,7 +23,7 @@ a,
 @media (hover: hover) {
   a:hover {
     background-color: var(--systemColor);
-    color: #fff;
+    color: var(--outElementColor);
   }
 }
 

@@ -1,15 +1,22 @@
 <template>
     <div class="article_box">
-        <el-card class="card_class" v-for="(article, index) in articleList" shadow="hover" key="index">
-            <h2>{{ article.title }}</h2>
-            <span>更新时间：{{ article.updated_at }}</span>
-            <p class="abstract_box">{{ article.abstract||"此处为摘要" }}</p>
-            <el-button class="all_btn"  color="var(--txtColor)" @click="ToParticulars(article.id)">阅读</el-button>
-        </el-card>
+        <div class="card_box">
+            <el-card class="card_class" v-for="(article, index) in articleList" shadow="hover" key="index">
+                <h2 class="title_txt">{{ article.title }}</h2>
+                <span class="updata_txt">更新时间：{{ article.updated_at }}</span>
+                <div style="height: 170px;">
+                    <p class="abstract_box">{{ article.abstract || "此处为摘要" }}</p>
+                </div>
+                <el-button class="all_btn" color="var(--txtColor)" @click="ToParticulars(article.id)">阅读</el-button>
+            </el-card>
+        </div>
+        <el-pagination size="large" layout="prev, pager, next" :total="totalCount" @current-change="handleCurrentChange"
+            :default-page-size="20" />
+        <span class="page_box">
+        
+    </span>
     </div>
-    <div class="page_box">
-        <el-pagination size="large" layout="prev, pager, next" :total="totalCount" @current-change="handleCurrentChange" :default-page-size="20"/>
-    </div>
+   
 </template>
 
 <script lang='ts'>
@@ -27,14 +34,14 @@ export default {
         const pageQuery = ref({
             page: 1,
             pageSize: 20,
-            state:true,
+            state: true,
         })
         const totalCount = ref()
         onMounted(async () => {
             getArticleList()
         })
-        const handleCurrentChange=(value:number)=>{
-            pageQuery.value.page=value
+        const handleCurrentChange = (value: number) => {
+            pageQuery.value.page = value
             getArticleList()
         }
         const getArticleList = async () => {
@@ -59,11 +66,11 @@ export default {
                 ElMessage.error('获取列表失败')
             }
         }
-        const router=useRouter()
-        const ToParticulars=(articleId:number)=>{
+        const router = useRouter()
+        const ToParticulars = (articleId: number) => {
             router.push({
-                path:'/articleParticulars',
-                query:{articleId}
+                path: '/articleParticulars',
+                query: { articleId }
             })
         }
         return {
@@ -77,36 +84,50 @@ export default {
 }
 </script>
 
-<style scoped>
-.abstract_box {
-    height: 160px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 8;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.page_box {
-    display: flex;
-    justify-content: center;
-    margin: 10px;
-}
-
-.card_class {
-    width: 243px;
-    height: 300px;
-    margin: 10px;
-    background: transparent;
-    border-color: var(--systemColor);
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    flex-direction: column;
-}
+<style scoped lang="less">
 .article_box {
-    display: flex;
-    flex-wrap: wrap;
     color: var(--txtColor);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .card_box {
+        display: flex;
+        .card_class {
+            width: 243px;
+            height: 300px;
+            margin: 10px;
+            background: transparent;
+            border-color: var(--systemColor);
+            display: flex;
+            justify-content: center;
+            text-align: center;
+
+            .title_txt {
+                font-weight: bold
+            }
+
+            .updata_txt {
+                font-size: smaller;
+                font-weight: bolder;
+                margin: 5px 0
+            }
+
+            .abstract_box {
+                /* height: 100px; */
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 8;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: small;
+            }
+        }
+    }
+
+
+    .page_box {
+     
+    }
 }
 </style>

@@ -36,24 +36,45 @@
                 <div class="card_class" v-for="(article, index) in articleList" key="index">
                     <h2 class="title_txt">{{ article.title }}</h2>
                     <span class="updata_txt">更新时间：{{ article.updated_at }}</span>
-                    <p class="abstract_box">{{ article.abstract || "此处为摘要" }}</p>
-                    <el-button class="all_btn" color="var(--txtColor)"
-                        @click="ToParticulars(article.id)">阅读</el-button>
+                    <div style="height: 100px;">
+                        <p class="abstract_box">{{ article.abstract || "此处为摘要" }}</p>
+                    </div>
+                    <el-button class="all_btn" color="var(--txtColor)" @click="ToParticulars(article.id)">阅读</el-button>
                 </div>
             </div>
         </div>
         <div class="technique_box">
             <h1>网站技术</h1>
+            <!--全局-->
             <div class="card_box">
-                <div class="card_class" v-for="(technique, index) in techniqueList" key="index">
+                <div class="card_class" v-for="(item, index) in overallList" key="index">
                     <svg class="icon technique_icon" aria-hidden="true">
-                        <use :href=technique.icon></use>
+                        <use :href=item.icon></use>
                     </svg>
-                    <p>{{ technique.name }}</p>
-                    <p>{{ technique.versions }}</p>
+                    <p>{{ item.name }}</p>
+                    <p>{{ item.versions }}</p>
                 </div>
             </div>
-
+            <!--后端-->
+            <div class="card_box">
+                <div class="card_class" v-for="(item, index) in serverList" key="index">
+                    <svg class="icon technique_icon" aria-hidden="true">
+                        <use :href=item.icon></use>
+                    </svg>
+                    <p>{{ item.name }}</p>
+                    <p>{{ item.versions }}</p>
+                </div>
+            </div>
+            <!--前端-->
+            <div class="card_box">
+                <div class="card_class" v-for="(item, index) in clientList" key="index">
+                    <svg class="icon technique_icon" aria-hidden="true">
+                        <use :href=item.icon></use>
+                    </svg>
+                    <p>{{ item.name }}</p>
+                    <p>{{ item.versions }}</p>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -106,43 +127,97 @@ export default {
                 query: { articleId }
             })
         }
-        const techniqueList = [{
+        //全局技术
+        const overallList = [{
             icon: "#icon-typescript",
             name: "TypeScript",
-            versions: "1.0.0"
-        },
-        {
-            icon: "#icon-Vue",
-            name: "Vue3",
-            versions: "3.4.29"
-        },
-        {
-            icon: "#icon-ElementUI",
-            name: "elementPlus",
-            versions: "2.8.2"
+            versions: "5.4.0"
         },
         {
             icon: "#icon-Nodejs",
             name: "Node.js",
-            versions: "3.0.0"
+            versions: "20.18.01"
         },
         {
+            icon: "#icon-macos",
+            name: "MacOS",
+            versions: "15.0.1"
+        },
+        {
+            icon: "#icon-ubuntu",
+            name: "Ubuntu",
+            versions: "24.10"
+        }]
+        //服务器技术
+        const serverList = [{
             icon: "#icon-ic_taskedit_kafka",
             name: "Koa.js",
             versions: "2.15.3"
         },
         {
-            icon: "#icon-mysql",
+            icon: "#icon-mysql1",
             name: "mySQL",
             versions: "3.11.0"
         },
         {
+            icon: "#icon-J",
+            name: "Joi",
+            versions: "17.13.3"
+        },
+        {
+            icon: "#icon-jiami",
+            name: "bcrypt",
+            versions: "2.4.3"
+        },
+        {
+            icon: "#icon-cors",
+            name: "Cors",
+            versions: "2.0.6"
+        },{
+            icon: "#icon-Nginx",
+            name: "Nginx",
+            versions: "1.24.0"
+        },{
+            icon: "#icon-ks",
+            name: "Kubernetes",
+            versions: "1.3.1"
+        },]
+        //客户端技术
+        const clientList = [{
+            icon: "#icon-Vue",
+            name: "Vue3",
+            versions: "3.4.29"
+        },
+        {
+            icon: "#icon-element-plus",
+            name: "ElementPlus",
+            versions: "2.8.2"
+        }, {
             icon: "#icon-pinia",
             name: "Pinia",
             versions: "2.1.7"
+        }, {
+            icon: "#icon-axios",
+            name: "Axios",
+            versions: "1.7.7"
+        }, {
+            icon: "#icon-eslint",
+            name: "Eslint",
+            versions: "8.57.0"
+        }, {
+            icon: "#icon-wangeditor-menu-img-",
+            name: "Wangeditor",
+            versions: "5.1.23"
+        },{
+            icon: "#icon-less",
+            name: "Less",
+            versions: "4.2.0"
         }]
+
         return {
-            techniqueList,
+            overallList,
+            serverList,
+            clientList,
             pageQuery,
             getArticleList,
             articleList,
@@ -182,8 +257,8 @@ export default {
 
     .middle_box {
         .card_box {
+
             display: flex;
-            flex-wrap: wrap;
 
             .card_class {
                 // border-radius: 10px;
@@ -207,18 +282,17 @@ export default {
                 }
 
                 .abstract_box {
-                    font-size: small;
-                    height: 150px;
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 8;
+                    -webkit-line-clamp: 5;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                    font-size: small;
                 }
 
                 .all_btn {
                     width: 60px;
-                    margin: 0 auto;
+                    margin: 10px auto 0px auto;
                 }
             }
         }
@@ -228,12 +302,13 @@ export default {
     .technique_box {
         .card_box {
             display: flex;
+
             .card_class {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-               border: 1px solid var(--systemColor);
+                border: 1px solid var(--systemColor);
                 margin: 10px;
                 padding: 10px;
                 text-align: center;

@@ -50,7 +50,7 @@ export default {
 
 <style scoped lang="less">
 a,a:hover{
-    background-color:#fff;
+    background-color:transparent;
 }
 .icon{
     fill: white;
