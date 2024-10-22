@@ -1,7 +1,7 @@
 <template>
     <el-input v-model="articleInfo.title" placeholder="请输入标题" />
     <el-select v-model="articleInfo.category" placeholder="请选择文章类别" style="width: 240px" @change="selectGroupKeyFun">
-        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
+        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id" />
     </el-select>
     <el-input v-model="articleInfo.abstract" type="textarea" placeholder="请输入摘要" />
     <span>推荐文章</span>
@@ -129,7 +129,7 @@ export default {
             }
         }
         const getConfigurationList = async () => {
-            const response = await http.get('configuration/list', { params: { type: "article_category" } })
+            const response = await http.get('categories/list', { params: { type: "article_category" } })
             options.value = response.data.data
         }
         return {

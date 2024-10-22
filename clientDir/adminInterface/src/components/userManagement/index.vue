@@ -20,7 +20,7 @@
             <el-input v-model="userinfo.username" placeholder="请输入用户名" />
             <el-input v-model="userinfo.password" placeholder="请输入密码" />
             <el-select v-model="userinfo.category" placeholder="请选择用户类别" size="large" @change="selectGroupKeyFun">
-                <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
+                <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
         </div>
         <template #footer>
@@ -151,7 +151,7 @@ export default {
         };
         //获取用户类别列表
         const getConfigurationList = async () => {
-            const response = await http.get('configuration/list', { params: { type: "user_category" } })
+            const response = await http.get('categories/list', { params: { type: "user_category" } })
             options.value = response.data.data
         }
         const selectGroupKeyFun = (value: any) => {

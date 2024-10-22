@@ -7,6 +7,7 @@ const whiteList = [
   '/api/article/content',
   '/api/user/login', // 例如登录接口通常不需要身份验证  
   '/api/user/add',
+  '/api/categories/list',
 ];  
   
 export async function authenticate(ctx: any, next: any) {  

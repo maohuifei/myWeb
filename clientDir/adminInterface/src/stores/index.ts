@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { defineStore } from 'pinia'
 // import { createRequest } from '@/axios'
 
@@ -9,29 +8,14 @@ export const myStore = defineStore('myStore', {
         articleNewOrEdit: 0,//新建文章：0，编辑文章：id
         responseData: null,
         token: "",
-        API_URL: 'http://111.229.189.189/api'
+        //API_URL: "http://111.229.189.189/api/", //生产环境
+        API_URL: 'http://localhost:3000/api', // 本地环境
     }),
     actions: {
         //定义修改状态的方法
         updataMainStateFun(newState: number) {
             this.mainState = newState
         },
-        // async getDataToServer(url: string, params?: any) {
-        //     const response = await axios.get(`${this.API_URL}/${url}`, { params })
-        //     return response.data
-        // },
-        // async postDataToServer(url: string, body: any) {
-        //     const response = await axios.post(`${this.API_URL}/${url}`, body)
-        //     return response.data
-        // },
-        // async putDataToServer(url: string, body: any) {
-        //     const response = await axios.put(`${this.API_URL}/${url}`, body)
-        //     return response.data
-        // },
-        // async delDataToServer(url: string, value: any) {
-        //     const response = await axios.delete(`${this.API_URL}/${url}/${value}`)
-        //     return response.data
-        // }
     },
     getters: {
         //定义计算属性
