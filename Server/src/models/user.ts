@@ -23,7 +23,7 @@ export class UserDataService{
         if (waitPutUser) {
             waitPutUser.username = value.username
             waitPutUser.password = value.password
-            waitPutUser.category = value.category
+            waitPutUser.categoryId = value.categoryId
             await userRepository.save(waitPutUser)
         }else{
             throw new Error('用户未找到');

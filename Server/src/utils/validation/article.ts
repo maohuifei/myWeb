@@ -3,7 +3,7 @@ import Joi from 'joi'
 const addArticleSchema = Joi.object({
     title: Joi.string().required(),
     content: Joi.string(),
-    category: Joi.number().required(),
+    categoryId: Joi.number().required(),
     abstract: Joi.string(),
     recommend: Joi.boolean(),
     state:Joi.boolean(),
@@ -12,7 +12,7 @@ const putArticleSchema = Joi.object({
     id: Joi.number().integer().required(),
     title: Joi.string(),
     content: Joi.string(),
-    category: Joi.number(),
+    categoryId: Joi.number(),
     abstract: Joi.string(),
     recommend: Joi.boolean(),
     state:Joi.boolean(),
@@ -25,7 +25,7 @@ const delArticleSchema = Joi.object({
 const getArticleSchema = Joi.object({
     id: Joi.number().integer(),
     title: Joi.string(),
-    category: Joi.number(),
+    categoryId: Joi.number(),
     recommend: Joi.boolean(),
     state:Joi.boolean(),
     page: Joi.number().integer().required(),

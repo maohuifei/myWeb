@@ -35,12 +35,12 @@ export default {
         const store = myStore()
 
         const tableData = ref([])
-        const viewArticle = (value?:any) => {
-            if(!value){
-                store.articleNewOrEdit=0
-            }else{
+        const viewArticle = (value?: any) => {
+            if (!value) {
+                store.articleNewOrEdit = 0
+            } else {
                 console.log(`获取文章id${value.id}`)
-                store.articleNewOrEdit=value.id
+                store.articleNewOrEdit = value.id
             }
             store.updataMainStateFun(21)
         }
@@ -49,14 +49,48 @@ export default {
             pageSize: 10
         })
         const totalCount = ref(0)//数据总条数
+        //获取文章列表
+        const articleList = ref([])
         const getActive = async () => {
-            const getData = await http.get('article/list', {
-                params:parameter.value
+            const response = await http.get('article/list', {
+                params: parameter.value
             })
-            tableData.value = getData.data.data
-            totalCount.value = getData.data.totalCount
+            articleList.value = response.data.data
+            totalCount.value = response.data.totalCount
+            // console.log("获取文章列表",articleList.value);
+            getCategoryList()
         }
-        const deleBtn = async (value:any) => {
+        //存储文章类别列表
+        const categoryList = ref([])
+        //获取类别列表-文章类别
+        const getCategoryList = async () => {
+            const response = await http.get('categories/list', { params: { type: "article_category" } })
+            categoryList.value = response.data.data
+            // console.log("获取文章类别列表",categoryList.value);
+            updateCategoryNames()
+        }
+        // 更新文章列表中的类别名称  
+        const updateCategoryNames = () => {
+            tableData.value=articleList.value
+            // 遍历 articleList 中的每一项  
+            tableData.value.forEach(article => {
+                // 尝试在 categoryList 中找到与 article.categoryId 相匹配的对象  
+                const category = categoryList.value.find(cat => cat.id === article.categoryId);
+
+                // 如果找到了匹配的对象，就更新 article 的 category 属性  
+                if (category) {
+                    // 这里我们假设 article 对象是可以直接修改的（即它不是通过某些不可变数据处理库创建的）  
+                    // 如果 article 是不可变的，你需要使用相应的方法来更新它  
+                    article.category = category.name;
+                } else {
+                    // 如果没有找到匹配的对象，你可以选择设置一个默认值，或者不做任何操作  
+                    // 例如，你可以将 article.category 设置为 null 或 ''（空字符串）  
+                    article.category = "未分类"; // 如果需要的话，取消注释这行代码  
+                }
+            });
+            // console.log("替换后的data",tableData.value);
+        };
+        const deleBtn = async (value: any) => {
             await http.delete(`article/delete/${value.id}`)
             try {
                 ElMessage({
@@ -72,39 +106,39 @@ export default {
             parameter.value.page = value
             getActive()
         };
-        const stateBtn= async(value:any)=>{
+        const stateBtn = async (value: any) => {
             try {
-                    const parameter={
-                        id:value.id,
-                        state:!value.state
-                    }
-                    await http.put('article/put', parameter)
-                    ElMessage({
-                        message: '修改成功',
-                        type: 'success',
-                    })
-                    getActive()
-
-
-                } catch (error) {
-                    ElMessage.error('修改失败')
+                const parameter = {
+                    id: value.id,
+                    state: !value.state
                 }
+                await http.put('article/put', parameter)
+                ElMessage({
+                    message: '修改成功',
+                    type: 'success',
+                })
+                getActive()
+
+
+            } catch (error) {
+                ElMessage.error('修改失败')
+            }
         }
-        const recommendBtn=async(value: { id: any; recommend: any; })=>{
+        const recommendBtn = async (value: { id: any; recommend: any; }) => {
             try {
-                    const parameter={
-                        id:value.id,
-                        recommend:!value.recommend
-                    }
-                    await http.put('article/put', parameter)
-                    ElMessage({
-                        message: '修改成功',
-                        type: 'success',
-                    })
-                    getActive()
-                } catch (error) {
-                    ElMessage.error('修改失败')
+                const parameter = {
+                    id: value.id,
+                    recommend: !value.recommend
                 }
+                await http.put('article/put', parameter)
+                ElMessage({
+                    message: '修改成功',
+                    type: 'success',
+                })
+                getActive()
+            } catch (error) {
+                ElMessage.error('修改失败')
+            }
         }
         return {
             recommendBtn,
@@ -116,6 +150,10 @@ export default {
             totalCount,
             parameter,
             deleBtn,
+            getCategoryList,
+            categoryList,
+            articleList,
+            updateCategoryNames,
         }
     }
 }

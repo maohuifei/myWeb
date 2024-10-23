@@ -3,13 +3,13 @@ import Joi from 'joi'
 const addUserSchema = Joi.object({
     username: Joi.string().required(),
     password: Joi.string().required(),
-    category: Joi.number()
+    categoryId: Joi.number()
 });
 const updateUserSchema = Joi.object({
     id: Joi.number().integer().required(),
     username: Joi.string().required(),
     password: Joi.string().required(),
-    category: Joi.number()
+    categoryId: Joi.number()
 });
 
 const deleteUserSchema = Joi.object({
@@ -19,7 +19,7 @@ const deleteUserSchema = Joi.object({
 const getUserSchema = Joi.object({
     id: Joi.number().integer(),
     username: Joi.string(),
-    category: Joi.number(),
+    categoryId: Joi.number(),
     page: Joi.number().integer().required(),
     pageSize: Joi.number().integer().required(),
 });

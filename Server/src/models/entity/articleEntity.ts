@@ -15,7 +15,7 @@ export class Article {
     content: string="";//内容
 
     @Column()
-    category!: string;//类别
+    categoryId!: number;//类别id
 
     @Column()
     recommend: boolean=false;//是否推荐

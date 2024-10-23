@@ -23,7 +23,7 @@ export class ArticleDataService {
         if (waitPutArticle) {
             waitPutArticle.title = value.title
             waitPutArticle.content = value.content
-            waitPutArticle.category = value.category
+            waitPutArticle.categoryId = value.categoryId
             waitPutArticle.abstract = value.abstract
             waitPutArticle.recommend = value.recommend
             waitPutArticle.state = value.state
