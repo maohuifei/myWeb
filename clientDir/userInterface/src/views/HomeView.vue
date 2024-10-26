@@ -259,6 +259,7 @@ export default {
         .card_box {
 
             display: flex;
+            flex-wrap: wrap;
 
             .card_class {
                 // border-radius: 10px;

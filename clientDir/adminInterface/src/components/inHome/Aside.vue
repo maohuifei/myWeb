@@ -23,27 +23,9 @@
                 <el-menu-item-group>
                     <el-menu-item index="1-3" @click="toFieldSystemFun">
                         <el-icon><Finished /></el-icon>
-                        <span>字段配置</span>
+                        <span>类别配置</span>
                     </el-menu-item>
                 </el-menu-item-group>
-                <!-- <el-menu-item-group>
-                    <el-menu-item index="1-1" @click="toArticeSystemFun">
-                        <el-icon><Reading /></el-icon>
-                        <span>文章配置</span>
-                    </el-menu-item>
-                </el-menu-item-group>
-                <el-menu-item-group>
-                    <el-menu-item index="1-3" @click="toUserSystemFun">
-                        <el-icon><User /></el-icon>
-                        <span>用户配置</span>
-                    </el-menu-item>
-                </el-menu-item-group>
-                <el-menu-item-group>
-                    <el-menu-item index="1-2" @click="toWebSystemFun">
-                        <el-icon><Postcard /></el-icon>
-                        <span>网站配置</span>
-                    </el-menu-item>
-                </el-menu-item-group> -->
             </el-sub-menu>
         </el-menu>
     </div>

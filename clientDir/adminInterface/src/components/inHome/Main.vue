@@ -6,7 +6,7 @@
         <!-- <articleSystem v-else-if="store.mainState==41"></articleSystem>
         <webSystem v-else-if="store.mainState==42"></webSystem>
         <userSystem v-else-if="store.mainState==43"></userSystem> -->
-        <fieldSystem v-else-if="store.mainState==44"></fieldSystem>
+        <categoriesSystem v-else-if="store.mainState==44"></categoriesSystem>
         <span v-else>首页</span>
     </div>
 </template>
@@ -18,7 +18,7 @@ import userManagement from '../userManagement/index.vue'
 // import userSystem from '../systemManagement/userSystem.vue';
 // import webSystem from '../systemManagement/webSystem.vue';
 import newArticle from '../articleManagement/newArticle.vue';
-import fieldSystem from '../systemManagement/fieldSystem.vue';
+import categoriesSystem from '../systemManagement/categoriesSystem.vue';
 
 import { myStore } from '@/stores'
 const store=myStore()

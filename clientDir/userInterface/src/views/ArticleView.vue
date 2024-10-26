@@ -93,6 +93,7 @@ export default {
 
     .card_box {
         display: flex;
+        flex-wrap: wrap;
         .card_class {
             width: 243px;
             height: 300px;

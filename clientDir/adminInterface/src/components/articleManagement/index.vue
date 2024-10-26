@@ -64,7 +64,7 @@ export default {
         const categoryList = ref([])
         //获取类别列表-文章类别
         const getCategoryList = async () => {
-            const response = await http.get('categories/list', { params: { type: "article_category" } })
+            const response = await http.get('categories/list', { params: { type: "文章分类" } })
             categoryList.value = response.data.data
             // console.log("获取文章类别列表",categoryList.value);
             updateCategoryNames()

@@ -129,7 +129,7 @@ export default {
             }
         }
         const getConfigurationList = async () => {
-            const response = await http.get('categories/list', { params: { type: "article_category" } })
+            const response = await http.get('categories/list', { params: { type: "文章分类" } })
             options.value = response.data.data
         }
         return {

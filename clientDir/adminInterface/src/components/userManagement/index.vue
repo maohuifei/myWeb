@@ -150,7 +150,7 @@ export default {
         const categoryList=ref([])
         //获取用户类别列表
         const getConfigurationList = async () => {
-            const response = await http.get('categories/list', { params: { type: "user_category" } })
+            const response = await http.get('categories/list', { params: { type: "用户分类" } })
             categoryList.value = response.data.data
             console.log("获取用户类别列表",categoryList.value);
             // options.value = response.data.data
