@@ -9,10 +9,10 @@ export class Article {
     title!: string;//标题
 
     @Column()
-    abstract: string="暂无摘要";//摘要
+    abstract!: string;//摘要
 
-    @Column('text')//支持长文本
-    content: string="";//内容
+    @Column('text') //支持长文本
+    content!: string;//内容
 
     @Column()
     categoryId!: number;//类别id

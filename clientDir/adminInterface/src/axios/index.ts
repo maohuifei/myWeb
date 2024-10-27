@@ -4,6 +4,8 @@ import { useRouter } from 'vue-router';
 import { myStore } from '@/stores';
   
 const stores=myStore()
+const router = useRouter();
+
 const service = axios.create({
   baseURL: stores.API_URL,
   timeout: 5000, // 请求超时时间  
@@ -17,7 +19,6 @@ service.interceptors.request.use(
         config.headers['Authorization'] = `Bearer ${token}`;  
       }
       else{
-        const router = useRouter();
         router.push('./login')
         ElMessage.error('认证过期，请重新登录')
       }
@@ -25,9 +26,38 @@ service.interceptors.request.use(
   },  
   (error) => {  
     // 对请求错误做些什么  
-    console.error(error); // for debug  
-    Promise.reject(error);  
+    console.log("请求拦截器报错",error); // for debug  
+    // Promise.reject(error);  
   }  
-);  
+)
+
+// 响应拦截器
+service.interceptors.response.use(
+  (response) => {
+    // 对响应数据做些什么
+    return response; // 返回数据部分
+  },
+  (error) => {
+    // 对响应错误做些什么
+    console.log("响应拦截器报错", error); // for debug
+    const status = error.response ? error.response.status : null;
+
+    // 根据不同的状态码进行不同的处理
+    if (status === 401) {
+      ElMessage.error(error.response.data);
+      router.push('./login'); // 跳转到登录页面
+    } else if (status === 404) {
+      ElMessage.error(error.response.data);
+    } else if (status === 405) {
+      ElMessage.error(error.response.data);
+      router.push('./login'); // 跳转到登录页面
+    } else {
+      ElMessage.error(error.response.data);
+    }
+
+    return Promise.reject(error); // 继续抛出错误
+  }
+);
+
   
 export default service;

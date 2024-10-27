@@ -11,7 +11,8 @@ export const AppDataSource = new DataSource({
     password: 'HFhf991((!',
     database: 'huafengSQL',//数据库名
     entities: [User,Article,Categories],//一个数组，用于指定 TypeORM 应该加载哪些实体类
-    // synchronize: true,
+    synchronize: false,
+    // logging: true,
 });
 
   

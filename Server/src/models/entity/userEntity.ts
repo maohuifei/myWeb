@@ -1,19 +1,19 @@
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
-// import * as bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
-    id: number = 0;
+    id!: number;
 
     @Column()
-    username: string = '';
+    username!: string;
 
     @Column()
-    password: string = '';
+    password!: string;
 
     @Column()
-    categoryId: number=0;
+    categoryId!: number;
 
     // @BeforeInsert()
     // async hashPassword() {

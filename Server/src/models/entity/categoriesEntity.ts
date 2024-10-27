@@ -3,11 +3,11 @@ import { Entity,PrimaryGeneratedColumn,Column } from 'typeorm';
 @Entity()
 export class Categories {
     @PrimaryGeneratedColumn()
-    id:number=0;
+    id!:number;
 
     @Column()
-    name:string='';
+    name!: string;
 
     @Column()
-    type:string='';
+    type!: string;
 }

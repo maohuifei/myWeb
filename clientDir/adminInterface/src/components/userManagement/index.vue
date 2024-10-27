@@ -1,5 +1,5 @@
 <template>
-    <div class="article_box">
+    <div class="user_box">
         <!-- <h1 class="title_class">用户管理</h1> -->
         <el-button type="success" @click="userUperation()">新增用户</el-button>
         <el-table :data="tableData" height="530" :style="{ width: '100%' }">
@@ -12,8 +12,10 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination class="pag_class" background @current-change="handleCurrentChange" :current-page="parameter.page"
-            :page-size="parameter.pageSize" layout="prev, pager, next" :total="totalCount" />
+        <el-pagination class="pag_class" background layout="prev, pager, next" 
+        v-model:current-page="parameter.page"
+        :page-size="parameter.pageSize" 
+        :total="totalCount" />
     </div>
     <el-dialog v-model="newuseerwin" :title="newUserTitle">
         <div>
@@ -88,6 +90,7 @@ export default {
                     newUserTitle.value = '编辑用户'
             }
         }
+        //删除按钮
         const delUser = async (value: any) => {
             try {
                 await http.delete(`user/delete/${value.id}`)
@@ -144,7 +147,7 @@ export default {
             })
             userList.value = getData.data.data
             totalCount.value = getData.data.data.totalCount
-            console.log("获取用户列表",userList.value);
+            // console.log("获取用户列表",userList.value);
             getConfigurationList()
         }
         const categoryList=ref([])
@@ -152,7 +155,7 @@ export default {
         const getConfigurationList = async () => {
             const response = await http.get('categories/list', { params: { type: "用户分类" } })
             categoryList.value = response.data.data
-            console.log("获取用户类别列表",categoryList.value);
+            // console.log("获取用户类别列表",categoryList.value);
             // options.value = response.data.data
             updateCategoryNames()
         }
@@ -166,23 +169,20 @@ export default {
 
                 // 如果找到了匹配的对象，就更新 article 的 category 属性  
                 if (category) {
-                    // 这里我们假设 article 对象是可以直接修改的（即它不是通过某些不可变数据处理库创建的）  
-                    // 如果 article 是不可变的，你需要使用相应的方法来更新它  
                     user.category = category.name;
                 } else {
-                    // 如果没有找到匹配的对象，你可以选择设置一个默认值，或者不做任何操作  
-                    // 例如，你可以将 article.category 设置为 null 或 ''（空字符串）  
-                    user.category = "未分类"; // 如果需要的话，取消注释这行代码  
+                    // 如果没有找到匹配的对象，你可以选择设置一个默认值，或者不做任何操作   
+                    user.category = "未分类";  
                 }
             });
-            console.log("替换后的data",tableData.value);
+            // console.log("替换后的data",tableData.value);
         };
         const selectGroupKeyFun = (value: any) => {
             userinfo.value.categoryId = value
         }
            //分页按钮的触发事件
-           const handleCurrentChange = async (value: number) => {
-            parameter.value.page = value
+        const handleCurrentChange = async (newPage: number) => {
+            parameter.value.page = newPage
             getUserList()
         };
         return {
@@ -211,7 +211,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped lang="less">
 .title_class {
     margin-bottom: 20px;
 }

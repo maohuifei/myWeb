@@ -91,8 +91,8 @@ export default {
             // console.log("替换后的data",tableData.value);
         };
         const deleBtn = async (value: any) => {
-            await http.delete(`article/delete/${value.id}`)
             try {
+                await http.delete(`article/delete/${value.id}`)
                 ElMessage({
                     message: '删除文章成功',
                     type: 'success',
@@ -160,7 +160,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped lang="less">
 .title_class {
     margin-bottom: 20px;
 }
