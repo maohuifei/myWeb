@@ -13,7 +13,7 @@ export class User {
     password!: string;
 
     @Column()
-    categoryId!: number;
+    categoryId: number=0;
 
     // @BeforeInsert()
     // async hashPassword() {

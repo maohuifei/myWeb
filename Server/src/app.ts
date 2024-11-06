@@ -4,9 +4,10 @@ import jsonError from 'koa-json-error';
 import userRouter from './routes/user';
 import ariticleRouter from './routes/article'
 import categoriesRouter from './routes/categories'
-import { AppDataSource } from '../data-source'; // 导入 DataSource 实例
+import { AppDataSource } from './data-source'; // 导入 DataSource 实例
 import cors from 'koa2-cors'
 import { authenticate } from './utils/tokenAuth';
+import 'reflect-metadata';
 
 const app = new Koa();
 

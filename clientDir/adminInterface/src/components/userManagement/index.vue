@@ -12,10 +12,8 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination class="pag_class" background layout="prev, pager, next" 
-        v-model:current-page="parameter.page"
-        :page-size="parameter.pageSize" 
-        :total="totalCount" />
+        <el-pagination class="pag_class" background layout="prev, pager, next" v-model:current-page="parameter.page"
+            :page-size="parameter.pageSize" :total="totalCount" />
     </div>
     <el-dialog v-model="newuseerwin" :title="newUserTitle">
         <div>
@@ -39,7 +37,15 @@ import { ref, onMounted } from 'vue';
 import { myStore } from '@/stores'
 import { ElMessage } from 'element-plus'
 import http from '@/axios'
-
+interface Category {
+  id: number;
+  name: string;
+}
+interface User {
+  username: string;
+  category:string;
+  categoryId: number;
+}
 export default {
     setup() {
         //页面挂载执行
@@ -82,11 +88,11 @@ export default {
                         categoryId: 0
                     }
             } else {
-                    userinfo.value.id=value.id
-                    userinfo.value.username=value.username
-                    userinfo.value.password=value.password
-                    userinfo.value.categoryId=value.categoryId
-                      newuseerwin.value = true,
+                userinfo.value.id = value.id
+                userinfo.value.username = value.username
+                userinfo.value.password = value.password
+                userinfo.value.categoryId = value.categoryId
+                newuseerwin.value = true,
                     newUserTitle.value = '编辑用户'
             }
         }
@@ -150,7 +156,7 @@ export default {
             // console.log("获取用户列表",userList.value);
             getConfigurationList()
         }
-        const categoryList=ref([])
+        const categoryList = ref<Category[]>([]);
         //获取用户类别列表
         const getConfigurationList = async () => {
             const response = await http.get('categories/list', { params: { type: "用户分类" } })
@@ -159,20 +165,20 @@ export default {
             // options.value = response.data.data
             updateCategoryNames()
         }
-        const tableData=ref([])//现实的表格数据
+        const tableData = ref<User[]>([])//现实的表格数据
         const updateCategoryNames = () => {
-            tableData.value=userList.value
+            tableData.value = userList.value
             // 遍历 articleList 中的每一项  
             tableData.value.forEach(user => {
                 // 尝试在 categoryList 中找到与 article.categoryId 相匹配的对象  
-                const category = categoryList.value.find(cat => cat.id === user.categoryId);
+                const category = categoryList.value.find((cat) => cat.id === user.categoryId);
 
                 // 如果找到了匹配的对象，就更新 article 的 category 属性  
                 if (category) {
                     user.category = category.name;
                 } else {
                     // 如果没有找到匹配的对象，你可以选择设置一个默认值，或者不做任何操作   
-                    user.category = "未分类";  
+                    user.category = "未分类";
                 }
             });
             // console.log("替换后的data",tableData.value);
@@ -180,7 +186,7 @@ export default {
         const selectGroupKeyFun = (value: any) => {
             userinfo.value.categoryId = value
         }
-           //分页按钮的触发事件
+        //分页按钮的触发事件
         const handleCurrentChange = async (newPage: number) => {
             parameter.value.page = newPage
             getUserList()

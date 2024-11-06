@@ -1,4 +1,4 @@
-import { AppDataSource } from '../../data-source'
+import { AppDataSource } from '../data-source'
 import { User } from './entity/userEntity'
 
 export class UserDataService{

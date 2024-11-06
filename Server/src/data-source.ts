@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
-import { User } from './src/models/entity/userEntity';
-import { Article } from './src/models/entity/articleEntity';
-import { Categories } from './src/models/entity/categoriesEntity';
+import { User } from './models/entity/userEntity';
+import { Article } from './models/entity/articleEntity';
+import { Categories } from './models/entity/categoriesEntity';
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
     password: 'HFhf991((!',
     database: 'huafengSQL',//数据库名
     entities: [User,Article,Categories],//一个数组，用于指定 TypeORM 应该加载哪些实体类
-    synchronize: false,
+    synchronize: true,
     // logging: true,
 });
 

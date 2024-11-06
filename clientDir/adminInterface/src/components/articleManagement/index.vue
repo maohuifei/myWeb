@@ -26,7 +26,10 @@ import { ref, onMounted } from 'vue';
 import { myStore } from '@/stores';
 import { ElMessage } from 'element-plus'
 import http from '@/axios'
-
+interface Category {
+  id: number;
+  name: string;
+}
 export default {
     setup() {
         onMounted(async () => {
@@ -61,7 +64,7 @@ export default {
             getCategoryList()
         }
         //存储文章类别列表
-        const categoryList = ref([])
+        const categoryList = ref<Category[]>([]);
         //获取类别列表-文章类别
         const getCategoryList = async () => {
             const response = await http.get('categories/list', { params: { type: "文章分类" } })
@@ -71,11 +74,11 @@ export default {
         }
         // 更新文章列表中的类别名称  
         const updateCategoryNames = () => {
-            tableData.value=articleList.value
+            tableData.value = articleList.value
             // 遍历 articleList 中的每一项  
-            tableData.value.forEach(article => {
+            tableData.value.forEach((article: { categoryId: any; category: string; }) => {
                 // 尝试在 categoryList 中找到与 article.categoryId 相匹配的对象  
-                const category = categoryList.value.find(cat => cat.id === article.categoryId);
+                const category = categoryList.value.find((cat) => cat.id === article.categoryId);
 
                 // 如果找到了匹配的对象，就更新 article 的 category 属性  
                 if (category) {

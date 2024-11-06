@@ -1,6 +1,6 @@
 <template>
   <div v-if="isLoading" class="boxLoading"></div>
-  <div v-else @contextmenu.prevent>
+  <div v-else >
     <div class="tage_box">
       <div class="logo_box">
         <RouterLink to="/">
