@@ -95,8 +95,9 @@ export default {
             recommend: true
         })
         const articleList = ref()
-        onMounted(async () => {
+        onMounted( () => {
             getArticleList()
+            
         })
         const utils = new Utils()
         const getArticleList = async () => {
@@ -263,7 +264,7 @@ export default {
 
             .card_class {
                 // border-radius: 10px;
-                width: 18%;
+                width: 200px;
                 height: 250px;
                 margin: 10px;
                 display: flex;

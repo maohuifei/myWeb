@@ -1,10 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
- import HomeView from '../views/HomeView.vue'
- import PrivacyView from '@/views/PrivacyView.vue'
- import AboutView from '@/views/AboutView.vue'
- import ArticleView from '@/views/ArticleView.vue'
-
- import ArticleParticulars from '@/components/ArticleParticulars.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,28 +6,32 @@ const router = createRouter({
     {
       path: '/',
       name: '首页',
-      component: HomeView
+      component: () => import('@/views/HomeView.vue')
     },
     {
       path: '/article',
       name: '文章',
-      component: ArticleView
+      component: () => import('@/views/ArticleView.vue')
     },
     {
       path:'/articleParticulars',
       name:"文章详情",
-      component:ArticleParticulars
+      component:() => import('@/components/ArticleParticulars.vue')
     },
     {
       path: '/about',
       name: '关于',
-      component: AboutView
+      component: () => import('@/views/AboutView.vue')
     },
     {
       path: '/privacy',
       name: '隐私政策',
-      component: PrivacyView
-    },
+      component: () => import('@/views/PrivacyView.vue')
+    },{
+      path:'/maintenance',
+      name:'维护中',
+      component:() => import('@/components/Maintenance.vue')
+    }
   ]
 })
 

@@ -1,6 +1,6 @@
 <template>
   <div v-if="isLoading" class="boxLoading"></div>
-  <div v-else>
+  <div v-else @contextmenu.prevent>
     <div class="tage_box">
       <div class="logo_box">
         <RouterLink to="/">
@@ -14,18 +14,9 @@
         <RouterLink to="/privacy">公告</RouterLink>
       </div>
       <div class="icon_box">
-        <svg class="icon" aria-hidden="true">
-          <use href="#icon-sousuo"></use>
-        </svg>
         <!-- <svg class="icon" aria-hidden="true">
-        <use href="#icon-shengyin"></use>
-      </svg>
-      <svg class="icon" aria-hidden="true">
-        <use href="#icon-taiyang"></use>
-      </svg>
-      <svg class="icon" aria-hidden="true">
-        <use href="#icon-dingyue"></use>
-      </svg> -->
+          <use href="#icon-sousuo"></use>
+        </svg> -->
       </div>
     </div>
     <div style="height: 60px;"></div>
@@ -41,14 +32,38 @@
 <script lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
 import { ref, onMounted } from 'vue';
+
 export default {
   setup() {
     const isLoading = ref(true)
-    onMounted(() => [
+    // const maintenance = ref(false)
+    onMounted(() => {
       isLoading.value = false
-    ])
+      // isMobileDevice()
+    })
+    // //检查设备
+    // const isMobileDevice = () => {
+    //   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    //   // 匹配常见的移动设备User-Agent字符串
+    //   const mobileAgents = [
+    //     /android/i,
+    //     /iphone|ipad|ipod/i,
+    //     /blackberry/i,
+    //     /iemobile/i,
+    //     /opera mini/i,
+    //     /windows phone/i,
+    //     /mobile/i, // 这个可能会匹配到一些桌面浏览器的旧版本或特殊配置
+    //     /touch/i   // 这个可能会匹配到一些桌面触摸屏设备
+    //   ]
+    //   // 检查User-Agent字符串是否匹配任何一个移动设备模式
+    //   if (mobileAgents.some(agent => agent.test(userAgent.toLowerCase()))) {
+
+    //   }
+    // }
+
     return {
       isLoading,
+      // isMobileDevice,
     }
   }
 }
