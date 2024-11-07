@@ -11,6 +11,11 @@
   font-weight: normal;
   /* 平滑滚动 */
   scroll-behavior:smooth;
+
+}
+
+body{
+  cursor: url(./cursor.ico), auto;
 }
 
 a,
@@ -20,12 +25,17 @@ a,
   transition: 0.4s;
   padding: 3px;
   font-weight: bolder;
+  cursor: url(./cursor.ico), auto;
+}
+button{
+  cursor: url(./cursor.ico), auto;
 }
 
 @media (hover: hover) {
   a:hover {
     background-color: var(--systemColor);
     color: var(--outElementColor);
+    
   }
 }
 
