@@ -7,33 +7,33 @@
         </div>
         <div class="contact_box">
             <a href="mailto:jzwbuer@163.com">
-                <el-button color="var(--elementColor)">
-                <svg class="icon" aria-hidden="true">
-                    <use href="#icon-youjian"></use>
-                </svg>
-            </el-button>
+                <button>
+                    <svg class="icon" aria-hidden="true">
+                        <use href="#icon-youjian"></use>
+                    </svg>
+                </button>
             </a>
-           <a href="https://www.baidu.com">
-            <el-button color="var(--elementColor)"> 
-                <svg class="icon" aria-hidden="true">
-                    <use href="#icon-weixin"></use>
-                </svg>
-            </el-button>
-           </a>
+            <a href="https://www.baidu.com">
+                <button>
+                    <svg class="icon" aria-hidden="true">
+                        <use href="#icon-weixin"></use>
+                    </svg>
+                </button>
+            </a>
             <a href="https://github.com/maohuifei">
-                <el-button color="var(--elementColor)">
-                <svg class="icon" aria-hidden="true">
-                    <use href="#icon-github"></use>
-                </svg>
-            </el-button>
+                <button>
+                    <svg class="icon" aria-hidden="true">
+                        <use href="#icon-github"></use>
+                    </svg>
+                </button>
             </a>
-           <a href="https://www.baidu.com">
-            <el-button color="var(--elementColor)">
-                 <svg class="icon" aria-hidden="true">
-                    <use href="#icon-telegram"></use>
-                </svg>
-            </el-button>
-           </a>
+            <a href="https://www.baidu.com">
+                <button>
+                    <svg class="icon" aria-hidden="true">
+                        <use href="#icon-telegram"></use>
+                    </svg>
+                </button>
+            </a>
         </div>
     </div>
 </template>
@@ -49,12 +49,15 @@ export default {
 </script>
 
 <style scoped lang="less">
-a,a:hover{
-    background-color:transparent;
+a,
+a:hover {
+    background-color: transparent;
 }
-.icon{
+
+.icon {
     fill: white;
 }
+
 .about_box {
     width: 80%;
     margin: 20px auto;
@@ -79,5 +82,8 @@ a,a:hover{
 
 .contact_box {
     margin-top: 50px;
+    button{
+        background-color: var(--elementColor);
+    }
 }
 </style>

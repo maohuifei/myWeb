@@ -1,5 +1,5 @@
 <template>
-    <!-- <el-button @click="backBtn"  color="var(--txtColor)">返回上一页</el-button> -->
+    <!-- <button @click="backBtn"  color="var(--txtColor)">返回上一页</button> -->
     <div class="particulars_box">
         <h1 class="title">{{ particulars.title }}</h1>
         <div class="content_box">
@@ -21,7 +21,14 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { myStore } from '@/stores/counter';
 import { Utils } from '@/utils';
-
+interface ArticleData {
+    title: string;
+    content: string;
+    category: string;
+    categoryId: number;
+    created_at: string;
+    updated_at: string;
+}
 export default {
     setup() {
         onMounted(() => {
@@ -30,14 +37,7 @@ export default {
             getParticulars(articleId)
         })
         const stores = myStore()
-        interface ArticleData {
-            title: string;
-            content: string;
-            category: string;
-            categoryId: number;
-            created_at: string;
-            updated_at: string;
-        }
+
         const particulars = ref<ArticleData>({} as ArticleData)
         const utils = new Utils()
         const getParticulars = async (id: number) => {

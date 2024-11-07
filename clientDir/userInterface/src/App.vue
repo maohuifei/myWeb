@@ -11,7 +11,7 @@
         <RouterLink to="/">首页</RouterLink>
         <RouterLink to="/article">文章</RouterLink>
         <RouterLink to="/about">关于</RouterLink>
-        <RouterLink to="/privacy">公告</RouterLink>
+        <RouterLink to="/privacy">声明</RouterLink>
       </div>
       <div class="icon_box">
         <!-- <svg class="icon" aria-hidden="true">
@@ -30,7 +30,6 @@
   </div>
 </template>
 <script lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
 import { ref, onMounted } from 'vue';
 
 export default {

@@ -39,7 +39,7 @@
                     <div style="height: 100px;">
                         <p class="abstract_box">{{ article.abstract || "此处为摘要" }}</p>
                     </div>
-                    <el-button class="all_btn" color="var(--txtColor)" @click="ToParticulars(article.id)">阅读</el-button>
+                    <button class="all_btn" color="var(--txtColor)" @click="ToParticulars(article.id)">阅读</button>
                 </div>
             </div>
         </div>
@@ -84,7 +84,6 @@ import { ref, onMounted } from 'vue';
 import { myStore } from '@/stores/counter';
 import { useRouter } from 'vue-router';
 import { Utils } from '@/utils';
-import { ElMessage } from 'element-plus';
 
 export default {
     setup() {
@@ -118,7 +117,8 @@ export default {
                 articleList.value = formattedArticles; // 假设 articleList 是一个响应式引用  
 
             } catch (error) {
-                ElMessage.error('获取列表失败')
+                console.error('获取列表失败');
+                
             }
         }
         const router = useRouter()
@@ -188,12 +188,7 @@ export default {
             icon: "#icon-Vue",
             name: "Vue3",
             versions: "3.4.29"
-        },
-        {
-            icon: "#icon-element-plus",
-            name: "ElementPlus",
-            versions: "2.8.2"
-        }, {
+        },{
             icon: "#icon-pinia",
             name: "Pinia",
             versions: "2.1.7"
@@ -294,7 +289,9 @@ export default {
 
                 .all_btn {
                     width: 60px;
-                    margin: 10px auto 0px auto;
+                margin: 10px auto 0px auto;
+                background-color: var(--systemColor);
+                color: var(--outElementColor);
                 }
             }
         }

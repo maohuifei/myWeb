@@ -40,7 +40,3 @@ a,
   width: 20px;
   height: 20px;
 }
-
-.el-pager li.is-active, .el-pager li:hover{
-  color: var(--txtColor) !important;
-  }

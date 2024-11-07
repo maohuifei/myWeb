@@ -1,28 +1,25 @@
 <template>
     <div class="article_box">
         <div class="card_box">
-            <el-card class="card_class" v-for="(article, index) in articleList" shadow="hover" key="index">
+            <div class="card_class" v-for="(article, index) in articleList" key="index">
                 <h2 class="title_txt">{{ article.title }}</h2>
                 <span class="updata_txt">更新时间：{{ article.updated_at }}</span>
                 <div style="height: 170px;">
                     <p class="abstract_box">{{ article.abstract || "此处为摘要" }}</p>
                 </div>
-                <el-button class="all_btn" color="var(--txtColor)" @click="ToParticulars(article.id)">阅读</el-button>
-            </el-card>
+                <button class="all_btn" @click="ToParticulars(article.id)">阅读</button>
+            </div>
         </div>
-        <el-pagination size="large" layout="prev, pager, next" :total="totalCount" @current-change="handleCurrentChange"
-            :default-page-size="20" />
-        <span class="page_box">
-        
-    </span>
+        <span class="page_box" v-if="pageCount>1">
+            <button class="page_btn" v-for="item in pageCount" @click="pageBtn(item)">{{ item }}</button>
+        </span> 
     </div>
-   
+
 </template>
 
 <script lang='ts'>
 import { ref, onMounted } from 'vue';
 import { myStore } from '@/stores/counter';
-import { ElMessage } from 'element-plus';
 import { Utils } from '@/utils';
 import { useRouter } from 'vue-router';
 
@@ -37,18 +34,22 @@ export default {
             state: true,
         })
         const totalCount = ref()
+        const pageCount = ref(1)
         onMounted(async () => {
             getArticleList()
         })
-        const handleCurrentChange = (value: number) => {
+        const pageBtn = (value: number) => {
             pageQuery.value.page = value
             getArticleList()
+            console.log(value);
+            
         }
         const getArticleList = async () => {
             try {
                 const returned = await stores.getDataToServer('article/list', pageQuery.value)
 
                 totalCount.value = returned.totalCount
+                pageCount.value = Math.ceil(returned.totalCount / 20)
                 // 假设 returned.data 是一个包含多个对象的数组，每个对象都有一个 updated_at 字段  
                 const articles = returned.data;
 
@@ -63,7 +64,8 @@ export default {
                 articleList.value = formattedArticles; // 假设 articleList 是一个响应式引用  
 
             } catch (error) {
-                ElMessage.error('获取列表失败')
+                console.error('获取列表失败');
+                
             }
         }
         const router = useRouter()
@@ -75,10 +77,11 @@ export default {
         }
         return {
             ToParticulars,
-            handleCurrentChange,
+            pageBtn,
             getArticleList,
             articleList,
             totalCount,
+            pageCount,
         }
     }
 }
@@ -94,15 +97,25 @@ export default {
     .card_box {
         display: flex;
         flex-wrap: wrap;
+
         .card_class {
+            border: 1px solid var(--systemColor);
             width: 243px;
             height: 300px;
             margin: 10px;
+            padding: 10px;
             background: transparent;
-            border-color: var(--systemColor);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             text-align: center;
+
+            .all_btn {
+                width: 60px;
+                margin: 10px auto 0px auto;
+                background-color: var(--systemColor);
+                color: var(--outElementColor);
+            }
 
             .title_txt {
                 font-weight: bold
@@ -128,7 +141,10 @@ export default {
 
 
     .page_box {
-     
+        .page_btn{
+            margin: 5px;
+            border: none;
+        }
     }
 }
 </style>
