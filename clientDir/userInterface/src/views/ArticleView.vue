@@ -112,7 +112,8 @@ export default {
 
             .all_btn {
                 width: 60px;
-                margin: 10px auto 0px auto;
+                margin: auto;
+                margin-bottom: 0;
                 background-color: var(--systemColor);
                 color: var(--outElementColor);
             }

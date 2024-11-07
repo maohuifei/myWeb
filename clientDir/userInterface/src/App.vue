@@ -1,6 +1,4 @@
 <template>
-  <div v-if="isLoading" class="boxLoading"></div>
-  <div v-else >
     <div class="tage_box">
       <div class="logo_box">
         <RouterLink to="/">
@@ -14,20 +12,24 @@
         <RouterLink to="/privacy">声明</RouterLink>
       </div>
       <div class="icon_box">
-        <!-- <svg class="icon" aria-hidden="true">
+        <svg class="icon" aria-hidden="true">
           <use href="#icon-sousuo"></use>
-        </svg> -->
+        </svg>
       </div>
     </div>
     <div style="height: 60px;"></div>
     <div class="content_box">
-      <RouterView />
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+
     </div>
     <div class="foot_box">
       <p>© 2024 huafeng 版权所有</p>
       <p>备案号：鲁ICP备2024118017号 </p>
     </div>
-  </div>
 </template>
 <script lang="ts">
 import { ref, onMounted } from 'vue';
@@ -37,9 +39,9 @@ export default {
     const isLoading = ref(true)
     // const maintenance = ref(false)
     onMounted(() => {
-      isLoading.value = false
       // isMobileDevice()
     })
+
     // //检查设备
     // const isMobileDevice = () => {
     //   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -61,7 +63,6 @@ export default {
     // }
 
     return {
-      isLoading,
       // isMobileDevice,
     }
   }
@@ -69,6 +70,14 @@ export default {
 
 </script>
 <style scoped lang="less">
+/* 定义过渡类 */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
+
 .tage_box {
   width: 100%;
   height: 60px;
@@ -128,77 +137,4 @@ export default {
   color: var(--txtColor);
 }
 
-//加载动画
-.boxLoading {
-  width: 50px;
-  height: 50px;
-  margin: auto;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-
-//方块影子
-.boxLoading:before {
-  content: '';
-  width: 50px;
-  height: 5px;
-  background: rgb(107, 107, 107);
-  opacity: 0.7;
-  position: absolute;
-  top: 59px;
-  left: 0;
-  border-radius: 50%;
-  animation: shadow .5s linear infinite;
-}
-
-//方块本体
-.boxLoading:after {
-  content: '';
-  width: 50px;
-  height: 50px;
-  background: rgb(45, 197, 239);
-  animation: animate .5s linear infinite;
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 3px;
-}
-
-@keyframes animate {
-  17% {
-    border-bottom-right-radius: 3px;
-  }
-
-  25% {
-    transform: translateY(9px) rotate(22.5deg);
-  }
-
-  50% {
-    transform: translateY(18px) scale(1, .9) rotate(45deg);
-    border-bottom-right-radius: 40px;
-  }
-
-  75% {
-    transform: translateY(9px) rotate(67.5deg);
-  }
-
-  100% {
-    transform: translateY(0) rotate(90deg);
-  }
-}
-
-@keyframes shadow {
-
-  0%,
-  100% {
-    transform: scale(1, 1);
-  }
-
-  50% {
-    transform: scale(1.2, 1);
-  }
-}
 </style>

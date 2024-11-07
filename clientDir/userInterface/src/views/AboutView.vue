@@ -39,11 +39,10 @@
 </template>
 
 <script lang='ts'>
-
 export default {
+
     setup() {
-        return {
-        }
+
     }
 }
 </script>
@@ -82,8 +81,10 @@ a:hover {
 
 .contact_box {
     margin-top: 50px;
-    button{
+
+    button {
         background-color: var(--elementColor);
+        border: none;
     }
 }
 </style>

@@ -94,9 +94,9 @@ export default {
             recommend: true
         })
         const articleList = ref()
-        onMounted( () => {
+        onMounted(() => {
             getArticleList()
-            
+
         })
         const utils = new Utils()
         const getArticleList = async () => {
@@ -118,7 +118,7 @@ export default {
 
             } catch (error) {
                 console.error('获取列表失败');
-                
+
             }
         }
         const router = useRouter()
@@ -138,17 +138,7 @@ export default {
             icon: "#icon-Nodejs",
             name: "Node.js",
             versions: "20.18.01"
-        },
-        {
-            icon: "#icon-macos",
-            name: "MacOS",
-            versions: "15.0.1"
-        },
-        {
-            icon: "#icon-ubuntu",
-            name: "Ubuntu",
-            versions: "24.10"
-        }]
+        },]
         //服务器技术
         const serverList = [{
             icon: "#icon-ic_taskedit_kafka",
@@ -159,26 +149,11 @@ export default {
             icon: "#icon-mysql1",
             name: "mySQL",
             versions: "3.11.0"
-        },
-        {
-            icon: "#icon-J",
-            name: "Joi",
-            versions: "17.13.3"
-        },
-        {
-            icon: "#icon-jiami",
-            name: "bcrypt",
-            versions: "2.4.3"
-        },
-        {
-            icon: "#icon-cors",
-            name: "Cors",
-            versions: "2.0.6"
-        },{
+        }, {
             icon: "#icon-Nginx",
             name: "Nginx",
             versions: "1.24.0"
-        },{
+        }, {
             icon: "#icon-ks",
             name: "Kubernetes",
             versions: "1.3.1"
@@ -188,7 +163,7 @@ export default {
             icon: "#icon-Vue",
             name: "Vue3",
             versions: "3.4.29"
-        },{
+        }, {
             icon: "#icon-pinia",
             name: "Pinia",
             versions: "2.1.7"
@@ -197,18 +172,10 @@ export default {
             name: "Axios",
             versions: "1.7.7"
         }, {
-            icon: "#icon-eslint",
-            name: "Eslint",
-            versions: "8.57.0"
-        }, {
             icon: "#icon-wangeditor-menu-img-",
             name: "Wangeditor",
             versions: "5.1.23"
-        },{
-            icon: "#icon-less",
-            name: "Less",
-            versions: "4.2.0"
-        }]
+        },]
 
         return {
             overallList,
@@ -289,9 +256,10 @@ export default {
 
                 .all_btn {
                     width: 60px;
-                margin: 10px auto 0px auto;
-                background-color: var(--systemColor);
-                color: var(--outElementColor);
+                    margin: auto;
+                    margin-bottom: 0;
+                    background-color: var(--systemColor);
+                    color: var(--outElementColor);
                 }
             }
         }

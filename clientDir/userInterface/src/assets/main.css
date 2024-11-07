@@ -9,6 +9,8 @@
 
 #app {
   font-weight: normal;
+  /* 平滑滚动 */
+  scroll-behavior:smooth;
 }
 
 a,
