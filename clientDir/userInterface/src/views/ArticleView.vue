@@ -5,7 +5,9 @@
                 <h2 class="title_txt">{{ article.title }}</h2>
                 <span class="updata_txt">更新时间：{{ article.updated_at }}</span>
                 <div style="height: 170px;">
-                    <p class="abstract_box">{{ article.abstract || "此处为摘要" }}</p>
+                    <div class="abstract_container" ref="abstractContainers">
+                        <p class="abstract_box" ref="abstractBoxes">{{ article.abstract || "此处为摘要" }}</p>
+                    </div>
                 </div>
                 <button class="all_btn" @click="ToParticulars(article.id)">阅读</button>
             </div>
@@ -18,7 +20,7 @@
 </template>
 
 <script lang='ts'>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { myStore } from '@/stores/counter';
 import { Utils } from '@/utils';
 import { useRouter } from 'vue-router';
@@ -35,9 +37,17 @@ export default {
         })
         const totalCount = ref()
         const pageCount = ref(1)
+        const abstractBoxes = ref<HTMLElement[]>([])
+        const abstractContainers = ref<HTMLElement[]>([])
+
         onMounted(async () => {
-            getArticleList()
+            await getArticleList()
+            // 等待DOM更新后检查文本是否溢出
+            nextTick(() => {
+                checkTextOverflow()
+            })
         })
+
         const pageBtn = (value: number) => {
             pageQuery.value.page = value
             getArticleList()
@@ -75,6 +85,20 @@ export default {
                 query: { articleId }
             })
         }
+        const checkTextOverflow = () => {
+            abstractBoxes.value.forEach((box, index) => {
+                const container = abstractContainers.value[index]
+                if (box && container) {
+                    // 检查文本是否溢出
+                    const isOverflowing = box.scrollHeight > box.clientHeight
+                    if (isOverflowing) {
+                        container.classList.add('has-overflow')
+                    } else {
+                        container.classList.remove('has-overflow')
+                    }
+                }
+            })
+        }
         return {
             ToParticulars,
             pageBtn,
@@ -82,6 +106,8 @@ export default {
             articleList,
             totalCount,
             pageCount,
+            abstractBoxes,
+            abstractContainers,
         }
     }
 }
@@ -93,58 +119,129 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 20px;
 
     .card_box {
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
+        max-width: 1200px;
 
         .card_class {
             border: 1px solid var(--systemColor);
-            width: 243px;
-            height: 300px;
-            margin: 10px;
-            padding: 10px;
+            width: 280px;
+            height: 320px;
+            margin: 15px;
+            padding: 20px;
             background: transparent;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
 
-            .all_btn {
-                width: 60px;
-                margin: auto;
-                margin-bottom: 0;
-                background-color: var(--systemColor);
-                color: var(--outElementColor);
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 4px;
+                background: var(--systemColor);
+                transform: scaleX(0);
+                transform-origin: left;
+                transition: transform 0.3s ease;
+            }
+
+            &:hover::before {
+                transform: scaleX(1);
             }
 
             .title_txt {
-                font-weight: bold
+                font-weight: bold;
+                font-size: 1.2em;
+                margin-bottom: 10px;
+                color: var(--systemColor);
             }
 
             .updata_txt {
-                font-size: smaller;
-                font-weight: bolder;
-                margin: 5px 0
+                font-size: 0.9em;
+                font-weight: 500;
+                margin: 10px 0;
+                color: #666;
             }
 
-            .abstract_box {
-                /* height: 100px; */
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 8;
+            .abstract_container {
+                flex: 1;
                 overflow: hidden;
-                text-overflow: ellipsis;
-                font-size: small;
+                margin: 10px 0;
+                position: relative;
+
+                &.has-overflow::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 20px;
+                    background: linear-gradient(transparent, white);
+                }
+
+                .abstract_box {
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 6;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    font-size: 0.95em;
+                    line-height: 1.5;
+                    color: #333;
+                }
+            }
+
+            .all_btn {
+                width: 80px;
+                margin: 15px auto 0;
+                background-color: var(--systemColor);
+                color: var(--outElementColor);
+                padding: 8px 15px;
+                border: none;
+                border-radius: 4px;
+                transition: all 0.3s ease;
+                cursor: pointer;
+
+                &:hover {
+                    opacity: 0.9;
+                    transform: scale(1.05);
+                }
             }
         }
     }
 
-
     .page_box {
-        .page_btn{
+        margin-top: 30px;
+        
+        .page_btn {
             margin: 5px;
-            border: none;
+            padding: 8px 12px;
+            border: 1px solid var(--systemColor);
+            background: transparent;
+            color: var(--systemColor);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+
+            &:hover {
+                background: var(--systemColor);
+                color: var(--outElementColor);
+            }
         }
     }
 }

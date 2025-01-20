@@ -11,11 +11,10 @@
   font-weight: normal;
   /* 平滑滚动 */
   scroll-behavior:smooth;
-
 }
 
 body{
-  cursor: url(./cursor.ico), auto;
+  /* 移除自定义光标 */
 }
 
 a,
@@ -25,10 +24,11 @@ a,
   transition: 0.4s;
   padding: 3px;
   font-weight: bolder;
-  cursor: url(./cursor.ico), auto;
+  /* 移除自定义光标 */
 }
+
 button{
-  cursor: url(./cursor.ico), auto;
+  /* 移除自定义光标 */
 }
 
 @media (hover: hover) {

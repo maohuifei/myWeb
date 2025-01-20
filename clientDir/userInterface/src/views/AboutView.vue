@@ -1,39 +1,87 @@
 <template>
     <div class="about_box">
-        <div class="user_box">
-            <h1>Wen Jiang</h1>
-            <h3>神秘IT男</h3>
-            <p>更简单、更纯粹</p>
+        <h1>关于我</h1>
+        <div class="content_section">
+            <h2>个人介绍</h2>
+            <p>你好，我是wen Jiang，一个神秘IT男</p>
         </div>
-        <div class="contact_box">
-            <a href="mailto:jzwbuer@163.com">
-                <button>
+
+        <div class="content_section">
+            <h2>技术栈</h2>
+            <p>最常使用JavaScript技术栈</p>
+            <div class="tech_list">
+                <div class="tech_category">
+                    <h3>WEB开发</h3>
+                    <ul>
+                        <li>JavaScript/ES6+</li>
+                        <li>TypeScript</li>
+                        <li>Vue3</li>
+                        <li>Node.js</li>
+                        <li>Koa</li>
+                        <li>MySQL</li>
+                        <li>MongoDB</li>
+                    </ul>
+                </div>
+                <div class="tech_category">
+                    <h3>操作系统</h3>
+                    <ul>
+                        <li>Windows</li>
+                        <li>MacOS</li>
+                        <li>Ubuntu</li>
+                        <li>CentOS</li>
+                        <li>Deepin</li>
+                        <li>RedHat</li>
+                        <li>中标麒麟</li>
+                    </ul>
+                </div>
+                <div class="tech_category">
+                    <h3>视觉设计</h3>
+                    <ul>
+                        <li>Photoshop</li>
+                        <li>Illustrator</li>
+                        <li>LOGO</li>
+                        <li>插画</li>
+                        <li>包装</li>
+                        <li>UI/UX</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="content_section">
+            <h2>联系方式</h2>
+            <div class="contact_list">
+                <a href="mailto:example@email.com" class="contact_item">
                     <svg class="icon" aria-hidden="true">
                         <use href="#icon-youjian"></use>
                     </svg>
-                </button>
-            </a>
-            <a href="https://www.baidu.com">
-                <button>
-                    <svg class="icon" aria-hidden="true">
-                        <use href="#icon-weixin"></use>
-                    </svg>
-                </button>
-            </a>
-            <a href="https://github.com/maohuifei">
-                <button>
+                    <span>Email</span>
+                </a>
+                <a href="https://github.com/yourusername" target="_blank" class="contact_item">
                     <svg class="icon" aria-hidden="true">
                         <use href="#icon-github"></use>
                     </svg>
-                </button>
-            </a>
-            <a href="https://www.baidu.com">
-                <button>
+                    <span>GitHub</span>
+                </a>
+                <div class="contact_item qrcode-container">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="#icon-weixin"></use>
+                    </svg>
+                    <span>WeChat</span>
+                    <div class="qrcode">
+                        <img src="/weixin.jpg" alt="WeChat QR Code">
+                    </div>
+                </div>
+                <div class="contact_item qrcode-container">
                     <svg class="icon" aria-hidden="true">
                         <use href="#icon-telegram"></use>
                     </svg>
-                </button>
-            </a>
+                    <span>Telegram</span>
+                    <div class="qrcode">
+                        <img src="/telegram.jpg" alt="Telegram QR Code">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -48,43 +96,230 @@ export default {
 </script>
 
 <style scoped lang="less">
-a,
-a:hover {
-    background-color: transparent;
-}
-
-.icon {
-    fill: white;
-}
-
 .about_box {
-    width: 80%;
-    margin: 20px auto;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    color: var(--txtColor);
-}
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
 
-.user_box {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-}
+    h1 {
+        font-size: 2.8em;
+        color: var(--systemColor);
+        text-align: center;
+        margin-bottom: 60px;
+        position: relative;
+        font-weight: 600;
 
-.portrait {
-    width: 100px;
-    height: 100px;
-}
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 4px;
+            background: var(--systemColor);
+            border-radius: 2px;
+        }
+    }
 
-.contact_box {
-    margin-top: 50px;
+    .content_section {
+        margin: 50px 0;
+        padding: 35px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.4s ease;
 
-    button {
-        background-color: var(--elementColor);
-        border: none;
+        &:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        h2 {
+            font-size: 2em;
+            color: var(--systemColor);
+            margin-bottom: 25px;
+            text-align: left;
+            font-weight: 600;
+            position: relative;
+            padding-left: 20px;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 6px;
+                height: 28px;
+                background: var(--systemColor);
+                border-radius: 3px;
+            }
+        }
+
+        p {
+            font-size: 1.15em;
+            line-height: 1.8;
+            color: #2c3e50;
+            text-align: justify;
+            letter-spacing: 0.6px;
+            margin: 0 20px 20px;
+        }
+
+        .tech_list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 30px 20px;
+
+            .tech_category {
+                h3 {
+                    font-size: 1.4em;
+                    color: var(--systemColor);
+                    margin-bottom: 15px;
+                    font-weight: 500;
+                }
+
+                ul {
+                    list-style: none;
+                    padding: 0;
+
+                    li {
+                        font-size: 1.1em;
+                        color: #2c3e50;
+                        margin: 12px 0;
+                        padding-left: 25px;
+                        position: relative;
+
+                        &::before {
+                            content: '•';
+                            position: absolute;
+                            left: 0;
+                            color: var(--systemColor);
+                            font-size: 1.5em;
+                            line-height: 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        .contact_list {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 35px;
+            flex-wrap: wrap;
+
+            .contact_item {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 15px 30px;
+                border: 2.5px solid var(--systemColor);
+                border-radius: 12px;
+                text-decoration: none;
+                color: var(--systemColor);
+                transition: all 0.4s ease;
+                background: transparent;
+                position: relative;
+                overflow: visible;
+                cursor: pointer;
+
+                &.qrcode-container {
+                    .qrcode {
+                        position: absolute;
+                        bottom: calc(100% + 15px);
+                        left: 50%;
+                        transform: translateX(-50%) scale(0);
+                        background: white;
+                        padding: 10px;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+                        transition: all 0.3s ease;
+                        opacity: 0;
+                        z-index: 100;
+
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            top: 100%;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            border-width: 8px;
+                            border-style: solid;
+                            border-color: white transparent transparent transparent;
+                            z-index: 100;
+                        }
+
+                        img {
+                            width: 150px;
+                            height: auto;
+                            display: block;
+                            border-radius: 4px;
+                            object-fit: contain;
+                        }
+                    }
+
+                    &:hover .qrcode {
+                        transform: translateX(-50%) scale(1);
+                        opacity: 1;
+                    }
+                }
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: var(--systemColor);
+                    transform: scaleX(0);
+                    transform-origin: right;
+                    transition: transform 0.4s ease;
+                    z-index: 0;
+                }
+
+                .icon {
+                    width: 28px;
+                    height: 28px;
+                    position: relative;
+                    z-index: 2;
+                    transition: all 0.4s ease;
+                    fill: var(--elementColor);
+                    filter: brightness(0);
+                }
+
+                span {
+                    font-size: 1.2em;
+                    font-weight: 600;
+                    position: relative;
+                    z-index: 2;
+                    transition: all 0.4s ease;
+                }
+
+                &:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+
+                    &::before {
+                        transform: scaleX(1);
+                        transform-origin: left;
+                    }
+
+                    .icon {
+                        fill: var(--outElementColor);
+                        filter: brightness(1);
+                    }
+
+                    span {
+                        color: var(--outElementColor);
+                        transform: scale(1.05);
+                    }
+                }
+            }
+        }
     }
 }
 </style>

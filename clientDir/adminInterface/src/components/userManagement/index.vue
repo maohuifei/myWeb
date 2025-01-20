@@ -1,231 +1,323 @@
 <template>
-    <div class="user_box">
-        <!-- <h1 class="title_class">用户管理</h1> -->
-        <el-button type="success" @click="userUperation()">新增用户</el-button>
-        <el-table :data="tableData" height="530" :style="{ width: '100%' }">
-            <el-table-column prop="username" label="用户名" />
-            <el-table-column prop="category" label="类别" />
-            <el-table-column label="操作">
-                <template #default="scope">
-                    <el-button type="primary" @click="userUperation(scope.row)">编辑</el-button>
-                    <el-button type="danger" @click="delUser(scope.row)">删除</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <el-pagination class="pag_class" background layout="prev, pager, next" v-model:current-page="parameter.page"
-            :page-size="parameter.pageSize" :total="totalCount" />
+    <div class="user-management">
+        <!-- 用户信息卡片 -->
+        <el-card class="user-card">
+            <template #header>
+                <div class="card-header">
+                    <span class="title">个人信息管理</span>
+                    <el-button type="primary" @click="editInfo" :icon="Edit">编辑信息</el-button>
+                </div>
+            </template>
+            <div class="user-info">
+                <el-avatar 
+                    :size="120" 
+                    :src="userInfo.avatar" 
+                    class="user-avatar"
+                />
+                <div class="info-content">
+                    <div class="info-item">
+                        <label>用户名：</label>
+                        <span>{{ userInfo.username }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>昵称：</label>
+                        <span>{{ userInfo.nickname || '未设置' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>个人简介：</label>
+                        <span>{{ userInfo.declaration || '暂无简介' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>地址：</label>
+                        <span>{{ userInfo.address || '未设置' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>职位：</label>
+                        <span>{{ userInfo.position || '未设置' }}</span>
+                    </div>
+                </div>
+            </div>
+        </el-card>
     </div>
-    <el-dialog v-model="newuseerwin" :title="newUserTitle">
-        <div>
-            <el-input v-model="userinfo.username" placeholder="请输入用户名" />
-            <el-input v-model="userinfo.password" placeholder="请输入密码" />
-            <el-select v-model="userinfo.categoryId" placeholder="请选择用户类别" size="large" @change="selectGroupKeyFun">
-                <el-option v-for="item in categoryList" :key="item.id" :label="item.name" :value="item.id" />
-            </el-select>
-        </div>
+
+    <!-- 编辑信息对话框 -->
+    <el-dialog 
+        v-model="editDialog" 
+        title="编辑个人信息"
+        width="500px"
+        destroy-on-close
+    >
+        <el-form 
+            :model="editForm" 
+            label-width="100px"
+            :rules="formRules"
+            ref="formRef"
+        >
+            <el-form-item label="用户名" prop="username">
+                <el-input v-model="editForm.username" placeholder="请输入用户名" />
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+                <el-input 
+                    v-model="editForm.password" 
+                    type="password" 
+                    placeholder="如需修改密码请输入新密码"
+                    show-password 
+                />
+            </el-form-item>
+            <el-form-item label="昵称" prop="nickname">
+                <el-input v-model="editForm.nickname" placeholder="请输入昵称" />
+            </el-form-item>
+            <el-form-item label="头像" prop="avatar">
+                <el-input v-model="editForm.avatar" placeholder="请输入头像URL" />
+            </el-form-item>
+            <el-form-item label="个人简介" prop="declaration">
+                <el-input 
+                    v-model="editForm.declaration" 
+                    type="textarea" 
+                    :rows="3"
+                    placeholder="请输入个人简介" 
+                />
+            </el-form-item>
+            <el-form-item label="地址" prop="address">
+                <el-input v-model="editForm.address" placeholder="请输入地址" />
+            </el-form-item>
+            <el-form-item label="职位" prop="position">
+                <el-input v-model="editForm.position" placeholder="请输入职位" />
+            </el-form-item>
+        </el-form>
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="newuseerwin = false">取消</el-button>
-                <el-button type="primary" @click="yesBtn"> 确定 </el-button>
+                <el-button @click="editDialog = false">取消</el-button>
+                <el-button type="primary" @click="submitEdit" :loading="submitting">
+                    确定
+                </el-button>
             </span>
         </template>
     </el-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import { myStore } from '@/stores'
-import { ElMessage } from 'element-plus'
-import http from '@/axios'
-interface Category {
-  id: number;
-  name: string;
-}
-interface User {
-  username: string;
-  category:string;
-  categoryId: number;
-}
-export default {
-    setup() {
-        //页面挂载执行
-        onMounted(async () => {
-            getUserList()
-        })
-        // const options = ref()
-        const stores = myStore()//商店实例化
-        const newuseerwin = ref(false);//弹窗开关状态
-        const newUserTitle = ref("")//弹窗标题
-        const totalCount = ref(0)//数据总条数
-        const parameter = ref({//分页
-            page: 1,
-            pageSize: 10
-        })
-        const userinfo = ref({//用户信息
-            id: 0,
-            username: "",
-            password: "",
-            categoryId: 0
-        })
-        //弹出框-确认按钮事件
-        const yesBtn = () => {
-            if (newUserTitle.value == '新增用户') {
-                addUser()
-            } else {
-                putUser()
-            }
-        }
-        //根据点击哪个按钮，判断弹出框标题
-        const userUperation = (value?: any) => {
-            getConfigurationList()
-            if (!value) {
-                newuseerwin.value = true,
-                    newUserTitle.value = '新增用户',
-                    userinfo.value = {//用户信息
-                        id: 0,
-                        username: "",
-                        password: "",
-                        categoryId: 0
-                    }
-            } else {
-                userinfo.value.id = value.id
-                userinfo.value.username = value.username
-                userinfo.value.password = value.password
-                userinfo.value.categoryId = value.categoryId
-                newuseerwin.value = true,
-                    newUserTitle.value = '编辑用户'
-            }
-        }
-        //删除按钮
-        const delUser = async (value: any) => {
-            try {
-                await http.delete(`user/delete/${value.id}`)
-                newuseerwin.value = false
-                ElMessage({
-                    message: '删除用户成功',
-                    type: 'success',
-                })
-                getUserList()
-            } catch (error) {
-                ElMessage.error('删除用户失败')
-            }
-        }
-        //修改用户请求
-        const putUser = async () => {
-            try {
-                await http.put('user/put', userinfo.value)
-                newuseerwin.value = false
-                ElMessage({
-                    message: '修改用户成功',
-                    type: 'success',
-                })
-                getUserList()
-            } catch (error) {
-                ElMessage.error('添加用户失败')
-            }
-        }
-        //添加用户请求
-        const addUser = async () => {
-            //清除表单缓存
-            try {
-                const dataToSend = {
-                    username: userinfo.value.username,
-                    password: userinfo.value.password,
-                    categoryId: userinfo.value.categoryId,
-                }
-                await http.post('user/add', dataToSend)
-                newuseerwin.value = false
-                ElMessage({
-                    message: '添加用户成功',
-                    type: 'success',
-                })
-                getUserList()
-            } catch (error) {
-                ElMessage.error('添加用户失败')
-            }
+import { ElMessage } from 'element-plus';
+import { Edit } from '@element-plus/icons-vue';
+import http from '@/axios';
+import { myStore } from '@/stores';
 
-        }
-        const userList = ref([])
-        //获取用户列表请求
-        const getUserList = async () => {
-            const getData = await http.get('user/list', {
-                params: parameter.value
-            })
-            userList.value = getData.data.data
-            totalCount.value = getData.data.data.totalCount
-            // console.log("获取用户列表",userList.value);
-            getConfigurationList()
-        }
-        const categoryList = ref<Category[]>([]);
-        //获取用户类别列表
-        const getConfigurationList = async () => {
-            const response = await http.get('categories/list', { params: { type: "用户分类" } })
-            categoryList.value = response.data.data
-            // console.log("获取用户类别列表",categoryList.value);
-            // options.value = response.data.data
-            updateCategoryNames()
-        }
-        const tableData = ref<User[]>([])//现实的表格数据
-        const updateCategoryNames = () => {
-            tableData.value = userList.value
-            // 遍历 articleList 中的每一项  
-            tableData.value.forEach(user => {
-                // 尝试在 categoryList 中找到与 article.categoryId 相匹配的对象  
-                const category = categoryList.value.find((cat) => cat.id === user.categoryId);
+// 类型定义
+interface UserInfo {
+    id: number;
+    username: string;
+    nickname: string;
+    avatar: string;
+    declaration: string;
+    address: string;
+    position: string;
+}
 
-                // 如果找到了匹配的对象，就更新 article 的 category 属性  
-                if (category) {
-                    user.category = category.name;
-                } else {
-                    // 如果没有找到匹配的对象，你可以选择设置一个默认值，或者不做任何操作   
-                    user.category = "未分类";
-                }
-            });
-            // console.log("替换后的data",tableData.value);
-        };
-        const selectGroupKeyFun = (value: any) => {
-            userinfo.value.categoryId = value
+interface EditForm {
+    id: number;
+    username: string;
+    password: string;
+    nickname: string;
+    avatar: string;
+    declaration: string;
+    address: string;
+    position: string;
+    [key: string]: string | number; // 添加索引签名
+}
+
+// 状态定义
+const store = myStore();
+const userInfo = ref<UserInfo>({
+    id: 0,
+    username: '',
+    nickname: '',
+    avatar: '',
+    declaration: '',
+    address: '',
+    position: ''
+});
+const editDialog = ref(false);
+const submitting = ref(false);
+const formRef = ref();
+
+// 表单验证规则
+const formRules = {
+    username: [
+        { required: true, message: '请输入用户名', trigger: 'blur' },
+        { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+    ],
+    password: [
+        { min: 6, message: '密码长度不能小于6个字符', trigger: 'blur' }
+    ],
+    nickname: [
+        { max: 20, message: '昵称不能超过20个字符', trigger: 'blur' }
+    ]
+};
+
+const editForm = ref<EditForm>({
+    id: 0,
+    username: '',
+    password: '',
+    nickname: '',
+    avatar: '',
+    declaration: '',
+    address: '',
+    position: ''
+});
+
+// 获取用户信息
+const getUserInfo = async () => {
+    try {
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            ElMessage.error('未登录，请先登录');
+            return;
         }
-        //分页按钮的触发事件
-        const handleCurrentChange = async (newPage: number) => {
-            parameter.value.page = newPage
-            getUserList()
-        };
-        return {
-            updateCategoryNames,
-            categoryList,
-            // options,
-            newUserTitle,
-            userUperation,
-            newuseerwin,
-            userinfo,
-            getUserList,
-            tableData,
-            userList,
-            handleCurrentChange,
-            totalCount,
-            parameter,
-            addUser,
-            putUser,
-            delUser,
-            yesBtn,
-            getConfigurationList,
-            selectGroupKeyFun,
+        
+        // 从token中解析用户信息
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(window.atob(base64));
+        
+        if (!payload.id) {
+            ElMessage.error('token无效，请重新登录');
+            return;
+        }
+
+        const response = await http.get('user/query', {
+            params: { id: payload.id }
+        });
+        userInfo.value = response.data.data;
+    } catch (error) {
+        ElMessage.error('获取用户信息失败');
+    }
+};
+
+// 打开编辑对话框
+const editInfo = () => {
+    editForm.value = {
+        id: userInfo.value.id,
+        username: userInfo.value.username,
+        password: '',
+        nickname: userInfo.value.nickname || '',
+        avatar: userInfo.value.avatar || '',
+        declaration: userInfo.value.declaration || '',
+        address: userInfo.value.address || '',
+        position: userInfo.value.position || ''
+    };
+    editDialog.value = true;
+};
+
+// 提交编辑
+const submitEdit = async () => {
+    if (!formRef.value) return;
+    
+    try {
+        await formRef.value.validate();
+        submitting.value = true;
+        
+        const updateData: any = { id: userInfo.value.id };
+        // 只包含已修改的字段
+        Object.keys(editForm.value).forEach(key => {
+            if (editForm.value[key] && key !== 'id') {
+                updateData[key] = editForm.value[key];
+            }
+        });
+
+        await http.put('user/revise', updateData);
+        ElMessage.success('更新成功');
+        editDialog.value = false;
+        getUserInfo(); // 刷新用户信息
+    } catch (error: any) {
+        ElMessage.error(error.response?.data?.message || '更新失败');
+    } finally {
+        submitting.value = false;
+    }
+};
+
+onMounted(() => {
+    getUserInfo();
+});
+</script>
+
+<style scoped lang="less">
+.user-management {
+    min-height: 100%;
+    padding: 20px;
+    background-color: #f5f7fa;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-card {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+    background-color: #fff;
+    flex: 1;
+    
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #303133;
         }
     }
 }
 
-</script>
-
-<style scoped lang="less">
-.title_class {
-    margin-bottom: 20px;
+.user-info {
+    display: flex;
+    padding: 30px;
+    gap: 40px;
+    
+    .user-avatar {
+        flex-shrink: 0;
+        border: 2px solid #eee;
+        padding: 2px;
+        transition: all 0.3s ease;
+        
+        &:hover {
+            transform: scale(1.05);
+            border-color: var(--el-color-primary);
+        }
+    }
+    
+    .info-content {
+        flex: 1;
+        
+        .info-item {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: baseline;
+            
+            label {
+                font-weight: bold;
+                color: #606266;
+                min-width: 100px;
+            }
+            
+            span {
+                color: #303133;
+                flex: 1;
+            }
+        }
+    }
 }
 
-.pag_class {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-top: 20px;
+.dialog-footer {
+    padding-top: 20px;
+    border-top: 1px solid #dcdfe6;
+}
+
+:deep(.el-form-item__label) {
+    font-weight: 500;
 }
 </style>

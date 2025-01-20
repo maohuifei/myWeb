@@ -1,42 +1,35 @@
+/**
+ * 用户相关路由定义
+ * 处理所有与用户相关的HTTP路由
+ */
 import Router from 'koa-router'
+import { loginPot, revisePot, queryPot } from '../controllers/user';
 
-import { userAdd,userDel,userPut,userGet,loginPot} from '../controllers/user';
-
+/**
+ * 创建路由实例
+ * 所有用户相关的路由都以/api/user为前缀
+ */
 const router = new Router({
     prefix: '/api/user'
 })
-
-//增
-router.post('/add', async (ctx) => {
-    await userAdd(ctx)
-})
-//删
-router.delete('/delete/:id', async (ctx) => {
-    await userDel(ctx)
-});
-
-//改
-router.put('/put', async (ctx) => {
-    await userPut(ctx)
-});
-//查
-router.get('/list', async (ctx) => {
-    await userGet(ctx)
-})
-
-//登录
+/**
+ * 用户登录
+ * POST /api/user/login
+ * Body: { username: string, password: string }
+ * 返回: { message: string, token: string }
+ */
 router.post('/login', async (ctx) => {
     await loginPot(ctx)
 })
 
-// //注册
-// router.post('/register', async (ctx) => {
-//     await registerPot(ctx)
-// })
+//修改用户信息
+router.put('/revise', async (ctx) => {
+    await revisePot(ctx)
+})
 
-// //更新token
-// router.post('/updataToken', async (ctx) => {
-//     await updataTokenPot(ctx)
-// })
+//查询用户信息
+router.get('/query', async (ctx) => {
+    await queryPot(ctx)
+})
 
 export default router
