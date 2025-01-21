@@ -15,6 +15,7 @@
 
 body{
   /* 移除自定义光标 */
+  margin: 0 !important;
 }
 
 a,

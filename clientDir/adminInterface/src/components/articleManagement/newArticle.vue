@@ -61,18 +61,11 @@
                 </div>
 
                 <div class="editor-container">
-                    <Toolbar 
-                        style="border-bottom: 1px solid #ccc" 
-                        :editor="editorRef" 
-                        :defaultConfig="toolbarConfig"
-                        :mode="mode" 
-                    />
-                    <Editor 
-                        style="height: calc(100vh - 400px); overflow-y: hidden;" 
-                        v-model="articleInfo.content" 
-                        :defaultConfig="editorConfig"
-                        :mode="mode" 
-                        @onCreated="handleCreated" 
+                    <el-input
+                        v-model="articleInfo.content"
+                        type="textarea"
+                        placeholder="请输入 HTML 内容..."
+                        class="html-editor"
                     />
                 </div>
             </div>
@@ -81,169 +74,154 @@
 </template>
 
 <script lang='ts' setup>
-import '@wangeditor/editor/dist/css/style.css' // 引入 css
-import { onBeforeUnmount, ref, shallowRef, onMounted, computed } from 'vue'
-import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { myStore } from '@/stores';
+import { ref, computed, onMounted } from 'vue'
+import { myStore } from '@/stores'
 import { ElMessage } from 'element-plus'
 import http from '@/axios'
 
 const store = myStore()
 const isEdit = computed(() => store.articleNewOrEdit !== 0)
-const mode = ref('default')
 
 const articleInfo = ref({
     title: '',
-    categoryId:'',
-    abstract:'',
-    recommend:false,
-    state:true,
-    content:''
+    categoryId: '',
+    abstract: '',
+    recommend: false,
+    state: true,
+    content: ''
 })
+
 onMounted(async () => {
     if (store.articleNewOrEdit) {
-        const parameter = {
-            id: store.articleNewOrEdit
-        }
         try {
-            const getData = await http.get('article/content', {
-                params: parameter
+            const { data } = await http.get('article/content', {
+                params: { id: store.articleNewOrEdit }
             })
-            articleInfo.value = getData.data.data
-            console.log(articleInfo.value);
-
-        } catch (error) {
-            ElMessage.error('获取文章失败')
+            articleInfo.value = data.data
+        } catch {
+            // 错误已在拦截器中处理
         }
-
     }
     getConfigurationList()
 })
+
 const options = ref()
-const editorRef = shallowRef()
-const toolbarConfig = {}
-const editorConfig = { placeholder: '胸藏万卷凭吞吐，笔有千钧任翕张' }
 
-// 组件销毁时，也及时销毁编辑器
-onBeforeUnmount(() => {
-    const editor = editorRef.value
-    if (editor == null) return
-    editor.destroy()
-})
-
-const handleCreated = (editor: any) => {
-    editorRef.value = editor // 记录 editor 实例，重要！
-}
 const cancelBtn = () => {
     store.updataMainStateFun(2)
 }
+
 const saveBtn = async () => {
-    if (store.articleNewOrEdit) {
-        //修改
-        const parameter = articleInfo.value
-        if (articleInfo.value && 'created_at' in articleInfo.value) {
-            delete articleInfo.value.created_at;
-        }
-        if (articleInfo.value && 'updated_at' in articleInfo.value) {
-            delete articleInfo.value.updated_at;
-        }
-        try {
+    const parameter = { 
+        ...articleInfo.value,
+        created_at: undefined,
+        updated_at: undefined
+    }
+
+    try {
+        if (store.articleNewOrEdit) {
             await http.put('article/put', parameter)
-            ElMessage({
-                message: '修改文章成功',
-                type: 'success',
-            })
-            setTimeout(() => {
-                store.updataMainStateFun(2)
-            }, 1000)
-
-        } catch (error) {
-            ElMessage.error('修改文章失败')
-        }
-
-    } else {
-        //新建
-        const parameter = articleInfo.value
-        if (articleInfo.value && 'created_at' in articleInfo.value) {
-            delete articleInfo.value.created_at;
-        }
-        if (articleInfo.value && 'updated_at' in articleInfo.value) {
-            delete articleInfo.value.updated_at;
-        }
-        try {
+            ElMessage.success('修改文章成功')
+        } else {
             await http.post('article/add', parameter)
-            setTimeout(() => {
-                store.updataMainStateFun(2)
-            }, 1000)
-            ElMessage({
-                message: '添加文章成功',
-                type: 'success',
-            })
-        } catch (error) {
-            ElMessage.error('添加文章失败')
+            ElMessage.success('添加文章成功')
         }
-
+        setTimeout(() => store.updataMainStateFun(2), 1000)
+    } catch {
+        // 错误已在拦截器中处理
     }
 }
+
 const selectGroupKeyFun = (value: any) => {
     if (articleInfo.value && 'category' in articleInfo.value) {
         articleInfo.value.category = value
     }
 }
+
 const getConfigurationList = async () => {
-    const response = await http.get('categories/list', { params: { type: "文章分类" } })
-    options.value = response.data.data
+    try {
+        const { data } = await http.get('categories/list', { 
+            params: { type: "文章分类" } 
+        })
+        options.value = data.data
+    } catch {
+        // 错误已在拦截器中处理
+    }
 }
 </script>
 
-<style scoped lang="less">
-.article-form {
+<style scoped>
+.page-container {
+    padding: 8px 16px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    height: 100%;
-
-    .form-header {
-        display: flex;
-        gap: 16px;
-        align-items: flex-start;
-
-        .title-input {
-            flex: 1;
-        }
-    }
-
-    .abstract-input {
-        width: 100%;
-    }
-
-    .article-switches {
-        display: flex;
-        gap: 32px;
-
-        .switch-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            span {
-                color: #606266;
-            }
-        }
-    }
-
-    .editor-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        border: 1px solid #dcdfe6;
-        border-radius: 4px;
-        overflow: hidden;
-        min-height: 0;
-    }
 }
 
-:deep(.el-input__wrapper) {
-    box-shadow: 0 0 0 1px #dcdfe6 inset;
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 24px;
+}
+
+.page-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.article-form {
+    background: #fff;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-header {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.title-input {
+    flex: 1;
+}
+
+.abstract-input {
+    margin-bottom: 12px;
+}
+
+.article-switches {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 12px;
+}
+
+.switch-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.editor-container {
+    height: calc(100vh - 334px);
+    min-height: 0;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    display: flex;
+}
+
+.html-editor {
+    font-family: monospace;
+    width: 100%;
+}
+
+:deep(.el-textarea__inner) {
+    height: 100% !important;
+    resize: none;
 }
 </style>

@@ -16,6 +16,7 @@ export class CategoriesDataService {
         } else {
             throw new Error('配置未找到');
         }
+
     }
     async getCategories(value: any){  
         const categoriesRepository = AppDataSource.getRepository(Categories) 

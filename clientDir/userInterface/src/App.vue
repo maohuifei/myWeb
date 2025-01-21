@@ -62,11 +62,14 @@ export default {
       const clientHeight = document.documentElement.clientHeight
       const scrollTop = window.scrollY || document.documentElement.scrollTop
       
-      // 只在有可滚动内容时显示向下箭头
-      showScrollDown.value = scrollHeight > clientHeight + 10 && scrollTop < clientHeight
-      
-      // 当滚动超过一屏高度时显示返回顶部
-      showBackTop.value = scrollTop > clientHeight
+      // 在顶部附近显示向下箭头，在其他位置显示返回顶部
+      if (scrollTop < 100) {
+        showScrollDown.value = scrollHeight > clientHeight + 10
+        showBackTop.value = false
+      } else {
+        showScrollDown.value = false
+        showBackTop.value = true
+      }
     }
 
     // 判断是否是首页
@@ -93,7 +96,10 @@ export default {
     onMounted(() => {
       Prohibit()
       isMobileDevice()
-      checkScroll() // 初始检查
+      // 延迟执行初始检查，让页面完全加载
+      setTimeout(() => {
+        checkScroll() // 初始检查
+      }, 100)
       window.addEventListener('scroll', checkScroll)
     })
 
@@ -104,10 +110,10 @@ export default {
     //禁止事件
     const Prohibit = () => {
       // 禁止右键
-      document.oncontextmenu = (event: MouseEvent) => {
-        event.preventDefault();
-        event.returnValue = false;
-      };
+      // document.oncontextmenu = (event: MouseEvent) => {
+      //   event.preventDefault();
+      //   event.returnValue = false;
+      // };
  
       // 禁止键盘 F12
       document.addEventListener("keydown", (e: KeyboardEvent) => {
@@ -236,15 +242,13 @@ export default {
   position: fixed;
   right: 20px;
   bottom: 20px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  z-index: 2000;
+  pointer-events: none;
 
   .icon {
+    pointer-events: auto;
     width: 40px;
     height: 40px;
-    margin: 10px;
     padding: 8px;
     background-color: var(--systemColor);
     border-radius: 50%;
@@ -253,6 +257,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    right: 0;
+    bottom: 0;
 
     svg {
       width: 24px;
@@ -266,14 +273,10 @@ export default {
     }
 
     &.scroll-down {
-      position: fixed;
-      bottom: 5vh;
-      margin: 0;
       animation: bounce 2s infinite;
-
-      // 默认在右下角
-      right: 20px;
-      transform: none;
+      position: absolute;
+      right: 0;
+      bottom: 0;
 
       &:hover {
         transform: scale(1.1);
@@ -281,6 +284,8 @@ export default {
 
       // 首页时的特殊样式
       &.scroll-down-home {
+        position: fixed;
+        bottom: 5vh;
         right: auto;
         left: calc(50% - 20px);
         transform: translateX(-50%);

@@ -14,12 +14,12 @@ const pinia=createPinia()
 
 app.use(ElementPlus)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-    app.component(key, component)
+    app.component(key, component as any)
 }
 
-app.use(axios)
+// 配置 axios
+app.config.globalProperties.$axios = axios
 app.use(pinia)
 app.use(router)
-
 
 app.mount('#app')
