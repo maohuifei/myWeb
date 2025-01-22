@@ -1,46 +1,60 @@
 <!-- 主页 -->
 <template>
-    <Aside></Aside> 
-    <div class="home_box">
-        <Header></Header>
-        <Main></Main>
+    <div class="app-container">
+        <div class="main-container">
+            <el-container>
+                <Aside />
+                <el-container>
+                    <el-header height="64px" style="padding: 0;">
+                        <Header />
+                    </el-header>
+                    <el-main>
+                        <Main />
+                    </el-main>
+                </el-container>
+            </el-container>
+        </div>
     </div>
 </template>
 
-<script lang="ts">  
-import Aside from '@/components/inHome/Aside.vue';  
-import Header from '@/components/inHome/Header.vue';  
-import Main from '@/components/inHome/Main.vue';  
-import { defineComponent,onMounted } from 'vue';  
-import { useRouter } from 'vue-router';  
-  
-export default defineComponent({ // 使用 defineComponent 来定义组件  
-  name: 'Home',
-  components: {  
-    Aside,  
-    Header,  
-    Main  
-  },  
-  setup() {  
-    onMounted(() => {  
-      const router = useRouter();  
-      const token = localStorage.getItem('auth_token'); // 在这里添加了分号，尽管它不是必需的  
-  
-      if (!token) {  
-        router.push({ name: 'login' }); // 跳转到登录页面  
-      }  
-    });  
-  
-    return {}; // 这里通常可以返回一些在模板中使用的响应式数据或函数  
-  }  
-});  
+<script setup lang="ts">
+import Aside from '../components/inHome/Aside.vue'
+import Header from '../components/inHome/Header.vue'
+import Main from '../components/inHome/Main.vue'
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+onMounted(() => {
+    const token = localStorage.getItem('auth_token')
+    if (!token) {
+        router.push('/login')
+    }
+})
 </script>
 
-<style lang="less">
-.home_box{
+<style lang="less" scoped>
+.app-container {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
+.main-container {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
+
+    .el-container {
+        height: 100%;
+    }
+
+    .el-main {
+        padding: var(--spacing-lg);
+        background-color: #ffffff;
+        height: calc(100vh - 64px);
+        overflow-y: auto;
+    }
 }
 </style>

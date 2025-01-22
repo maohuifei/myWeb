@@ -1,4 +1,5 @@
 <template>
+  <!-- 导航栏 -->
   <div class="tage_box">
     <div class="logo_box">
       <RouterLink to="/">
@@ -12,7 +13,11 @@
       <RouterLink to="/privacy">声明</RouterLink>
     </div>
   </div>
+
+  <!-- 导航栏占位 -->
   <div style="height: 60px;"></div>
+
+  <!-- 主要内容区域 -->
   <div class="content_box">
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
@@ -20,140 +25,95 @@
       </transition>
     </router-view>
   </div>
+
+  <!-- 滚动控制按钮 -->
   <div class="icon_box">
-    <!-- 向下滚动图标 -->
-    <transition name="fade-slide">
-      <div v-if="showScrollDown" 
-           :class="['icon', 'scroll-down', { 'scroll-down-home': isHomePage() }]" 
-           @click="scrollToBottom">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 5v14M5 12l7 7 7-7"/>
-        </svg>
-      </div>
-    </transition>
-    <!-- 返回顶部图标 -->
-    <transition name="fade-slide">
-      <div v-if="showBackTop" class="icon back-top" @click="scrollToTop">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 19V5M5 12l7-7 7 7"/>
-        </svg>
-      </div>
-    </transition>
+    <div class="icon" 
+         :class="{ 'is-up': showBackTop }" 
+         @click="showBackTop ? scrollToTop() : scrollToBottom()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </div>
   </div>
+
+  <!-- 页脚 -->
   <div class="foot_box">
     <p>© 2024 huafeng 版权所有</p>
     <p>备案号：鲁ICP备2024118017号 </p>
   </div>
 </template>
 
-<script lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
-import { useRoute } from 'vue-router';
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 
-export default {
-  setup() {
-    const showScrollDown = ref(true)
-    const showBackTop = ref(false)
-    const route = useRoute()
+// 状态管理
+const showBackTop = ref(false)
+const route = useRoute()
 
-    // 检查滚动位置
-    const checkScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight
-      const clientHeight = document.documentElement.clientHeight
-      const scrollTop = window.scrollY || document.documentElement.scrollTop
-      
-      // 在顶部附近显示向下箭头，在其他位置显示返回顶部
-      if (scrollTop < 100) {
-        showScrollDown.value = scrollHeight > clientHeight + 10
-        showBackTop.value = false
-      } else {
-        showScrollDown.value = false
-        showBackTop.value = true
-      }
-    }
-
-    // 判断是否是首页
-    const isHomePage = () => {
-      return route.path === '/'
-    }
-
-    // 滚动到底部
-    const scrollToBottom = () => {
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth'
-      })
-    }
-
-    // 返回顶部
-    const scrollToTop = () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      })
-    }
-
-    onMounted(() => {
-      Prohibit()
-      isMobileDevice()
-      // 延迟执行初始检查，让页面完全加载
-      setTimeout(() => {
-        checkScroll() // 初始检查
-      }, 100)
-      window.addEventListener('scroll', checkScroll)
-    })
-
-    onUnmounted(() => {
-      window.removeEventListener('scroll', checkScroll)
-    })
-
-    //禁止事件
-    const Prohibit = () => {
-      // 禁止右键
-      // document.oncontextmenu = (event: MouseEvent) => {
-      //   event.preventDefault();
-      //   event.returnValue = false;
-      // };
- 
-      // 禁止键盘 F12
-      document.addEventListener("keydown", (e: KeyboardEvent) => {
-        if (e.key === "F12") {
-          e.preventDefault();
-        }
-      });
-    }
-
-    // 检查设备
-    const isMobileDevice = () => {
-      const userAgent = navigator.userAgent
-      const mobileAgents = [
-        /android/i,
-        /iphone|ipad|ipod/i,
-        /blackberry/i,
-        /iemobile/i,
-        /opera mini/i,
-        /windows phone/i,
-        /mobile/i,
-        /touch/i
-      ]
-      if (mobileAgents.some(agent => agent.test(userAgent.toLowerCase()))) {
-        console.log("移动设备");
-      }
-    }
-
-    return {
-      showScrollDown,
-      showBackTop,
-      scrollToBottom,
-      scrollToTop,
-      isHomePage,
-    }
-  }
+// 检查滚动位置并更新按钮显示状态
+const checkScroll = () => {
+  const scrollTop = window.scrollY || document.documentElement.scrollTop
+  showBackTop.value = scrollTop > 100
 }
+
+// 滚动到底部
+const scrollToBottom = () => {
+  window.scrollTo({
+    top: document.documentElement.scrollHeight,
+    behavior: 'smooth'
+  })
+}
+
+// 返回顶部
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
+
+// 检查设备类型
+const checkDeviceType = () => {
+  const userAgent = navigator.userAgent.toLowerCase()
+  const mobileAgents = [
+    /android/i,
+    /iphone|ipad|ipod/i,
+    /blackberry/i,
+    /iemobile/i,
+    /opera mini/i,
+    /windows phone/i,
+    /mobile/i,
+    /touch/i
+  ]
+  return mobileAgents.some(agent => agent.test(userAgent))
+}
+
+// 生命周期钩子
+onMounted(() => {
+  // 禁用F12键
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'F12') e.preventDefault()
+  })
+
+  // 检查设备类型
+  if (checkDeviceType()) {
+    console.log('移动设备')
+  }
+
+  // 初始化滚动检查
+  setTimeout(checkScroll, 100)
+  window.addEventListener('scroll', checkScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', checkScroll)
+})
 </script>
 
 <style scoped lang="less">
-/* 定义过渡类 */
+/* 过渡动画 */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
@@ -164,6 +124,7 @@ export default {
   opacity: 0;
 }
 
+/* 导航栏样式 */
 .tage_box {
   width: 100%;
   height: 60px;
@@ -237,70 +198,40 @@ export default {
   }
 }
 
-// 将滚动图标移出导航栏样式，作为独立的固定定位元素
+/* 滚动控制按钮样式 */
 .icon_box {
   position: fixed;
   right: 20px;
   bottom: 20px;
   z-index: 2000;
-  pointer-events: none;
 
   .icon {
-    pointer-events: auto;
     width: 40px;
     height: 40px;
-    padding: 8px;
-    background-color: var(--systemColor);
+    background: #000;
     border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s ease;
     display: flex;
-    justify-content: center;
     align-items: center;
-    position: absolute;
-    right: 0;
-    bottom: 0;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: bounce 2s infinite;
 
     svg {
       width: 24px;
       height: 24px;
-      stroke: var(--outElementColor);
+      stroke: #fff;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &.is-up svg {
+      transform: rotate(180deg);
     }
 
     &:hover {
       transform: scale(1.1);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-
-    &.scroll-down {
-      animation: bounce 2s infinite;
-      position: absolute;
-      right: 0;
-      bottom: 0;
-
-      &:hover {
-        transform: scale(1.1);
-      }
-
-      // 首页时的特殊样式
-      &.scroll-down-home {
-        position: fixed;
-        bottom: 5vh;
-        right: auto;
-        left: calc(50% - 20px);
-        transform: translateX(-50%);
-
-        &:hover {
-          transform: translateX(-50%) scale(1.1);
-        }
-      }
-    }
-
-    &.back-top {
-      opacity: 0.8;
-      &:hover {
-        opacity: 1;
-      }
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
   }
 }
@@ -310,35 +241,17 @@ export default {
     transform: translateY(0);
   }
   40% {
-    transform: translateY(5px);
+    transform: translateY(-8px);
   }
   60% {
-    transform: translateY(3px);
+    transform: translateY(-4px);
   }
 }
 
-.content_box {
-  width: 90%;
-  height: 100%;
-  margin: 0px auto;
-}
-
-.foot_box {
-  width: 90%;
-  height: 150px;
-  border-top: 2px solid var(--systemColor);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 15px;
-  margin: 0 auto;
-  color: var(--txtColor);
-}
-
-/* 图标显示和消失的过渡效果 */
+/* 过渡动画 */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fade-slide-enter-from,
@@ -347,9 +260,16 @@ export default {
   transform: translateY(20px);
 }
 
-.fade-slide-enter-to,
-.fade-slide-leave-from {
-  opacity: 1;
-  transform: translateY(0);
+/* 页脚样式 */
+.foot_box {
+  width: 100%;
+  padding: 20px 0;
+  text-align: center;
+  color: var(--elementColor);
+  font-size: 0.9em;
+  
+  p {
+    margin: 5px 0;
+  }
 }
 </style>

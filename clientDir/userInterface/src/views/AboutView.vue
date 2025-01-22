@@ -99,7 +99,7 @@ export default {
 .about_box {
     max-width: 900px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 80px 20px 40px;
 
     h1 {
         font-size: 2.8em;
@@ -239,6 +239,13 @@ export default {
                         transition: all 0.3s ease;
                         opacity: 0;
                         z-index: 100;
+                        pointer-events: none;
+
+                        img {
+                            width: 150px;
+                            height: 150px;
+                            display: block;
+                        }
 
                         &::after {
                             content: '';
@@ -249,15 +256,6 @@ export default {
                             border-width: 8px;
                             border-style: solid;
                             border-color: white transparent transparent transparent;
-                            z-index: 100;
-                        }
-
-                        img {
-                            width: 150px;
-                            height: auto;
-                            display: block;
-                            border-radius: 4px;
-                            object-fit: contain;
                         }
                     }
 
@@ -267,56 +265,47 @@ export default {
                     }
                 }
 
-                &::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: var(--systemColor);
-                    transform: scaleX(0);
-                    transform-origin: right;
-                    transition: transform 0.4s ease;
-                    z-index: 0;
-                }
-
                 .icon {
-                    width: 28px;
-                    height: 28px;
-                    position: relative;
-                    z-index: 2;
-                    transition: all 0.4s ease;
-                    fill: var(--elementColor);
-                    filter: brightness(0);
+                    width: 24px;
+                    height: 24px;
+                    fill: var(--systemColor);
                 }
 
                 span {
-                    font-size: 1.2em;
-                    font-weight: 600;
-                    position: relative;
-                    z-index: 2;
-                    transition: all 0.4s ease;
+                    font-size: 1.1em;
+                    font-weight: 500;
                 }
 
                 &:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-
-                    &::before {
-                        transform: scaleX(1);
-                        transform-origin: left;
-                    }
+                    background: var(--systemColor);
+                    color: white;
 
                     .icon {
-                        fill: var(--outElementColor);
-                        filter: brightness(1);
+                        fill: white;
                     }
+                }
+            }
+        }
+    }
+}
 
-                    span {
-                        color: var(--outElementColor);
-                        transform: scale(1.05);
-                    }
+@media (max-width: 768px) {
+    .about_box {
+        padding: 60px 15px 30px;
+
+        h1 {
+            font-size: 2.2em;
+        }
+
+        .content_section {
+            padding: 25px;
+            margin: 30px 0;
+
+            .contact_list {
+                gap: 20px;
+
+                .contact_item {
+                    padding: 12px 20px;
                 }
             }
         }

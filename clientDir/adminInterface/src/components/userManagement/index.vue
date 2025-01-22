@@ -1,17 +1,15 @@
 <template>
-    <div class="user-management">
-        <!-- 用户信息卡片 -->
-        <el-card class="user-card">
-            <template #header>
-                <div class="card-header">
-                    <span class="title">个人信息管理</span>
-                    <el-button type="primary" @click="editInfo" :icon="Edit">编辑信息</el-button>
-                </div>
-            </template>
+    <div class="page-container">
+        <div class="page-header">
+            <h2 class="page-title">个人信息管理</h2>
+            <el-button type="black" @click="handleEdit" :icon="Edit">编辑信息</el-button>
+        </div>
+        <div class="page-content" v-loading="loading">
             <div class="user-info">
                 <el-avatar 
                     :size="120" 
                     :src="userInfo.avatar" 
+                    :icon="Avatar"
                     class="user-avatar"
                 />
                 <div class="info-content">
@@ -21,23 +19,27 @@
                     </div>
                     <div class="info-item">
                         <label>昵称：</label>
-                        <span>{{ userInfo.nickname || '未设置' }}</span>
+                        <span v-if="userInfo.nickname">{{ userInfo.nickname }}</span>
+                        <span v-else class="empty-value">未设置</span>
                     </div>
                     <div class="info-item">
                         <label>个人简介：</label>
-                        <span>{{ userInfo.declaration || '暂无简介' }}</span>
+                        <span v-if="userInfo.declaration">{{ userInfo.declaration }}</span>
+                        <span v-else class="empty-value">暂无简介</span>
                     </div>
                     <div class="info-item">
                         <label>地址：</label>
-                        <span>{{ userInfo.address || '未设置' }}</span>
+                        <span v-if="userInfo.address">{{ userInfo.address }}</span>
+                        <span v-else class="empty-value">未设置</span>
                     </div>
                     <div class="info-item">
                         <label>职位：</label>
-                        <span>{{ userInfo.position || '未设置' }}</span>
+                        <span v-if="userInfo.position">{{ userInfo.position }}</span>
+                        <span v-else class="empty-value">未设置</span>
                     </div>
                 </div>
             </div>
-        </el-card>
+        </div>
     </div>
 
     <!-- 编辑信息对话框 -->
@@ -46,49 +48,89 @@
         title="编辑个人信息"
         width="500px"
         destroy-on-close
+        class="edit-dialog"
     >
         <el-form 
-            :model="editForm" 
-            label-width="100px"
-            :rules="formRules"
             ref="formRef"
+            :model="editForm" 
+            :rules="formRules"
+            label-width="100px"
+            class="edit-form"
         >
             <el-form-item label="用户名" prop="username">
-                <el-input v-model="editForm.username" placeholder="请输入用户名" />
+                <el-input 
+                    v-model="editForm.username" 
+                    placeholder="请输入用户名"
+                    maxlength="20"
+                    show-word-limit
+                />
             </el-form-item>
+
             <el-form-item label="密码" prop="password">
                 <el-input 
                     v-model="editForm.password" 
                     type="password" 
                     placeholder="如需修改密码请输入新密码"
                     show-password 
+                    maxlength="20"
                 />
             </el-form-item>
+
             <el-form-item label="昵称" prop="nickname">
-                <el-input v-model="editForm.nickname" placeholder="请输入昵称" />
+                <el-input 
+                    v-model="editForm.nickname" 
+                    placeholder="请输入昵称"
+                    maxlength="20"
+                    show-word-limit
+                />
             </el-form-item>
+
             <el-form-item label="头像" prop="avatar">
-                <el-input v-model="editForm.avatar" placeholder="请输入头像URL" />
+                <el-input 
+                    v-model="editForm.avatar" 
+                    placeholder="请输入头像URL"
+                />
             </el-form-item>
+
             <el-form-item label="个人简介" prop="declaration">
                 <el-input 
                     v-model="editForm.declaration" 
                     type="textarea" 
                     :rows="3"
-                    placeholder="请输入个人简介" 
+                    placeholder="请输入个人简介"
+                    maxlength="200"
+                    show-word-limit
                 />
             </el-form-item>
+
             <el-form-item label="地址" prop="address">
-                <el-input v-model="editForm.address" placeholder="请输入地址" />
+                <el-input 
+                    v-model="editForm.address" 
+                    placeholder="请输入地址"
+                />
             </el-form-item>
+
             <el-form-item label="职位" prop="position">
-                <el-input v-model="editForm.position" placeholder="请输入职位" />
+                <el-input 
+                    v-model="editForm.position" 
+                    placeholder="请输入职位"
+                />
             </el-form-item>
         </el-form>
+
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="editDialog = false">取消</el-button>
-                <el-button type="primary" @click="submitEdit" :loading="submitting">
+                <button 
+                    class="cancel-button"
+                    @click="handleCancel"
+                >
+                    取消
+                </button>
+                <el-button 
+                    type="black" 
+                    @click="handleSubmit" 
+                    :loading="submitting"
+                >
                     确定
                 </el-button>
             </span>
@@ -97,37 +139,43 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { ElMessage } from 'element-plus';
-import { Edit } from '@element-plus/icons-vue';
-import http from '@/axios';
-import { myStore } from '@/stores';
+import { ref, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
+import { Edit, Avatar } from '@element-plus/icons-vue'
+import http from '@/axios'
+import { myStore } from '@/stores'
+import type { FormInstance, FormRules } from 'element-plus'
 
 // 类型定义
 interface UserInfo {
-    id: number;
-    username: string;
-    nickname: string;
-    avatar: string;
-    declaration: string;
-    address: string;
-    position: string;
+    id: number
+    username: string
+    nickname: string
+    avatar: string
+    declaration: string
+    address: string
+    position: string
 }
 
-interface EditForm {
-    id: number;
-    username: string;
-    password: string;
-    nickname: string;
-    avatar: string;
-    declaration: string;
-    address: string;
-    position: string;
-    [key: string]: string | number; // 添加索引签名
+interface EditForm extends Omit<UserInfo, 'id'> {
+    id: number
+    password: string
 }
 
-// 状态定义
-const store = myStore();
+interface ApiResponse<T> {
+    success: boolean
+    data: T
+    message?: string
+}
+
+// 状态管理
+const store = myStore()
+const formRef = ref<FormInstance>()
+const loading = ref(false)
+const submitting = ref(false)
+const editDialog = ref(false)
+
+// 用户信息
 const userInfo = ref<UserInfo>({
     id: 0,
     username: '',
@@ -136,25 +184,9 @@ const userInfo = ref<UserInfo>({
     declaration: '',
     address: '',
     position: ''
-});
-const editDialog = ref(false);
-const submitting = ref(false);
-const formRef = ref();
+})
 
-// 表单验证规则
-const formRules = {
-    username: [
-        { required: true, message: '请输入用户名', trigger: 'blur' },
-        { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
-    ],
-    password: [
-        { min: 6, message: '密码长度不能小于6个字符', trigger: 'blur' }
-    ],
-    nickname: [
-        { max: 20, message: '昵称不能超过20个字符', trigger: 'blur' }
-    ]
-};
-
+// 编辑表单
 const editForm = ref<EditForm>({
     id: 0,
     username: '',
@@ -164,160 +196,353 @@ const editForm = ref<EditForm>({
     declaration: '',
     address: '',
     position: ''
-});
+})
+
+// 表单验证规则
+const formRules: FormRules = {
+    username: [
+        { required: true, message: '请输入用户名', trigger: 'blur' },
+        { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+    ],
+    password: [
+        { min: 6, message: '密码长度不能小于6个字符', trigger: 'blur' }
+    ],
+    nickname: [
+        { max: 20, message: '昵称不能超过20个字符', trigger: 'blur' }
+    ],
+    declaration: [
+        { max: 200, message: '个人简介不能超过200个字符', trigger: 'blur' }
+    ]
+}
+
+// 从token中获取用户ID
+const getUserIdFromToken = (): number => {
+    const token = localStorage.getItem('auth_token')
+    if (!token) {
+        throw new Error('未登录，请先登录')
+    }
+    
+    try {
+        const base64Url = token.split('.')[1]
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+        const payload = JSON.parse(window.atob(base64))
+        
+        if (!payload.id) {
+            throw new Error('token无效，请重新登录')
+        }
+        
+        return payload.id
+    } catch (error) {
+        throw new Error('token解析失败，请重新登录')
+    }
+}
 
 // 获取用户信息
 const getUserInfo = async () => {
+    loading.value = true
     try {
-        const token = localStorage.getItem('auth_token');
-        if (!token) {
-            ElMessage.error('未登录，请先登录');
-            return;
-        }
+        const userId = getUserIdFromToken()
+        console.log('获取用户信息，用户ID:', userId)
         
-        // 从token中解析用户信息
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const payload = JSON.parse(window.atob(base64));
+        const response = await http.get<ApiResponse<UserInfo>>('user/query', {
+            params: { id: userId }
+        })
         
-        if (!payload.id) {
-            ElMessage.error('token无效，请重新登录');
-            return;
+        console.log('API响应:', response.data)
+        
+        // 不再检查 success 字段，因为后端总是返回 success: true
+        const data = response.data.data
+        if (!data) {
+            throw new Error('未找到用户信息')
         }
 
-        const response = await http.get('user/query', {
-            params: { id: payload.id }
-        });
-        userInfo.value = response.data.data;
+        console.log('用户信息数据:', data)
+        userInfo.value = data
+        console.log('更新后的用户信息:', userInfo.value)
     } catch (error) {
-        ElMessage.error('获取用户信息失败');
+        console.error('获取用户信息出错:', error)
+        // 只有在真正的错误情况下才显示错误消息
+        if (error instanceof Error && 
+            error.message !== '查询用户信息成功' && 
+            error.message !== '未找到用户信息') {
+            ElMessage.error(error.message)
+        }
+    } finally {
+        loading.value = false
     }
-};
+}
 
 // 打开编辑对话框
-const editInfo = () => {
+const handleEdit = () => {
     editForm.value = {
         id: userInfo.value.id,
         username: userInfo.value.username,
         password: '',
-        nickname: userInfo.value.nickname || '',
-        avatar: userInfo.value.avatar || '',
-        declaration: userInfo.value.declaration || '',
-        address: userInfo.value.address || '',
-        position: userInfo.value.position || ''
-    };
-    editDialog.value = true;
-};
+        nickname: userInfo.value.nickname,
+        avatar: userInfo.value.avatar,
+        declaration: userInfo.value.declaration,
+        address: userInfo.value.address,
+        position: userInfo.value.position
+    }
+    editDialog.value = true
+}
+
+// 取消编辑
+const handleCancel = () => {
+    formRef.value?.resetFields()
+    editDialog.value = false
+}
 
 // 提交编辑
-const submitEdit = async () => {
-    if (!formRef.value) return;
+const handleSubmit = async () => {
+    if (!formRef.value) return
     
     try {
-        await formRef.value.validate();
-        submitting.value = true;
+        await formRef.value.validate()
+        submitting.value = true
         
-        const updateData: any = { id: userInfo.value.id };
-        // 只包含已修改的字段
-        Object.keys(editForm.value).forEach(key => {
-            if (editForm.value[key] && key !== 'id') {
-                updateData[key] = editForm.value[key];
-            }
-        });
-
-        await http.put('user/revise', updateData);
-        ElMessage.success('更新成功');
-        editDialog.value = false;
-        getUserInfo(); // 刷新用户信息
-    } catch (error: any) {
-        ElMessage.error(error.response?.data?.message || '更新失败');
+        // 构建更新数据
+        const updateData: Record<string, any> = {
+            id: userInfo.value.id,
+            username: editForm.value.username.trim(),
+            nickname: editForm.value.nickname?.trim() ?? null,
+            avatar: editForm.value.avatar?.trim() ?? null,
+            declaration: editForm.value.declaration?.trim() ?? null,
+            address: editForm.value.address?.trim() ?? null,
+            position: editForm.value.position?.trim() ?? null
+        }
+        
+        // 如果有设置新密码，才包含密码字段
+        if (editForm.value.password?.trim()) {
+            updateData.password = editForm.value.password.trim()
+        }
+        
+        console.log('提交更新数据:', updateData)
+        const response = await http.put<ApiResponse<void>>('user/revise', updateData)
+        console.log('更新响应:', response.data)
+        
+        // 不再检查 success 字段，因为后端总是返回 success: true
+        ElMessage.success('更新成功')
+        handleCancel()
+        await getUserInfo() // 刷新用户信息
+    } catch (error) {
+        console.error('更新用户信息出错:', error)
+        if (error instanceof Error && error.message !== '修改用户信息成功') {
+            ElMessage.error(error.message || '更新失败')
+        }
     } finally {
-        submitting.value = false;
+        submitting.value = false
     }
-};
+}
 
+// 初始化
 onMounted(() => {
-    getUserInfo();
-});
+    getUserInfo()
+})
 </script>
 
 <style scoped lang="less">
-.user-management {
-    min-height: 100%;
+.page-container {
     padding: 20px;
-    background-color: #f5f7fa;
-    box-sizing: border-box;
+    height: 100%;
     display: flex;
     flex-direction: column;
-}
-
-.user-card {
-    max-width: 800px;
-    width: 100%;
-    margin: 0 auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
-    background-color: #fff;
-    flex: 1;
+    background-color: var(--el-bg-color);
     
-    .card-header {
+    .page-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: 20px;
         
-        .title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #303133;
+        .page-title {
+            margin: 0;
+            font-size: 1.5em;
+            color: var(--el-text-color-primary);
+        }
+    }
+    
+    .page-content {
+        flex: 1;
+        background-color: var(--el-bg-color-overlay);
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: var(--el-box-shadow-light);
+        
+        .user-info {
+            display: flex;
+            gap: 40px;
+            
+            .user-avatar {
+                flex-shrink: 0;
+                border: 4px solid var(--el-border-color-lighter);
+                box-shadow: var(--el-box-shadow-light);
+                background-color: var(--el-bg-color-overlay);
+                
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+            
+            .info-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                
+                .info-item {
+                    display: flex;
+                    align-items: baseline;
+                    gap: 12px;
+                    padding-bottom: 12px;
+                    border-bottom: 1px solid var(--el-border-color-lighter);
+                    
+                    label {
+                        color: var(--el-text-color-secondary);
+                        font-weight: 500;
+                        min-width: 80px;
+                    }
+                    
+                    span {
+                        color: var(--el-text-color-primary);
+                        flex: 1;
+                        
+                        &.empty-value {
+                            color: var(--el-text-color-placeholder);
+                            font-style: italic;
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
-.user-info {
-    display: flex;
-    padding: 30px;
-    gap: 40px;
-    
-    .user-avatar {
-        flex-shrink: 0;
-        border: 2px solid #eee;
-        padding: 2px;
-        transition: all 0.3s ease;
+// 对话框样式
+.edit-dialog {
+    :deep(.el-dialog) {
+        border-radius: 8px;
+        overflow: hidden;
         
-        &:hover {
-            transform: scale(1.05);
-            border-color: var(--el-color-primary);
+        .el-dialog__header {
+            margin: 0;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--el-border-color-lighter);
+            
+            .el-dialog__title {
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--el-text-color-primary);
+            }
+        }
+        
+        .el-dialog__body {
+            padding: 24px;
+        }
+        
+        .el-dialog__footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--el-border-color-lighter);
+            
+            .dialog-footer {
+                display: flex;
+                justify-content: flex-end;
+                gap: 12px;
+                
+                .el-button {
+                    margin: 0;
+                    min-width: 80px;
+                }
+            }
         }
     }
     
-    .info-content {
-        flex: 1;
-        
-        .info-item {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: baseline;
+    .edit-form {
+        :deep(.el-form-item) {
+            margin-bottom: 24px;
             
-            label {
-                font-weight: bold;
-                color: #606266;
-                min-width: 100px;
+            &:last-child {
+                margin-bottom: 0;
             }
             
-            span {
-                color: #303133;
-                flex: 1;
+            .el-form-item__label {
+                font-weight: 500;
+                color: var(--el-text-color-primary);
             }
         }
     }
+}
+
+// 响应式设计
+@media screen and (max-width: 768px) {
+    .page-container {
+        padding: 16px;
+        
+        .page-content {
+            padding: 20px;
+            
+            .user-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 24px;
+                
+                .user-avatar {
+                    width: 100px;
+                    height: 100px;
+                }
+                
+                .info-content {
+                    width: 100%;
+                }
+            }
+        }
+    }
+    
+    .edit-dialog {
+        :deep(.el-dialog) {
+            width: 90% !important;
+            margin: 0 auto;
+        }
+    }
+}
+
+:deep(.el-button--black) {
+    --el-button-bg-color: var(--el-color-black);
+    --el-button-border-color: var(--el-color-black);
+    --el-button-hover-bg-color: var(--el-color-black);
+    --el-button-hover-border-color: var(--el-color-black);
+    --el-button-active-bg-color: var(--el-color-black);
+    --el-button-active-border-color: var(--el-color-black);
+    --el-button-text-color: var(--el-color-white);
 }
 
 .dialog-footer {
-    padding-top: 20px;
-    border-top: 1px solid #dcdfe6;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    
+    .el-button {
+        margin: 0;
+        min-width: 80px;
+    }
 }
 
-:deep(.el-form-item__label) {
-    font-weight: 500;
+.cancel-button {
+    min-width: 80px;
+    height: 36px;
+    padding: 0 16px;
+    background-color: var(--el-bg-color);
+    border: 1px solid var(--el-border-color);
+    border-radius: 4px;
+    color: var(--el-text-color-regular);
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: var(--el-border-color-darker);
+        color: var(--el-text-color-primary);
+    }
 }
 </style>

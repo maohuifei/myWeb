@@ -38,7 +38,7 @@
                     <div class="abstract_container" ref="abstractContainers">
                         <p class="abstract_box" ref="abstractBoxes">{{ article.abstract || "此处为摘要" }}</p>
                     </div>
-                    <button class="all_btn" color="var(--txtColor)" @click="ToParticulars(article.id)">阅读</button>
+                    <button class="all_btn" color="var(--txtColor)" @click="viewArticle(article.id)">阅读</button>
                 </div>
             </div>
         </div>
@@ -132,21 +132,21 @@ export default {
                 }));
 
                 // 现在 formattedArticles 包含了格式化后的文章数据  
-                // 你可以将 formattedArticles 赋值给某个响应式引用或用于其他目的  
                 articleList.value = formattedArticles; // 假设 articleList 是一个响应式引用  
 
             } catch (error) {
                 console.error('获取列表失败');
-
             }
         }
+
         const router = useRouter()
-        const ToParticulars = (articleId: number) => {
+        const viewArticle = (articleId: number) => {
             router.push({
                 path: '/articleParticulars',
-                query: { articleId }
+                query: { id: articleId }
             })
         }
+
         //全局技术
         const overallList = [{
             icon: "#icon-typescript",
@@ -228,9 +228,9 @@ export default {
             pageQuery,
             getArticleList,
             articleList,
-            ToParticulars,
+            viewArticle,
             abstractBoxes,
-            abstractContainers,
+            abstractContainers
         }
     }
 }

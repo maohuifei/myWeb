@@ -82,7 +82,7 @@ export default {
         const ToParticulars = (articleId: number) => {
             router.push({
                 path: '/articleParticulars',
-                query: { articleId }
+                query: { id: articleId }
             })
         }
         const checkTextOverflow = () => {

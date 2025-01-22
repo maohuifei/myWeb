@@ -11,7 +11,7 @@ export class Article {
     @Column()
     abstract!: string;//摘要
 
-    @Column('text') //支持长文本
+    @Column('mediumtext') //支持长文本，最大16MB
     content!: string;//内容
 
     @Column()
