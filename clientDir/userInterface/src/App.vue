@@ -1,16 +1,33 @@
 <template>
   <!-- 导航栏 -->
-  <div class="tage_box">
+  <div class="tage_box" :class="{ 'with-shadow': showNavShadow }">
+    <!-- Logo -->
     <div class="logo_box">
       <RouterLink to="/">
         <img class="logo_class" src="/portrait.png" alt="Logo" />
       </RouterLink>
     </div>
-    <div class="nav_box">
-      <RouterLink to="/">首页</RouterLink>
-      <RouterLink to="/article">文章</RouterLink>
-      <RouterLink to="/about">关于</RouterLink>
-      <RouterLink to="/privacy">声明</RouterLink>
+
+    <!-- 占位用的空div -->
+    <div class="placeholder"></div>
+  </div>
+
+  <!-- 菜单按钮 - 移到外面 -->
+  <div class="menu-toggle" @click.stop="toggleMenu" :class="{ 'active': isMenuOpen }">
+    <div class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <!-- 导航菜单 -->
+  <div class="nav_box" :class="{ 'open': isMenuOpen }" ref="navBox" @click.stop>
+    <div class="nav-content">
+      <RouterLink to="/" :style="{ '--i': 0 }">首页</RouterLink>
+      <RouterLink to="/article" :style="{ '--i': 1 }">文章</RouterLink>
+      <RouterLink to="/about" :style="{ '--i': 2 }">关于</RouterLink>
+      <RouterLink to="/privacy" :style="{ '--i': 3 }">声明</RouterLink>
     </div>
   </div>
 
@@ -26,11 +43,15 @@
     </router-view>
   </div>
 
-  <!-- 滚动控制按钮 -->
-  <div class="icon_box">
+  <!-- 滚动控制按钮 - 添加内容高度判断 -->
+  <div class="icon_box" :class="{ 
+    'scrolled': isScrolled || !isHomePage,
+    'home': isHomePage,
+    'hidden': !hasScroll
+  }">
     <div class="icon" 
-         :class="{ 'is-up': showBackTop }" 
-         @click="showBackTop ? scrollToTop() : scrollToBottom()">
+         :class="{ 'is-up': isAtBottom }" 
+         @click="handleScrollClick">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 5v14M5 12l7 7 7-7"/>
       </svg>
@@ -39,24 +60,202 @@
 
   <!-- 页脚 -->
   <div class="foot_box">
-    <p>© 2024 huafeng 版权所有</p>
+    <p>© 2025 Mo-Fireborn-Jiang 版权所有</p>
     <p>备案号：鲁ICP备2024118017号 </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch, computed, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
+import gsap from 'gsap'
 
 // 状态管理
 const showBackTop = ref(false)
 const route = useRoute()
+const isMenuOpen = ref(false)
+const navBox = ref<HTMLElement | null>(null)
+const showNavShadow = ref(false)
+const isScrolled = ref(false)
+const isAtBottom = ref(false)
+const hasScroll = ref(false)
+
+// 添加是否为首页的判断
+const isHomePage = computed(() => route.path === '/')
+
+// 切换菜单
+const toggleMenu = () => {
+  if (isMenuOpen.value) {
+    closeMenu()
+  } else {
+    isMenuOpen.value = true
+    gsap.to('.nav-content', {
+      duration: 0.3,
+      opacity: 1,
+      x: 0,
+      ease: "power2.out"
+    })
+    gsap.to('.nav-content a', {
+      duration: 0.4,
+      opacity: 1,
+      x: 0,
+      stagger: 0.05,
+      ease: "power2.out"
+    })
+  }
+}
+
+// 关闭菜单的函数
+const closeMenu = () => {
+  if (!isMenuOpen.value) return
+  
+  isMenuOpen.value = false
+  gsap.to('.nav-content', {
+    duration: 0.3,
+    opacity: 0,
+    x: 300,
+    ease: "power2.in"
+  })
+  gsap.to('.nav-content a', {
+    duration: 0.2,
+    opacity: 0,
+    x: 20,
+    stagger: 0.03,
+    ease: "power2.in"
+  })
+}
+
+// 处理点击事件
+const handleClick = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  const menuToggle = document.querySelector('.menu-toggle')
+  const navBox = document.querySelector('.nav_box')
+  
+  // 如果点击的不是菜单按钮且不是菜单内容，则关闭菜单
+  if (isMenuOpen.value && 
+      !menuToggle?.contains(target) && 
+      !navBox?.contains(target)) {
+    closeMenu()
+  }
+}
 
 // 检查滚动位置并更新按钮显示状态
 const checkScroll = () => {
   const scrollTop = window.scrollY || document.documentElement.scrollTop
-  showBackTop.value = scrollTop > 100
+  const windowHeight = window.innerHeight
+  const documentHeight = document.documentElement.scrollHeight
+  
+  isAtBottom.value = (windowHeight + scrollTop) >= (documentHeight - 10)
+  showBackTop.value = isAtBottom.value
+  showNavShadow.value = scrollTop > 0
+  
+  if (!isScrolled.value && scrollTop > 50) {
+    isScrolled.value = true
+    const iconBox = document.querySelector('.icon_box')
+    if (iconBox) {
+      gsap.timeline()
+        .to(iconBox, {
+          duration: 0.3,
+          scale: 0.8,
+          ease: "power2.in"
+        })
+        .to(iconBox, {
+          duration: 0.8,
+          left: 'calc(100% - 64px)',
+          ease: "power3.inOut"
+        })
+        .to(iconBox, {
+          duration: 0.3,
+          scale: 1,
+          ease: "back.out(1.7)"
+        })
+        .set(iconBox, {
+          left: 'auto',
+          right: '20px',
+          clearProps: "transform"
+        })
+    }
+  }
 }
+
+// 修改滚动按钮点击处理
+const handleScrollClick = () => {
+  if (isAtBottom.value) {
+    scrollToTop()
+  } else {
+    scrollToBottom()
+  }
+}
+
+// 检查页面是否有滚动条
+const checkScrollable = () => {
+  hasScroll.value = document.documentElement.scrollHeight > (window.innerHeight + 20)
+}
+
+// 监听窗口大小变化
+window.addEventListener('resize', checkScrollable)
+
+// 在路由变化时检查
+watch(route, () => {
+  // 关闭菜单
+  closeMenu()
+  
+  // 重置滚动按钮状态
+  isScrolled.value = false
+  isAtBottom.value = false
+  
+  // 重置按钮位置和样式
+  const iconBox = document.querySelector('.icon_box')
+  if (iconBox) {
+    gsap.set(iconBox, {
+      clearProps: 'all'
+    })
+  }
+  
+  // 等待 DOM 更新后再检查
+  nextTick(() => {
+    checkScrollable()
+    // 初始化滚动检查
+    checkScroll()
+  })
+})
+
+// 在组件挂载时检查
+onMounted(() => {
+  checkScrollable()
+
+  // 禁用F12键
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'F12') e.preventDefault()
+  })
+
+  // 禁用右键菜单
+  document.addEventListener('contextmenu', (e: Event) => {
+    e.preventDefault()
+  })
+
+  // 检查设备类型
+  if (checkDeviceType()) {
+    console.log('移动设备')
+  }
+
+  // 初始化滚动检查
+  setTimeout(checkScroll, 100)
+  window.addEventListener('scroll', checkScroll)
+
+  // 添加点击事件监听
+  document.addEventListener('click', handleClick)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', checkScroll)
+  window.removeEventListener('resize', checkScrollable)
+  
+  // 移除点击事件监听
+  document.removeEventListener('click', handleClick)
+  // 移除右键菜单监听
+  document.removeEventListener('contextmenu', (e: Event) => e.preventDefault())
+})
 
 // 滚动到底部
 const scrollToBottom = () => {
@@ -89,27 +288,6 @@ const checkDeviceType = () => {
   ]
   return mobileAgents.some(agent => agent.test(userAgent))
 }
-
-// 生命周期钩子
-onMounted(() => {
-  // 禁用F12键
-  document.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'F12') e.preventDefault()
-  })
-
-  // 检查设备类型
-  if (checkDeviceType()) {
-    console.log('移动设备')
-  }
-
-  // 初始化滚动检查
-  setTimeout(checkScroll, 100)
-  window.addEventListener('scroll', checkScroll)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', checkScroll)
-})
 </script>
 
 <style scoped lang="less">
@@ -134,38 +312,148 @@ onUnmounted(() => {
   position: fixed;
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, .9);
-  padding: 0 40px;
-  z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-
-  .logo_box,
-  .nav_box {
-    width: 33%;
+  padding: 0 20px;
+  z-index: 998;
+  transition: box-shadow 0.3s ease;
+  
+  &.with-shadow {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
 
   .logo_box {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start; // 改为左对齐
+    align-items: center;
+
     a:hover {
       background-color: transparent;
     }
 
     .logo_class {
       width: 130px;
+      height: auto;
     }
   }
 
-  .nav_box {
-    text-align: center;
+  .placeholder {
+    width: 44px; // 与菜单按钮宽度相同
+  }
+}
+
+/* 菜单按钮样式 */
+.menu-toggle {
+  position: fixed;
+  top: 8px; // 调整位置以对齐导航栏
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1005;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .hamburger {
+    width: 26px;
+    height: 22px;
+    position: relative;
+    
+    span {
+      display: block;
+      position: absolute;
+      height: 3px;
+      width: 100%;
+      background: var(--elementColor);
+      border-radius: 3px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:nth-child(1) { top: 0; }
+      &:nth-child(2) { top: 9.5px; }
+      &:nth-child(3) { top: 19px; }
+    }
+  }
+  
+  &.active {
+    .hamburger span {
+      background: #ffffff;
+      
+      &:nth-child(1) {
+        transform: rotate(45deg);
+        top: 9.5px;
+      }
+      &:nth-child(2) {
+        opacity: 0;
+      }
+      &:nth-child(3) {
+        transform: rotate(-45deg);
+        top: 9.5px;
+      }
+    }
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+/* 导航菜单样式 */
+.nav_box {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: auto;
+  width: 300px;
+  height: 100vh;
+  pointer-events: none; // 默认不接受交互
+  z-index: 1004;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  
+  &.open {
+    pointer-events: all; // 展开时允许交互
+    transform: translateX(0);
+    
+    ~ .menu-toggle { // 当菜单展开时，修改菜单按钮的样式
+      .hamburger span {
+        background: #ffffff;
+      }
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+  
+  .nav-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     gap: 30px;
+    padding-left: 40px;
+    opacity: 0;
+    transform: translateX(300px);
     
     a {
-      font-size: 1.1em;
-      transition: all 0.3s ease;
       position: relative;
-      color: var(--elementColor);
+      font-size: 1.2em;
+      color: #ffffff;
       text-decoration: none;
       font-weight: 500;
+      pointer-events: auto;
+      opacity: 0;
+      transform: translateX(-20px);
       
       &::after {
         content: '';
@@ -174,22 +462,14 @@ onUnmounted(() => {
         left: 0;
         width: 100%;
         height: 2px;
-        background-color: var(--systemColor);
+        background-color: #ffffff;
         transform: scaleX(0);
         transition: transform 0.3s ease;
       }
-
+      
       &:hover {
-        transform: scale(1.2);
-        background-color: transparent;
-        color: var(--systemColor);
-        font-weight: 600;
-      }
-
-      &.router-link-active {
-        color: var(--systemColor);
-        font-weight: 600;
-
+        transform: translateX(0) scale(1.1);
+        
         &::after {
           transform: scaleX(1);
         }
@@ -201,14 +481,16 @@ onUnmounted(() => {
 /* 滚动控制按钮样式 */
 .icon_box {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 2000;
-
+  will-change: transform;
+  
   .icon {
-    width: 40px;
-    height: 40px;
-    background: #000;
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.8);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -216,8 +498,8 @@ onUnmounted(() => {
     cursor: pointer;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: bounce 2s infinite;
-
+    animation: gentleBounce 2s infinite;
+    
     svg {
       width: 24px;
       height: 24px;
@@ -231,20 +513,27 @@ onUnmounted(() => {
 
     &:hover {
       transform: scale(1.1);
+      background: rgba(0, 0, 0, 0.9);
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      animation-play-state: paused;
     }
+  }
+
+  &.hidden {
+    display: none;
   }
 }
 
-@keyframes bounce {
+/* 轻柔的跳跃动画 */
+@keyframes gentleBounce {
   0%, 20%, 50%, 80%, 100% {
     transform: translateY(0);
   }
   40% {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
   }
   60% {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
   }
 }
 

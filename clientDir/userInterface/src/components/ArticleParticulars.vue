@@ -30,14 +30,28 @@
             <transition name="slide-fade">
                 <div class="toc-content" v-show="tocExpanded">
                     <div class="toc-items">
-                        <div 
-                            v-for="item in tocItems" 
-                            :key="item.id"
-                            :class="['toc-item', `level-${item.level}`]"
-                            @click="scrollToHeading(item.id)"
-                        >
-                            {{ item.text }}
-                        </div>
+                        <template v-for="(item, index) in processedTocItems" :key="index">
+                            <div 
+                                :class="[
+                                    'toc-item',
+                                    `level-${item.level}`,
+                                    { 'has-children': item.hasChildren },
+                                    { 'collapsed': item.collapsed }
+                                ]"
+                                @click.stop="handleTocItemClick(item, index)"
+                            >
+                                <span class="toc-item-content">
+                                    <span 
+                                        v-if="item.hasChildren" 
+                                        class="toggle-icon"
+                                        :class="{ 'expanded': !item.collapsed }"
+                                    >
+                                        ▶
+                                    </span>
+                                    {{ item.text }}
+                                </span>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </transition>
@@ -46,7 +60,7 @@
 </template>
 
 <script lang='ts'>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { myStore } from '@/stores/counter';
 import { Utils } from '@/utils';
@@ -77,6 +91,9 @@ interface TocItem {
     id: string;
     level: number;
     text: string;
+    hasChildren?: boolean;
+    collapsed?: boolean;
+    isChild?: boolean;
 }
 
 // 创建 markdown-it 实例
@@ -281,6 +298,14 @@ export default {
             tocExpanded.value = !tocExpanded.value;
         };
 
+        const processedTocItems = computed(() => {
+            return tocItems.value;
+        });
+
+        const handleTocItemClick = (item: TocItem, index: number) => {
+            scrollToHeading(item.id);
+        };
+
         // 监听滚动事件
         onMounted(() => {
             const id = Number(route.query.id);
@@ -300,7 +325,9 @@ export default {
             tocItems,
             scrollToHeading,
             tocExpanded,
-            toggleToc
+            toggleToc,
+            processedTocItems,
+            handleTocItemClick
         };
     }
 };
@@ -479,23 +506,80 @@ export default {
 }
 
 .toc-item {
+    position: relative;
     cursor: pointer;
     color: #666;
     transition: all 0.2s ease;
     font-size: 0.95em;
     line-height: 1.4;
+    padding: 6px 0;
+}
+
+.toc-item-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggle-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    font-size: 10px;
+    color: #999;
+    transition: transform 0.3s ease;
+}
+
+.toggle-icon.expanded {
+    transform: rotate(90deg);
+}
+
+.toc-item.has-children {
+    font-weight: 500;
+}
+
+.toc-item.collapsed + .toc-item[class*="level-"] {
+    display: none;
 }
 
 .toc-item:hover {
     color: var(--systemColor);
 }
 
-.level-1 { padding-left: 0; }
-.level-2 { padding-left: 1em; }
-.level-3 { padding-left: 2em; }
-.level-4 { padding-left: 3em; }
-.level-5 { padding-left: 4em; }
-.level-6 { padding-left: 5em; }
+.toc-item.has-children:hover > .toc-item-content .toggle-icon {
+    color: var(--systemColor);
+}
+
+/* 优化层级缩进 */
+.level-1 { padding-left: 0; font-weight: 600; }
+.level-2 { padding-left: 1.5em; }
+.level-3 { padding-left: 3em; }
+.level-4 { padding-left: 4.5em; }
+.level-5 { padding-left: 6em; }
+.level-6 { padding-left: 7.5em; }
+
+/* 添加层级连接线 */
+.toc-item:not(.level-1)::before {
+    content: '';
+    position: absolute;
+    left: 0.5em;
+    top: 0;
+    height: 100%;
+    width: 1px;
+    background-color: #eee;
+}
+
+.toc-item:not(.level-1)::after {
+    content: '';
+    position: absolute;
+    left: 0.5em;
+    top: 50%;
+    width: 0.75em;
+    height: 1px;
+    background-color: #eee;
+}
 
 /* 添加滚动条样式 */
 .catalogue::-webkit-scrollbar {

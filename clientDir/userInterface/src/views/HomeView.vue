@@ -1,7 +1,7 @@
 <template>
     <div class="home_box">
         <div class="web_introduction_box">
-            <h1>欢迎来到huafeng，我的在线知识库</h1>
+            <h1>欢迎来到HuaFeng，我的在线知识库</h1>
             <p>
                 这个网站是我个人学习、生活感悟及技术实践的记录空间，并非公开宣传的站点。如果你偶然间访问到了这里，那或许就是一种奇妙的缘分
             </p>
@@ -18,29 +18,46 @@
         <div class="my_introduction_box">
             <h1>关于我</h1>
             <p>你好，我是
-                <span class="significant">Wen Jiang</span>
-                ，huafeng的创始人与维护者
+                <span class="significant">姜墨（Mo-Fireborn）</span>
+                ，HuaFeng的创始人与维护者
             </p>
             <p>
                 我崇尚简洁纯粹的生活哲学，追求技术与艺术的完美结合
             </p>
             <p>
-                huafeng，就是我这一理念的集中体现，它包含了我的思想理念，记录了我的成长轨迹，也见证了我与众多先行者思想的碰撞与共鸣
+                HuaFeng，就是我这一理念的集中体现，它包含了我的思想理念，记录了我的成长轨迹，也见证了我与众多先行者思想的碰撞与共鸣
             </p>
         </div>
 
         <div class="middle_box">
             <h1>推荐文章</h1>
             <div class="card_box">
-                <div class="card_class" v-for="(article, index) in articleList" key="index">
+                <div class="card_class" v-for="(article, index) in articleList" :key="index">
                     <h2 class="title_txt">{{ article.title }}</h2>
                     <span class="updata_txt">更新时间：{{ article.updated_at }}</span>
                     <div class="abstract_container" ref="abstractContainers">
                         <p class="abstract_box" ref="abstractBoxes">{{ article.abstract || "此处为摘要" }}</p>
                     </div>
-                    <button class="all_btn" color="var(--txtColor)" @click="viewArticle(article.id)">阅读</button>
+                    <button 
+                        class="all_btn" 
+                        :class="{ 'loading': article.isLoading }"
+                        :disabled="article.isLoading"
+                        @click="viewArticle(article.id, index)"
+                    >
+                        <span class="btn-text">{{ article.isLoading ? '加载中' : '阅读' }}</span>
+                        <span class="loading-spinner"></span>
+                    </button>
                 </div>
             </div>
+            <button 
+                class="view-more-btn"
+                :class="{ 'loading': isViewMoreLoading }"
+                :disabled="isViewMoreLoading"
+                @click="viewMoreArticles"
+            >
+                <span class="btn-text">{{ isViewMoreLoading ? '跳转中' : '查看更多' }}</span>
+                <span class="loading-spinner"></span>
+            </button>
         </div>
 
         <div class="technique_box">
@@ -108,6 +125,7 @@ export default {
         const articleList = ref()
         const abstractBoxes = ref<HTMLElement[]>([])
         const abstractContainers = ref<HTMLElement[]>([])
+        const isViewMoreLoading = ref(false)
 
         onMounted(async () => {
             await getArticleList()
@@ -128,7 +146,8 @@ export default {
                 // 使用 map 方法来遍历数组并格式化每个对象的 updated_at 字段  
                 const formattedArticles = articles.map((article: { updated_at: string; }) => ({
                     ...article, // 复制文章对象的所有属性  
-                    updated_at: utils.formatDate(article.updated_at) // 使用 Utils 类的 formatDate 方法来格式化 updated_at 字段  
+                    updated_at: utils.formatDate(article.updated_at), // 使用 Utils 类的 formatDate 方法来格式化 updated_at 字段  
+                    isLoading: false // 添加加载状态
                 }));
 
                 // 现在 formattedArticles 包含了格式化后的文章数据  
@@ -140,11 +159,39 @@ export default {
         }
 
         const router = useRouter()
-        const viewArticle = (articleId: number) => {
-            router.push({
-                path: '/articleParticulars',
-                query: { id: articleId }
-            })
+        const viewArticle = async (articleId: number, index: number) => {
+            try {
+                // 设置加载状态
+                if (articleList.value && articleList.value[index]) {
+                    articleList.value[index].isLoading = true
+                }
+                
+                // 跳转前等待一小段时间，确保加载动画显示
+                await new Promise(resolve => setTimeout(resolve, 100))
+                
+                await router.push({
+                    path: '/articleParticulars',
+                    query: { id: articleId }
+                })
+            } catch (error) {
+                console.error('跳转失败:', error)
+            } finally {
+                // 重置加载状态
+                if (articleList.value && articleList.value[index]) {
+                    articleList.value[index].isLoading = false
+                }
+            }
+        }
+
+        const viewMoreArticles = async () => {
+            try {
+                isViewMoreLoading.value = true
+                await router.push('/article')
+            } catch (error) {
+                console.error('跳转失败:', error)
+            } finally {
+                isViewMoreLoading.value = false
+            }
         }
 
         //全局技术
@@ -159,9 +206,65 @@ export default {
             name: "Node.js",
             versions: "20.18.01",
             url: "https://nodejs.org/"
-        },]
+        },
+        {
+            icon: "#icon-claude",
+            name: "Claude",
+            versions: "3.5",
+            url: "https://anthropic.com/"
+        }]
+
+        //客户端技术
+        const clientList = [{
+            icon: "#icon-Vue",
+            name: "Vue3",
+            versions: "3.4.29",
+            url: "https://vuejs.org/"
+        },
+        {
+            icon: "#icon-Vitest",
+            name: "Vite",
+            versions: "5.1.4",
+            url: "https://vitejs.dev/"
+        },
+        {
+            icon: "#icon-axios",
+            name: "Axios",
+            versions: "1.7.7",
+            url: "https://axios-http.com/"
+        },
+        {
+            icon: "#icon-less",
+            name: "Less",
+            versions: "4.2.0",
+            url: "https://lesscss.org/"
+        },
+        {
+            icon: "#icon-element-plus",
+            name: "Element Plus",
+            versions: "2.5.6",
+            url: "https://element-plus.org/"
+        },
+        {
+            icon: "#icon-GSAP",
+            name: "GSAP",
+            versions: "3.12.5",
+            url: "https://greensock.com/gsap/"
+        }]
+
         //服务器技术
-        const serverList = [{
+        const serverList = [ {
+            icon: "#icon-ubuntu",
+            name: "Ubuntu",
+            versions: "22.04",
+            url: "https://ubuntu.com/"
+        },{
+            icon: "#icon-Nginx",
+            name: "Nginx",
+            versions: "1.24.0",
+            url: "https://nginx.org/"
+        },
+        {
             icon: "#icon-ic_taskedit_kafka",
             name: "Koa.js",
             versions: "2.15.3",
@@ -172,39 +275,19 @@ export default {
             name: "mySQL",
             versions: "3.11.0",
             url: "https://www.mysql.com/"
-        }, {
-            icon: "#icon-Nginx",
-            name: "Nginx",
-            versions: "1.24.0",
-            url: "https://nginx.org/"
-        }, {
-            icon: "#icon-ks",
-            name: "Kubernetes",
-            versions: "1.3.1",
-            url: "https://kubernetes.io/"
-        },]
-        //客户端技术
-        const clientList = [{
-            icon: "#icon-Vue",
-            name: "Vue3",
-            versions: "3.4.29",
-            url: "https://vuejs.org/"
-        }, {
-            icon: "#icon-pinia",
-            name: "Pinia",
-            versions: "2.1.7",
-            url: "https://pinia.vuejs.org/"
-        }, {
-            icon: "#icon-axios",
-            name: "Axios",
-            versions: "1.7.7",
-            url: "https://axios-http.com/"
-        }, {
-            icon: "#icon-wangeditor-menu-img-",
-            name: "Wangeditor",
-            versions: "5.1.23",
-            url: "https://www.wangeditor.com/"
-        },]
+        },
+        {
+            icon: "#icon-lianjie",
+            name: "TypeORM",
+            versions: "0.3.20",
+            url: "https://typeorm.io/"
+        },
+        {
+            icon: "#icon-lingpaitoken",
+            name: "JWT",
+            versions: "9.0.2",
+            url: "https://jwt.io/"
+        }]
 
         const checkTextOverflow = () => {
             abstractBoxes.value.forEach((box, index) => {
@@ -230,7 +313,9 @@ export default {
             articleList,
             viewArticle,
             abstractBoxes,
-            abstractContainers
+            abstractContainers,
+            isViewMoreLoading,
+            viewMoreArticles
         }
     }
 }
@@ -443,12 +528,115 @@ export default {
                     border-radius: 4px;
                     transition: all 0.3s ease;
                     cursor: pointer;
+                    position: relative;
+                    overflow: hidden;
 
-                    &:hover {
+                    .btn-text {
+                        position: relative;
+                        z-index: 1;
+                        transition: opacity 0.3s ease;
+                    }
+
+                    .loading-spinner {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 20px;
+                        height: 20px;
+                        border: 2px solid transparent;
+                        border-top-color: #fff;
+                        border-radius: 50%;
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                    }
+
+                    &:hover:not(.loading) {
                         opacity: 0.9;
                         transform: scale(1.05);
                     }
+
+                    &.loading {
+                        cursor: wait;
+                        
+                        .btn-text {
+                            opacity: 0.7;
+                        }
+                        
+                        .loading-spinner {
+                            opacity: 1;
+                            animation: spin 1s linear infinite;
+                        }
+                    }
+
+                    &:disabled {
+                        cursor: wait;
+                        opacity: 0.8;
+                    }
                 }
+            }
+        }
+
+        .view-more-btn {
+            width: 400px;
+            margin: 40px auto 0;
+            background-color: transparent;
+            color: var(--systemColor);
+            padding: 10px 30px;
+            border: 2px solid var(--systemColor);
+            font-size: 1.2em;
+            font-weight:900;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .btn-text {
+                position: relative;
+                z-index: 1;
+                transition: opacity 0.3s ease;
+            }
+
+            .loading-spinner {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 20px;
+                height: 20px;
+                border: 2px solid transparent;
+                border-top-color: var(--systemColor);
+                border-radius: 50%;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            &:hover:not(.loading) {
+                background-color: var(--systemColor);
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+
+            &.loading {
+                cursor: wait;
+                
+                .btn-text {
+                    opacity: 0.7;
+                }
+                
+                .loading-spinner {
+                    opacity: 1;
+                    animation: spin 1s linear infinite;
+                }
+            }
+
+            &:disabled {
+                cursor: wait;
+                opacity: 0.8;
             }
         }
     }
@@ -513,6 +701,15 @@ export default {
                 }
             }
         }
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
     }
 }
 </style>

@@ -27,10 +27,17 @@ const router = createRouter({
       path: '/privacy',
       name: '隐私政策',
       component: () => import('@/views/PrivacyView.vue')
-    },{
-      path:'/maintenance',
-      name:'维护中',
-      component:() => import('@/components/Maintenance.vue')
+    },
+    {
+      path: '/maintenance',
+      name: '维护中',
+      component: () => import('@/views/MaintenanceView.vue')
+    },
+    // 404路由应该放在最后
+    {
+      path: '/:pathMatch(.*)*',
+      name: '404',
+      component: () => import('@/views/NotFoundView.vue')
     }
   ],
   scrollBehavior(to, from, savedPosition) {

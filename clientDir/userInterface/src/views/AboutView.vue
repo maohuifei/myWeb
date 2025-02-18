@@ -3,21 +3,20 @@
         <h1>关于我</h1>
         <div class="content_section">
             <h2>个人介绍</h2>
-            <p>你好，我是wen Jiang，一个神秘IT男</p>
+            <p>你好，我是姜墨（Mo-Fireborn），一个神秘IT男</p>
         </div>
 
         <div class="content_section">
             <h2>技术栈</h2>
-            <p>最常使用JavaScript技术栈</p>
+            <p>最常使用的编程语言是JavaScript</p>
             <div class="tech_list">
                 <div class="tech_category">
                     <h3>WEB开发</h3>
                     <ul>
-                        <li>JavaScript/ES6+</li>
-                        <li>TypeScript</li>
-                        <li>Vue3</li>
+                        <li>JavaScript/TypeScript</li>
+                        <li>Vue</li>
                         <li>Node.js</li>
-                        <li>Koa</li>
+                        <li>Express/Koa</li>
                         <li>MySQL</li>
                         <li>MongoDB</li>
                     </ul>
@@ -31,7 +30,7 @@
                         <li>CentOS</li>
                         <li>Deepin</li>
                         <li>RedHat</li>
-                        <li>中标麒麟</li>
+                        <li>银河麒麟</li>
                     </ul>
                 </div>
                 <div class="tech_category">
@@ -39,7 +38,8 @@
                     <ul>
                         <li>Photoshop</li>
                         <li>Illustrator</li>
-                        <li>LOGO</li>
+                        <li>CorelDRAW</li>
+                        <li>Figma</li>
                         <li>插画</li>
                         <li>包装</li>
                         <li>UI/UX</li>
@@ -47,17 +47,31 @@
                 </div>
             </div>
         </div>
-
+        <div class="content_section">
+            <h2>推荐工具</h2>
+            <ul>
+                <li>AI大模型管理：CerrySudio</li>
+                <li>编译器：VsCode</li>
+                <li>接口文档：ApiFox</li>
+                <li>设计：Photoshop</li>
+                <li>操作系统：MacOS/Ubuntu</li>
+                <li>浏览器：Chrome/Safari/Edge</li>
+                <li>笔记：Obsidian</li>
+                <li>思维导图：XMind</li>
+                <li>数据库管理：Navicat</li>
+                <li>版本控制：Git</li>
+            </ul>
+        </div>
         <div class="content_section">
             <h2>联系方式</h2>
             <div class="contact_list">
-                <a href="mailto:example@email.com" class="contact_item">
+                <a href="mailto:jzwbuer@163.com" class="contact_item">
                     <svg class="icon" aria-hidden="true">
                         <use href="#icon-youjian"></use>
                     </svg>
                     <span>Email</span>
                 </a>
-                <a href="https://github.com/yourusername" target="_blank" class="contact_item">
+                <a href="https://github.com/maohuifei" target="_blank" class="contact_item">
                     <svg class="icon" aria-hidden="true">
                         <use href="#icon-github"></use>
                     </svg>
@@ -72,26 +86,26 @@
                         <img src="/weixin.jpg" alt="WeChat QR Code">
                     </div>
                 </div>
-                <div class="contact_item qrcode-container">
+                <div class="contact_item qrcode-container" @click="XClick">
                     <svg class="icon" aria-hidden="true">
-                        <use href="#icon-telegram"></use>
+                        <use href="#icon-yooxi"></use>
                     </svg>
-                    <span>Telegram</span>
-                    <div class="qrcode">
-                        <img src="/telegram.jpg" alt="Telegram QR Code">
-                    </div>
+                    <span>X</span>
                 </div>
+                
             </div>
         </div>
     </div>
 </template>
 
-<script lang='ts'>
-export default {
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
 
-    setup() {
+const router = useRouter()
 
-    }
+// 处理联系方式点击
+const XClick = () => {
+  router.push('/maintenance')
 }
 </script>
 
@@ -226,6 +240,17 @@ export default {
                 overflow: visible;
                 cursor: pointer;
 
+                .icon {
+                    width: 24px;
+                    height: 24px;
+                    transition: all 0.3s ease;
+                }
+
+                &:hover {
+                    background: var(--systemColor);
+                    color: white;
+                }
+
                 &.qrcode-container {
                     .qrcode {
                         position: absolute;
@@ -265,24 +290,9 @@ export default {
                     }
                 }
 
-                .icon {
-                    width: 24px;
-                    height: 24px;
-                    fill: var(--systemColor);
-                }
-
                 span {
                     font-size: 1.1em;
                     font-weight: 500;
-                }
-
-                &:hover {
-                    background: var(--systemColor);
-                    color: white;
-
-                    .icon {
-                        fill: white;
-                    }
                 }
             }
         }

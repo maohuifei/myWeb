@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4705788 */
-  src: url('iconfont.woff2?t=1728820568345') format('woff2'),
-       url('iconfont.woff?t=1728820568345') format('woff'),
-       url('iconfont.ttf?t=1728820568345') format('truetype');
+  src: url('iconfont.woff2?t=1739879054043') format('woff2'),
+       url('iconfont.woff?t=1739879054043') format('woff'),
+       url('iconfont.ttf?t=1739879054043') format('truetype');
 }
 
 .iconfont {
@@ -13,16 +13,32 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-lianjie:before {
+  content: "\e68b";
+}
+
+.icon-yooxi:before {
+  content: "\e607";
+}
+
+.icon-lingpaitoken:before {
+  content: "\e603";
+}
+
+.icon-GSAP:before {
+  content: "\e606";
+}
+
+.icon-claude:before {
+  content: "\e624";
+}
+
+.icon-Vitest:before {
+  content: "\e678";
+}
+
 .icon-ubuntu:before {
   content: "\e605";
-}
-
-.icon-macos:before {
-  content: "\e6bb";
-}
-
-.icon-ks:before {
-  content: "\e603";
 }
 
 .icon-Nginx:before {
@@ -41,24 +57,8 @@
   content: "\e602";
 }
 
-.icon-jiami:before {
-  content: "\e636";
-}
-
-.icon-cors:before {
-  content: "\e60a";
-}
-
-.icon-wangeditor-menu-img-:before {
-  content: "\e611";
-}
-
 .icon-less:before {
   content: "\e63c";
-}
-
-.icon-eslint:before {
-  content: "\e69b";
 }
 
 .icon-axios:before {
@@ -103,10 +103,6 @@
 
 .icon-sousuo:before {
   content: "\e8b9";
-}
-
-.icon-telegram:before {
-  content: "\e9ac";
 }
 
 .icon-moon:before {
