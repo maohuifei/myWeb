@@ -8,6 +8,7 @@ import jsonError from 'koa-json-error';
 import userRouter from './routes/user';
 import ariticleRouter from './routes/article'
 import categoriesRouter from './routes/categories'
+import linkRouter from './routes/link'
 import { AppDataSource } from './data-source';
 import cors from 'koa2-cors'
 import { authenticate } from './utils/tokenAuth';
@@ -71,12 +72,13 @@ AppDataSource.initialize()
 
         // 注册路由
         app.use(userRouter.routes());
-        app.use(ariticleRouter.routes());
-        app.use(categoriesRouter.routes());
+        app.use(ariticleRouter.routes()).use(ariticleRouter.allowedMethods());
+        app.use(categoriesRouter.routes()).use(categoriesRouter.allowedMethods());
+        app.use(linkRouter.routes()).use(linkRouter.allowedMethods());
 
         // 启动服务器
         app.listen(3000, () => {
-            console.log("服务运行----，本地预览：http://localhost:3000");
+            console.log("服务运行：http://localhost:3000");
         });
     })
     .catch((error) => {

@@ -80,6 +80,12 @@ const menuItems = [
         icon: Avatar,
         label: '用户管理',
         action: () => store.updataMainStateFun(3)
+    },
+    {
+        index: '5',
+        icon: Avatar,
+        label: '链接管理',
+        action: () => store.updataMainStateFun(5)
     }
 ]
 

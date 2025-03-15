@@ -256,9 +256,9 @@ const getUserInfo = async () => {
             throw new Error('未找到用户信息')
         }
 
-        console.log('用户信息数据:', data)
+        // console.log('用户信息数据:', data)
         userInfo.value = data
-        console.log('更新后的用户信息:', userInfo.value)
+        // console.log('更新后的用户信息:', userInfo.value)
     } catch (error) {
         console.error('获取用户信息出错:', error)
         // 只有在真正的错误情况下才显示错误消息

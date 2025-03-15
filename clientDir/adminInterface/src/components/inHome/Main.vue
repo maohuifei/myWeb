@@ -5,6 +5,7 @@
             <articleManagement v-if="store.mainState === 2" />
             <newArticle v-else-if="store.mainState === 21" />
             <userManagement v-else-if="store.mainState === 3" />
+            <linkManagement v-else-if="store.mainState === 5" />
             <!-- <articleSystem v-else-if="store.mainState==41"></articleSystem>
             <webSystem v-else-if="store.mainState==42"></webSystem>
             <userSystem v-else-if="store.mainState==43"></userSystem> -->
@@ -72,6 +73,7 @@ import http from '@/axios'
 // 组件导入
 import articleManagement from '../articleManagement/index.vue'
 import userManagement from '../userManagement/index.vue'
+import linkManagement from '../linkManagement/index.vue'
 // import articleSystem from '../systemManagement/articleSystem.vue';
 // import userSystem from '../systemManagement/userSystem.vue';
 // import webSystem from '../systemManagement/webSystem.vue';

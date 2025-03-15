@@ -20,7 +20,7 @@ const secret = 'JWThuafeng991((!';
  * - expiresIn: token的有效期
  */
 const options = {
-    expiresIn: '1h' // token有效期为1小时
+    expiresIn: '7d' // token有效期为1小时
 };
 
 /**

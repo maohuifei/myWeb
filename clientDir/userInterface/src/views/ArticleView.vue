@@ -1,7 +1,7 @@
 <template>
     <div class="article_box">
         <div class="card_box">
-            <div class="card_class" v-for="(article, index) in articleList" key="index">
+            <div class="card_class" v-for="article in articleList" :key="article.id">
                 <h2 class="title_txt">{{ article.title }}</h2>
                 <span class="updata_txt">更新时间：{{ article.updated_at }}</span>
                 <div style="height: 170px;">
@@ -9,14 +9,21 @@
                         <p class="abstract_box" ref="abstractBoxes">{{ article.abstract || "此处为摘要" }}</p>
                     </div>
                 </div>
-                <button class="all_btn" @click="ToParticulars(article.id)">阅读</button>
+                <button class="all_btn" 
+                    :class="{ 'loading': article.isLoading }"
+                    :style="{ cursor: article.isLoading ? 'wait' : 'pointer' }"
+                    :disabled="article.isLoading"
+                    @click="ToParticulars(article.id)"
+                >
+                    <span class="btn-text">{{ article.isLoading ? '加载中' : '阅读' }}</span>
+                    <span class="loading-spinner"></span>
+                </button>
             </div>
         </div>
-        <span class="page_box" v-if="pageCount>1">
-            <button class="page_btn" v-for="item in pageCount" @click="pageBtn(item)">{{ item }}</button>
-        </span> 
+        <div v-if="loading" class="loading-indicator">
+            <div class="loader"></div>
+        </div>
     </div>
-
 </template>
 
 <script lang='ts'>
@@ -27,88 +34,106 @@ import { useRouter } from 'vue-router';
 
 export default {
     setup() {
-        const articleList = ref()
-        const stores = myStore()
-        const utils = new Utils()
+        const articleList = ref<any[]>([]);
+        const stores = myStore();
+        const utils = new Utils();
         const pageQuery = ref({
             page: 1,
-            pageSize: 20,
+            pageSize: 12, // 初始加载6个文章
             state: true,
-        })
-        const totalCount = ref()
-        const pageCount = ref(1)
-        const abstractBoxes = ref<HTMLElement[]>([])
-        const abstractContainers = ref<HTMLElement[]>([])
+        });
+        const totalCount = ref(0);
+        const pageCount = ref(1);
+        const abstractBoxes = ref<HTMLElement[]>([]);
+        const abstractContainers = ref<HTMLElement[]>([]);
+        const loading = ref(false); // 加载状态
 
         onMounted(async () => {
-            await getArticleList()
-            // 等待DOM更新后检查文本是否溢出
+            await getArticleList();
             nextTick(() => {
-                checkTextOverflow()
-            })
-        })
+                checkTextOverflow();
+            });
+            window.addEventListener('scroll', handleScroll);
+        });
 
-        const pageBtn = (value: number) => {
-            pageQuery.value.page = value
-            getArticleList()
-            console.log(value);
-            
-        }
+        const handleScroll = () => {
+            const scrollTop = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+
+            if (scrollTop + windowHeight >= documentHeight - 10) {
+                if (pageQuery.value.page < pageCount.value) {
+                    pageQuery.value.page++;
+                    getArticleList();
+                }
+            }
+        };
+
         const getArticleList = async () => {
+            loading.value = true; // 开始加载
             try {
-                const returned = await stores.getDataToServer('article/list', pageQuery.value)
-
-                totalCount.value = returned.totalCount
-                pageCount.value = Math.ceil(returned.totalCount / 20)
-                // 假设 returned.data 是一个包含多个对象的数组，每个对象都有一个 updated_at 字段  
+                const returned = await stores.getDataToServer('article/list', pageQuery.value);
+                totalCount.value = returned.totalCount;
+                pageCount.value = Math.ceil(returned.totalCount / pageQuery.value.pageSize);
                 const articles = returned.data;
-
-                // 使用 map 方法来遍历数组并格式化每个对象的 updated_at 字段  
                 const formattedArticles = articles.map((article: { updated_at: string; }) => ({
-                    ...article, // 复制文章对象的所有属性  
-                    updated_at: utils.formatDate(article.updated_at) // 使用 Utils 类的 formatDate 方法来格式化 updated_at 字段  
+                    ...article,
+                    updated_at: utils.formatDate(article.updated_at)
                 }));
 
-                // 现在 formattedArticles 包含了格式化后的文章数据  
-                // 你可以将 formattedArticles 赋值给某个响应式引用或用于其他目的  
-                articleList.value = formattedArticles; // 假设 articleList 是一个响应式引用  
-
+                // 如果是第一页，清空 articleList
+                if (pageQuery.value.page === 1) {
+                    articleList.value = formattedArticles;
+                } else {
+                    articleList.value = [...articleList.value, ...formattedArticles]; // 追加新文章
+                }
             } catch (error) {
                 console.error('获取列表失败');
-                
+            } finally {
+                loading.value = false; // 加载完成
             }
-        }
-        const router = useRouter()
-        const ToParticulars = (articleId: number) => {
-            router.push({
+        };
+
+        const router = useRouter();
+        const ToParticulars = async (articleId: number) => {
+            const article = articleList.value.find(a => a.id === articleId);
+            if (article) {
+                article.isLoading = true; // 设置加载状态
+            }
+            await router.push({
                 path: '/articleParticulars',
                 query: { id: articleId }
-            })
-        }
+            });
+            if (article) {
+                article.isLoading = false; // 重置加载状态
+            }
+        };
+
         const checkTextOverflow = () => {
             abstractBoxes.value.forEach((box, index) => {
-                const container = abstractContainers.value[index]
+                const container = abstractContainers.value[index];
                 if (box && container) {
-                    // 检查文本是否溢出
-                    const isOverflowing = box.scrollHeight > box.clientHeight
+                    const isOverflowing = box.scrollHeight > box.clientHeight;
                     if (isOverflowing) {
-                        container.classList.add('has-overflow')
+                        container.classList.add('has-overflow');
                     } else {
-                        container.classList.remove('has-overflow')
+                        container.classList.remove('has-overflow');
                     }
                 }
-            })
-        }
+            });
+        };
+
         return {
             ToParticulars,
-            pageBtn,
             getArticleList,
             articleList,
             totalCount,
             pageCount,
             abstractBoxes,
             abstractContainers,
-        }
+            handleScroll,
+            loading,
+        };
     }
 }
 </script>
@@ -225,24 +250,25 @@ export default {
         }
     }
 
-    .page_box {
-        margin-top: 30px;
-        
-        .page_btn {
-            margin: 5px;
-            padding: 8px 12px;
-            border: 1px solid var(--systemColor);
-            background: transparent;
-            color: var(--systemColor);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 4px;
+    .loading-indicator {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-            &:hover {
-                background: var(--systemColor);
-                color: var(--outElementColor);
-            }
-        }
+    .loader {
+        border: 8px solid rgba(255, 255, 255, 0.3);
+        border-left-color: var(--systemColor);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 }
 </style>

@@ -23,7 +23,7 @@
 
   <!-- 导航菜单 -->
   <div class="nav_box" :class="{ 'open': isMenuOpen }" ref="navBox" @click.stop>
-    <div class="nav-content">
+    <div class="nav-content" :style="{ opacity: isMenuOpen ? 1 : 0 }">
       <RouterLink to="/" :style="{ '--i': 0 }">首页</RouterLink>
       <RouterLink to="/article" :style="{ '--i': 1 }">文章</RouterLink>
       <RouterLink to="/about" :style="{ '--i': 2 }">关于</RouterLink>
@@ -35,7 +35,7 @@
   <div style="height: 60px;"></div>
 
   <!-- 主要内容区域 -->
-  <div class="content_box">
+  <div class="content_box" :class="{ 'shifted': isMenuOpen }">
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <component :is="Component" />
@@ -60,7 +60,7 @@
 
   <!-- 页脚 -->
   <div class="foot_box">
-    <p>© 2025 Mo-Fireborn-Jiang 版权所有</p>
+    <p>© 2025 Wenbo 版权所有</p>
     <p>备案号：鲁ICP备2024118017号 </p>
   </div>
 </template>
@@ -69,6 +69,7 @@
 import { ref, onMounted, onUnmounted, watch, computed, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import gsap from 'gsap'
+import { myStore } from './stores/counter';
 
 // 状态管理
 const showBackTop = ref(false)
@@ -85,45 +86,60 @@ const isHomePage = computed(() => route.path === '/')
 
 // 切换菜单
 const toggleMenu = () => {
+  console.log('Toggling menu. Current state:', isMenuOpen.value);
   if (isMenuOpen.value) {
-    closeMenu()
+    closeMenu();
   } else {
-    isMenuOpen.value = true
+    isMenuOpen.value = true;
+    console.log('Menu opened.');
     gsap.to('.nav-content', {
-      duration: 0.3,
+      duration: 0.2,
       opacity: 1,
       x: 0,
       ease: "power2.out"
-    })
+    });
     gsap.to('.nav-content a', {
-      duration: 0.4,
+      duration: 0.2,
       opacity: 1,
       x: 0,
       stagger: 0.05,
       ease: "power2.out"
-    })
+    });
+    // Shift content to the left
+    gsap.to('.content_box', {
+      duration: 0.2,
+      marginRight: '300px',
+      ease: "power2.out"
+    });
   }
-}
+};
 
 // 关闭菜单的函数
 const closeMenu = () => {
-  if (!isMenuOpen.value) return
-  
-  isMenuOpen.value = false
+  console.log('Closing menu. Current state:', isMenuOpen.value);
+  if (!isMenuOpen.value) return;
+  isMenuOpen.value = false;
+  console.log('Menu closed.');
   gsap.to('.nav-content', {
-    duration: 0.3,
+    duration: 0.2,
     opacity: 0,
     x: 300,
     ease: "power2.in"
-  })
+  });
   gsap.to('.nav-content a', {
     duration: 0.2,
     opacity: 0,
     x: 20,
     stagger: 0.03,
     ease: "power2.in"
-  })
-}
+  });
+  // Reset content position
+  gsap.to('.content_box', {
+    duration: 0.2,
+    marginRight: '0px',
+    ease: "power2.in"
+  });
+};
 
 // 处理点击事件
 const handleClick = (event: MouseEvent) => {
@@ -224,15 +240,20 @@ watch(route, () => {
 onMounted(() => {
   checkScrollable()
 
-  // 禁用F12键
-  document.addEventListener('keydown', (e: KeyboardEvent) => {
+  const stores = myStore()
+  if(!stores.debugStart){
+   // 禁用F12键
+   document.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'F12') e.preventDefault()
   })
 
-  // 禁用右键菜单
-  document.addEventListener('contextmenu', (e: Event) => {
+  // 新增右键禁用
+  document.addEventListener('contextmenu', (e: MouseEvent) => {
     e.preventDefault()
   })
+
+  }
+  
 
   // 检查设备类型
   if (checkDeviceType()) {
@@ -253,8 +274,6 @@ onUnmounted(() => {
   
   // 移除点击事件监听
   document.removeEventListener('click', handleClick)
-  // 移除右键菜单监听
-  document.removeEventListener('contextmenu', (e: Event) => e.preventDefault())
 })
 
 // 滚动到底部
@@ -357,7 +376,7 @@ const checkDeviceType = () => {
   transition: all 0.3s ease;
   
   &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color:rgba(0, 0, 0, 0.5);
   }
 
   .hamburger {
@@ -408,74 +427,54 @@ const checkDeviceType = () => {
   position: fixed;
   top: 0;
   right: 0;
-  left: auto;
   width: 300px;
-  height: 100vh;
-  pointer-events: none; // 默认不接受交互
-  z-index: 1004;
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(10px);
+  height: 100%;
+  background: black;
   transform: translateX(100%);
   transition: transform 0.3s ease;
-  
-  &.open {
-    pointer-events: all; // 展开时允许交互
-    transform: translateX(0);
-    
-    ~ .menu-toggle { // 当菜单展开时，修改菜单按钮的样式
-      .hamburger span {
-        background: #ffffff;
-      }
-      
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-    }
-  }
-  
-  .nav-content {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 30px;
-    padding-left: 40px;
-    opacity: 0;
-    transform: translateX(300px);
-    
-    a {
-      position: relative;
-      font-size: 1.2em;
-      color: #ffffff;
-      text-decoration: none;
-      font-weight: 500;
-      pointer-events: auto;
-      opacity: 0;
-      transform: translateX(-20px);
-      
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: #ffffff;
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-      }
-      
-      &:hover {
-        transform: translateX(0) scale(1.1);
-        
-        &::after {
-          transform: scaleX(1);
-        }
-      }
-    }
-  }
+  z-index: 1000;
+}
+
+.nav_box.open {
+  transform: translateX(0);
+}
+
+.content_box {
+  transition: margin-right 0.3s ease;
+}
+
+.content_box.shifted {
+  margin-right: 300px;
+}
+
+.nav-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+  padding-left: 10px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: white;
+  text-align: center;
+}
+
+.nav_box.open .nav-content {
+  opacity: 1;
+}
+
+.nav-content a {
+  color: white !important;
+  text-decoration: none;
+  font-size: 18px; /* 增加字体大小 */
+}
+
+.nav-content a:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* 设置悬停时的背景颜色 */
+  border-radius: 8px; /* 添加圆角效果 */
 }
 
 /* 滚动控制按钮样式 */

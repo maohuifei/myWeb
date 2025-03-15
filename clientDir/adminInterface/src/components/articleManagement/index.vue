@@ -224,13 +224,9 @@ const viewArticle = (article?: Article) => {
 };
 
 // 删除文章
-const deleBtn = async (article: Article) => {
-    try {
-        deleteArticle.value = article;
-        dialogVisible.value = true;
-    } catch (error) {
-        handleApiError(error, '删除文章失败');
-    }
+const deleBtn = (article: Article) => {
+    deleteArticle.value = article;
+    dialogVisible.value = true;
 };
 
 // 更新文章状态
@@ -269,12 +265,23 @@ onMounted(() => {
     getActive();
 });
 
-const handleConfirm = () => {
-    // 处理确认逻辑
-    if (deleteArticle.value) {
-        deleBtn(deleteArticle.value);
+const handleConfirm = async () => {
+    try {
+        if (deleteArticle.value) {
+            const response = await http.delete(`article/delete/${deleteArticle.value.id}`);
+            
+            if (response.data.success) {
+                ElMessage.success('删除成功');
+                await getActive();
+            } else {
+                throw new Error(response.data.message || '删除失败');
+            }
+        }
+    } catch (error) {
+        handleApiError(error, '删除文章失败');
+    } finally {
+        dialogVisible.value = false;
     }
-    dialogVisible.value = false;
 };
 </script>
 

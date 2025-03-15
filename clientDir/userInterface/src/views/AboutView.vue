@@ -3,64 +3,17 @@
         <h1>关于我</h1>
         <div class="content_section">
             <h2>个人介绍</h2>
-            <p>你好，我是姜墨（Mo-Fireborn），一个神秘IT男</p>
-        </div>
-
-        <div class="content_section">
-            <h2>技术栈</h2>
-            <p>最常使用的编程语言是JavaScript</p>
-            <div class="tech_list">
-                <div class="tech_category">
-                    <h3>WEB开发</h3>
-                    <ul>
-                        <li>JavaScript/TypeScript</li>
-                        <li>Vue</li>
-                        <li>Node.js</li>
-                        <li>Express/Koa</li>
-                        <li>MySQL</li>
-                        <li>MongoDB</li>
-                    </ul>
-                </div>
-                <div class="tech_category">
-                    <h3>操作系统</h3>
-                    <ul>
-                        <li>Windows</li>
-                        <li>MacOS</li>
-                        <li>Ubuntu</li>
-                        <li>CentOS</li>
-                        <li>Deepin</li>
-                        <li>RedHat</li>
-                        <li>银河麒麟</li>
-                    </ul>
-                </div>
-                <div class="tech_category">
-                    <h3>视觉设计</h3>
-                    <ul>
-                        <li>Photoshop</li>
-                        <li>Illustrator</li>
-                        <li>CorelDRAW</li>
-                        <li>Figma</li>
-                        <li>插画</li>
-                        <li>包装</li>
-                        <li>UI/UX</li>
-                    </ul>
-                </div>
-            </div>
+            <p>你好，我是文伯，一个普通人，对于编程和设计有一定涉猎</p>
         </div>
         <div class="content_section">
-            <h2>推荐工具</h2>
-            <ul>
-                <li>AI大模型管理：CerrySudio</li>
-                <li>编译器：VsCode</li>
-                <li>接口文档：ApiFox</li>
-                <li>设计：Photoshop</li>
-                <li>操作系统：MacOS/Ubuntu</li>
-                <li>浏览器：Chrome/Safari/Edge</li>
-                <li>笔记：Obsidian</li>
-                <li>思维导图：XMind</li>
-                <li>数据库管理：Navicat</li>
-                <li>版本控制：Git</li>
-            </ul>
+            <h2>所在地：青岛</h2>
+            <p>
+                青岛地处黄海之滨、山东半岛南部，是中国北方一座富有人文魅力、自然禀赋优越的沿海开放城市
+            </p>
+            <p>
+                位于东经119°30′～121°00′、北纬35°35′～37°09′，全市总面积为11293平方千米
+            </p>
+          
         </div>
         <div class="content_section">
             <h2>联系方式</h2>
@@ -93,6 +46,35 @@
                     <span>X</span>
                 </div>
                 
+            </div>
+        </div>
+        <div class="content_section">
+            <h2>我参与的项目</h2>
+            <div class="project_cards">
+                <div class="project_card">
+                    <svg class="project_icon" aria-hidden="true">
+                        <use href="#icon-youjian"></use>
+                    </svg>
+                    <h3>huafengWeb</h3>
+                    <p>本站github开源地址，欢迎star</p>
+                    <a href="https://github.com/maohuifei/myWeb" class="project_link">前往查看</a>
+                </div>
+                <div class="project_card">
+                    <svg class="project_icon" aria-hidden="true">
+                        <use href="#icon-youjian"></use>
+                    </svg>
+                    <h3>青岛市北不可移动文物巡查</h3>
+                    <p>该项目旨在对青岛市北区的不可移动文物进行巡查和保护，确保文化遗产的安全。</p>
+                    <a href="https://www.baidu.com/" class="project_link">前往查看</a>
+                </div>
+                <div class="project_card">
+                    <svg class="project_icon" aria-hidden="true">
+                        <use href="#icon-youjian"></use>
+                    </svg>
+                    <h3>青岛自贸人才港</h3>
+                    <p>青岛自贸人才港项目致力于吸引和培养高端人才，推动区域经济发展。</p>
+                    <a href="https://www.baidu.com/" class="project_link">前往查看</a>
+                </div>
             </div>
         </div>
     </div>
@@ -213,6 +195,64 @@ const XClick = () => {
                             font-size: 1.5em;
                             line-height: 1;
                         }
+                    }
+                }
+            }
+        }
+
+        .project_cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 30px 20px;
+
+            .project_card {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                transition: all 0.4s ease;
+                padding: 30px;
+
+                &:hover {
+                    transform: translateY(-8px);
+                    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+                }
+
+                .project_icon {
+                    width: 40px;
+                    height: 40px;
+                    margin-bottom: 20px;
+                }
+
+                h3 {
+                    font-size: 1.4em;
+                    color: var(--systemColor);
+                    margin-bottom: 15px;
+                    font-weight: 500;
+                }
+
+                p {
+                    font-size: 1.1em;
+                    color: #2c3e50;
+                    margin: 0 0 20px;
+                }
+
+                .project_link {
+                    display: inline-block;
+                    padding: 10px 20px;
+                    background: var(--systemColor);
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 8px;
+                    transition: all 0.4s ease;
+
+                    &:hover {
+                        background: var(--systemColor);
+                        color: white;
                     }
                 }
             }

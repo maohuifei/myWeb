@@ -8,24 +8,10 @@
             <p>
                 网站设计遵循
                 <span class="significant">"更简单、更纯粹"</span>
-                的原则，这也是我的生活哲学
+                的原则，它包含了我的思想理念，记录了我的成长轨迹，也见证了我与众多先行者思想的碰撞与共鸣
             </p>
             <p>
                 对于意外到访的你，如果有任何建议或想法，欢迎通过关于界面的联系方式与我沟通
-            </p>
-        </div>
-
-        <div class="my_introduction_box">
-            <h1>关于我</h1>
-            <p>你好，我是
-                <span class="significant">姜墨（Mo-Fireborn）</span>
-                ，HuaFeng的创始人与维护者
-            </p>
-            <p>
-                我崇尚简洁纯粹的生活哲学，追求技术与艺术的完美结合
-            </p>
-            <p>
-                HuaFeng，就是我这一理念的集中体现，它包含了我的思想理念，记录了我的成长轨迹，也见证了我与众多先行者思想的碰撞与共鸣
             </p>
         </div>
 
@@ -195,99 +181,70 @@ export default {
         }
 
         //全局技术
-        const overallList = [{
-            icon: "#icon-typescript",
-            name: "TypeScript",
-            versions: "5.4.0",
-            url: "https://www.typescriptlang.org/"
-        },
-        {
-            icon: "#icon-Nodejs",
-            name: "Node.js",
-            versions: "20.18.01",
-            url: "https://nodejs.org/"
-        },
-        {
-            icon: "#icon-claude",
-            name: "Claude",
-            versions: "3.5",
-            url: "https://anthropic.com/"
-        }]
+        const overallList = [
+            {
+                icon: "#icon-typescript",
+                name: "TypeScript",
+                versions: "5.4.0",
+                url: "https://www.typescriptlang.org/"
+            },
+            {
+                icon: "#icon-Nodejs",
+                name: "Node.js",
+                versions: "20.18.01",
+                url: "https://nodejs.org/"
+            }
+        ]
 
         //客户端技术
-        const clientList = [{
-            icon: "#icon-Vue",
-            name: "Vue3",
-            versions: "3.4.29",
-            url: "https://vuejs.org/"
-        },
-        {
-            icon: "#icon-Vitest",
-            name: "Vite",
-            versions: "5.1.4",
-            url: "https://vitejs.dev/"
-        },
-        {
-            icon: "#icon-axios",
-            name: "Axios",
-            versions: "1.7.7",
-            url: "https://axios-http.com/"
-        },
-        {
-            icon: "#icon-less",
-            name: "Less",
-            versions: "4.2.0",
-            url: "https://lesscss.org/"
-        },
-        {
-            icon: "#icon-element-plus",
-            name: "Element Plus",
-            versions: "2.5.6",
-            url: "https://element-plus.org/"
-        },
-        {
-            icon: "#icon-GSAP",
-            name: "GSAP",
-            versions: "3.12.5",
-            url: "https://greensock.com/gsap/"
-        }]
+        const clientList = [
+            {
+                icon: "#icon-Vue",
+                name: "Vue",
+                versions: "3.4.29",
+                url: "https://vuejs.org/"
+            },
+            {
+                icon: "#icon-element-plus",
+                name: "Element Plus",
+                versions: "2.5.6",
+                url: "https://element-plus.org/"
+            },
+            {
+                icon: "#icon-GSAP",
+                name: "GSAP",
+                versions: "3.12.5",
+                url: "https://greensock.com/gsap/"
+            }
+        ]
 
         //服务器技术
-        const serverList = [ {
-            icon: "#icon-ubuntu",
-            name: "Ubuntu",
-            versions: "22.04",
-            url: "https://ubuntu.com/"
-        },{
-            icon: "#icon-Nginx",
-            name: "Nginx",
-            versions: "1.24.0",
-            url: "https://nginx.org/"
-        },
-        {
-            icon: "#icon-ic_taskedit_kafka",
-            name: "Koa.js",
-            versions: "2.15.3",
-            url: "https://koajs.com/"
-        },
-        {
-            icon: "#icon-mysql1",
-            name: "mySQL",
-            versions: "3.11.0",
-            url: "https://www.mysql.com/"
-        },
-        {
-            icon: "#icon-lianjie",
-            name: "TypeORM",
-            versions: "0.3.20",
-            url: "https://typeorm.io/"
-        },
-        {
-            icon: "#icon-lingpaitoken",
-            name: "JWT",
-            versions: "9.0.2",
-            url: "https://jwt.io/"
-        }]
+        const serverList = [
+            {
+                icon: "#icon-ubuntu",
+                name: "Ubuntu",
+                versions: "22.04",
+                url: "https://ubuntu.com/"
+            },
+            {
+                icon: "#icon-Nginx",
+                name: "Nginx",
+                versions: "1.24.0",
+                url: "https://nginx.org/"
+            },
+            {
+                icon: "#icon-ic_taskedit_kafka",
+                name: "Koa.js",
+                versions: "2.15.3",
+                url: "https://koajs.com/"
+            },
+            {
+                icon: "#icon-mysql1",
+                name: "mySQL",
+                versions: "3.11.0",
+                url: "https://www.mysql.com/"
+            }
+        ]
 
         const checkTextOverflow = () => {
             abstractBoxes.value.forEach((box, index) => {

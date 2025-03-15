@@ -1,10 +1,14 @@
 <template>
     <div class="privacy_box">
         <h1>网站声明</h1>
-        
+        <div class="content_section">
+            <h2>开源项目</h2>
+            <p>本站已经在 GitHub 上开源，欢迎访问并参与贡献。</p>
+            <a href="https://github.com/maohuifei/myWeb" target="_blank">前往 GitHub 查看项目</a>
+        </div>
         <div class="content_section">
             <h2>关于本网站</h2>
-            <p>本网站由我（姜墨/Mo-Fireborn-Jiang）独立开发与维护，主要记录我的学习历程和心得。</p>
+            <p>本网站由我独立开发与维护，主要记录我的学习历程和心得。</p>
             <p>网站内的所有资料均来源于互联网，经过我个人的整理、分析和总结得出。</p>
             <p>这些资料仅供学习记录之用，不具备任何商业性质，如果有涉及侵权之处，请及时与我联系。</p>
         </div>
