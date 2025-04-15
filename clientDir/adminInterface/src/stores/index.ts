@@ -9,9 +9,9 @@ export const myStore = defineStore('myStore', {
         responseData: null,
         token: "",
         //生产环境
-        // API_URL: "https://huafeng.website/api",
+        API_URL: "https://huafeng.website/api",
         // 测试环境
-        API_URL: 'http://localhost:3000/api', 
+        // API_URL: 'http://localhost:3000/api', 
     }),
     actions: {
         //定义修改状态的方法

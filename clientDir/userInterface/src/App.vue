@@ -60,7 +60,7 @@
 
   <!-- 页脚 -->
   <div class="foot_box">
-    <p>© 2025 Wenbo 版权所有</p>
+    <p>© 2025 huafeng 版权所有</p>
     <p>备案号：鲁ICP备2024118017号 </p>
   </div>
 </template>
@@ -376,7 +376,10 @@ const checkDeviceType = () => {
   transition: all 0.3s ease;
   
   &:hover {
-    background-color:rgba(0, 0, 0, 0.5);
+    background-color: black;
+    .hamburger span {
+      background: white;
+    }
   }
 
   .hamburger {

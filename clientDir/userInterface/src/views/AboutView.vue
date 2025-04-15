@@ -3,7 +3,7 @@
         <h1>关于我</h1>
         <div class="content_section">
             <h2>个人介绍</h2>
-            <p>你好，我是文伯，一个普通人，对于编程和设计有一定涉猎</p>
+            <p>你好，我是画风（huafeng），一个普通人，对于编程和设计有一定涉猎</p>
         </div>
         <div class="content_section">
             <h2>所在地：青岛</h2>
@@ -56,7 +56,7 @@
                         <use href="#icon-youjian"></use>
                     </svg>
                     <h3>huafengWeb</h3>
-                    <p>本站github开源地址，欢迎star</p>
+                    <p>本站github开源地址，欢迎访问</p>
                     <a href="https://github.com/maohuifei/myWeb" class="project_link">前往查看</a>
                 </div>
                 <div class="project_card">

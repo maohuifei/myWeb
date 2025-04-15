@@ -3,7 +3,7 @@
         <!-- Logo -->
         <div class="logo">
             <el-icon size="24"><Monitor /></el-icon>
-            <span>管理系统</span>
+            <span>huafnegWeb管理面板</span>
         </div>
 
         <!-- 导航菜单 -->

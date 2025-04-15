@@ -6,8 +6,7 @@
                 <div class="logo">
                     <el-icon size="32"><Monitor /></el-icon>
                 </div>
-                <h2>后台管理系统</h2>
-                <p>Welcome Back</p>
+                <h2>huafnegWeb管理面板</h2>
             </div>
             <el-form 
                 :model="form" 

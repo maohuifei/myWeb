@@ -2,12 +2,12 @@ import axios from 'axios'
 import { defineStore } from 'pinia'
 
 // 生产环境
-// const API_URL = 'https://huafeng.website/api'
-// const debugStart = false
+const API_URL = 'https://huafeng.website/api'
+const debugStart = false
 
 //测试环境
-const API_URL = 'http://localhost:3000/api'
-const debugStart = true
+// const API_URL = 'http://localhost:3000/api'
+// const debugStart = true
 
 export const myStore = defineStore('myStore', {
     state: () => ({
