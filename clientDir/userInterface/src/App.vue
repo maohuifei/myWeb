@@ -1,18 +1,34 @@
+<!-- 
+主应用模板 - 包含整个应用的布局结构
+1. tage_box: 顶部导航栏，包含logo和占位空间
+   - logo_box: 包含网站logo的容器
+   - placeholder: 右侧占位空间，保持布局平衡
+2. menu-toggle: 菜单切换按钮
+   - hamburger: 三条横线组成的菜单图标
+   - active状态: 点击后变为X图标
+3. nav_box: 侧边导航菜单
+   - nav-content: 导航链接容器
+   - 包含首页、文章、关于、声明四个路由链接
+4. content_box: 主内容区域
+   - 使用router-view显示当前路由组件
+   - 包含页面切换的淡入淡出过渡动画
+5. icon_box: 滚动控制按钮
+   - 根据滚动位置显示向上或向下箭头
+   - 点击后平滑滚动到页面顶部或底部
+6. foot_box: 页脚信息
+   - 包含版权信息和备案号
+-->
 <template>
-  <!-- 导航栏 -->
   <div class="tage_box" :class="{ 'with-shadow': showNavShadow }">
-    <!-- Logo -->
     <div class="logo_box">
       <RouterLink to="/">
         <img class="logo_class" src="/portrait.png" alt="Logo" />
       </RouterLink>
     </div>
 
-    <!-- 占位用的空div -->
     <div class="placeholder"></div>
   </div>
 
-  <!-- 菜单按钮 - 移到外面 -->
   <div class="menu-toggle" @click.stop="toggleMenu" :class="{ 'active': isMenuOpen }">
     <div class="hamburger">
       <span></span>
@@ -21,7 +37,6 @@
     </div>
   </div>
 
-  <!-- 导航菜单 -->
   <div class="nav_box" :class="{ 'open': isMenuOpen }" ref="navBox" @click.stop>
     <div class="nav-content" :style="{ opacity: isMenuOpen ? 1 : 0 }">
       <RouterLink to="/" :style="{ '--i': 0 }">首页</RouterLink>
@@ -31,10 +46,8 @@
     </div>
   </div>
 
-  <!-- 导航栏占位 -->
   <div style="height: 60px;"></div>
 
-  <!-- 主要内容区域 -->
   <div class="content_box" :class="{ 'shifted': isMenuOpen }">
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
@@ -43,7 +56,6 @@
     </router-view>
   </div>
 
-  <!-- 滚动控制按钮 - 添加内容高度判断 -->
   <div class="icon_box" :class="{ 
     'scrolled': isScrolled || !isHomePage,
     'home': isHomePage,
@@ -58,20 +70,47 @@
     </div>
   </div>
 
-  <!-- 页脚 -->
   <div class="foot_box">
     <p>© 2025 huafeng 版权所有</p>
     <p>备案号：鲁ICP备2024118017号 </p>
   </div>
 </template>
 
+<!-- 
+脚本部分 - 包含所有组件逻辑
+1. 导入依赖
+   - Vue组合式API: ref, onMounted等
+   - vue-router: 路由相关功能
+   - GSAP: 用于菜单和滚动按钮的动画效果
+   - 状态管理: 从stores/counter导入
+2. 响应式变量
+   - showBackTop: 控制返回顶部按钮显示
+   - isMenuOpen: 菜单展开状态
+   - navBox: 导航菜单DOM引用
+   - showNavShadow: 导航栏阴影显示状态
+   - isScrolled: 页面是否已滚动
+   - isAtBottom: 是否滚动到底部
+   - hasScroll: 页面是否有滚动条
+3. 计算属性
+   - isHomePage: 判断当前路由是否为首页
+4. 方法
+   - toggleMenu: 切换菜单展开/收起状态
+   - closeMenu: 关闭菜单并执行动画
+   - handleClick: 处理外部点击关闭菜单
+   - checkScroll: 检查滚动位置并更新状态
+   - handleScrollClick: 处理滚动按钮点击
+   - scrollToTop/Bottom: 平滑滚动到顶部/底部
+   - checkDeviceType: 检测设备类型
+5. 生命周期钩子
+   - onMounted: 初始化事件监听和状态检查
+   - onUnmounted: 清理事件监听
+-->
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch, computed, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import gsap from 'gsap'
 import { myStore } from './stores/counter';
 
-// 状态管理
 const showBackTop = ref(false)
 const route = useRoute()
 const isMenuOpen = ref(false)
@@ -81,10 +120,8 @@ const isScrolled = ref(false)
 const isAtBottom = ref(false)
 const hasScroll = ref(false)
 
-// 添加是否为首页的判断
 const isHomePage = computed(() => route.path === '/')
 
-// 切换菜单
 const toggleMenu = () => {
   console.log('Toggling menu. Current state:', isMenuOpen.value);
   if (isMenuOpen.value) {
@@ -105,7 +142,6 @@ const toggleMenu = () => {
       stagger: 0.05,
       ease: "power2.out"
     });
-    // Shift content to the left
     gsap.to('.content_box', {
       duration: 0.2,
       marginRight: '300px',
@@ -114,7 +150,6 @@ const toggleMenu = () => {
   }
 };
 
-// 关闭菜单的函数
 const closeMenu = () => {
   console.log('Closing menu. Current state:', isMenuOpen.value);
   if (!isMenuOpen.value) return;
@@ -133,7 +168,6 @@ const closeMenu = () => {
     stagger: 0.03,
     ease: "power2.in"
   });
-  // Reset content position
   gsap.to('.content_box', {
     duration: 0.2,
     marginRight: '0px',
@@ -141,13 +175,11 @@ const closeMenu = () => {
   });
 };
 
-// 处理点击事件
 const handleClick = (event: MouseEvent) => {
   const target = event.target as HTMLElement
   const menuToggle = document.querySelector('.menu-toggle')
   const navBox = document.querySelector('.nav_box')
   
-  // 如果点击的不是菜单按钮且不是菜单内容，则关闭菜单
   if (isMenuOpen.value && 
       !menuToggle?.contains(target) && 
       !navBox?.contains(target)) {
@@ -155,7 +187,6 @@ const handleClick = (event: MouseEvent) => {
   }
 }
 
-// 检查滚动位置并更新按钮显示状态
 const checkScroll = () => {
   const scrollTop = window.scrollY || document.documentElement.scrollTop
   const windowHeight = window.innerHeight
@@ -309,8 +340,13 @@ const checkDeviceType = () => {
 }
 </script>
 
+<!-- 样式部分 - 组件作用域样式 -->
 <style scoped lang="less">
-/* 过渡动画 */
+/* 
+过渡动画 - 用于页面切换时的淡入淡出效果
+1. fade-enter-active/fade-leave-active: 定义过渡持续时间和属性
+2. fade-enter/fade-leave-to: 定义进入和离开的初始/结束状态
+*/
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
@@ -321,7 +357,13 @@ const checkDeviceType = () => {
   opacity: 0;
 }
 
-/* 导航栏样式 */
+/* 
+导航栏样式 - 固定在顶部的导航栏
+1. tage_box: 主容器，使用flex布局
+2. with-shadow: 滚动时添加阴影效果
+3. logo_box: logo容器，左对齐
+4. placeholder: 右侧占位空间，保持布局平衡
+*/
 .tage_box {
   width: 100%;
   height: 60px;
@@ -342,7 +384,7 @@ const checkDeviceType = () => {
   .logo_box {
     flex: 1;
     display: flex;
-    justify-content: flex-start; // 改为左对齐
+    justify-content: flex-start;
     align-items: center;
 
     a:hover {
@@ -356,14 +398,20 @@ const checkDeviceType = () => {
   }
 
   .placeholder {
-    width: 44px; // 与菜单按钮宽度相同
+    width: 44px;
   }
 }
 
-/* 菜单按钮样式 */
+/* 
+菜单按钮样式 - 汉堡菜单按钮
+1. menu-toggle: 固定定位在右上角
+2. hamburger: 三条横线组成的菜单图标
+3. active状态: 点击后变为X图标
+4. hover效果: 背景色变化
+*/
 .menu-toggle {
   position: fixed;
-  top: 8px; // 调整位置以对齐导航栏
+  top: 8px;
   right: 20px;
   width: 44px;
   height: 44px;
@@ -472,12 +520,12 @@ const checkDeviceType = () => {
 .nav-content a {
   color: white !important;
   text-decoration: none;
-  font-size: 18px; /* 增加字体大小 */
+  font-size: 18px;
 }
 
 .nav-content a:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* 设置悬停时的背景颜色 */
-  border-radius: 8px; /* 添加圆角效果 */
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
 }
 
 /* 滚动控制按钮样式 */
@@ -539,7 +587,11 @@ const checkDeviceType = () => {
   }
 }
 
-/* 过渡动画 */
+/* 
+过渡动画 - 用于页面切换时的淡入淡出效果
+1. fade-enter-active/fade-leave-active: 定义过渡持续时间和属性
+2. fade-enter/fade-leave-to: 定义进入和离开的初始/结束状态
+*/
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

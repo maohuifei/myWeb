@@ -1,7 +1,25 @@
-/**
- * 文章详情组件
- * 展示单篇文章的完整内容，包括标题、分类、创建时间等信息
- */
+<!--
+ * ArticleParticulars.vue - 文章详情展示组件
+ *
+ * 功能：
+ * 1. 展示单篇文章的完整内容，包括标题、摘要、正文等
+ * 2. 提供文章目录导航功能
+ * 3. 支持返回上一页操作
+ *
+ * 技术实现：
+ * - 使用markdown-it解析Markdown内容
+ * - 使用highlight.js实现代码高亮
+ * - 动态生成文章目录(TOC)
+ * - 响应式设计适配不同设备
+ *
+ * 数据接口：
+ * - 通过Vuex store获取文章数据
+ * - 使用Vue Router处理页面导航
+ *
+ * 注意事项：
+ * - 需要处理XSS安全风险
+ * - 目录生成需要等待DOM渲染完成
+-->
 <template>
     <div class="particulars_box">
         <div class="floating_back_btn">

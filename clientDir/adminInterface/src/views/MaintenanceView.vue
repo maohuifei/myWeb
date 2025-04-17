@@ -1,3 +1,12 @@
+<!-- 
+  维护页面
+  Template部分注释:
+  - maintenance-container: 维护页面容器，设置全屏居中布局
+  - maintenance-content: 维护内容区域，包含图标和文本
+  - el-icon: Element Plus图标组件，显示维护图标
+  - h1: 维护标题
+  - p: 维护描述文本
+-->
 <template>
   <div class="maintenance-container">
     <div class="maintenance-content">
@@ -8,10 +17,22 @@
   </div>
 </template>
 
+<!--
+  Script部分注释:
+  - 导入Element Plus的Tools图标组件
+  - 使用Vue 3的setup语法糖
+-->
 <script setup lang="ts">
 import { Tools } from '@element-plus/icons-vue'
 </script>
 
+<!--
+  Style部分注释:
+  - maintenance-container: 设置维护页面全屏布局和背景
+  - maintenance-content: 维护卡片样式，包含边框和圆角
+  - maintenance-icon: 维护图标样式和动画效果
+  - 响应式设计: 适配不同设备屏幕
+-->
 <style scoped lang="less">
 .maintenance-container {
   min-height: 100vh;
@@ -88,4 +109,4 @@ import { Tools } from '@element-plus/icons-vue'
     }
   }
 }
-</style> 
+</style>

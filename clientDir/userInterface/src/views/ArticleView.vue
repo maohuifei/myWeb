@@ -1,4 +1,15 @@
 <template>
+<!--
+文章列表页面 - 展示所有文章列表
+1. article_box: 主容器，包含所有文章卡片
+2. card_box: 文章卡片容器
+3. card_class: 单个文章卡片，包含:
+   - 文章标题
+   - 更新时间
+   - 文章摘要
+   - 阅读按钮
+4. loading-indicator: 加载指示器
+-->
     <div class="article_box">
         <div class="card_box">
             <div class="card_class" v-for="article in articleList" :key="article.id">
@@ -26,6 +37,23 @@
     </div>
 </template>
 
+<!--
+脚本部分 - 处理文章列表数据和交互
+1. 导入依赖:
+   - Vue组合式API: ref, onMounted等
+   - Pinia状态管理
+   - 工具类
+   - vue-router
+2. 响应式数据:
+   - articleList: 文章列表数据
+   - loading状态控制
+   - 分页参数
+3. 方法:
+   - getArticleList: 获取文章列表
+   - handleScroll: 滚动加载更多
+   - checkTextOverflow: 检查文本溢出
+   - ToParticulars: 查看文章详情
+-->
 <script lang='ts'>
 import { ref, onMounted, nextTick } from 'vue';
 import { myStore } from '@/stores/counter';
@@ -138,6 +166,17 @@ export default {
 }
 </script>
 
+<!--
+样式部分 - 文章列表页面特定样式
+1. article_box: 主容器样式
+2. card_box: 文章卡片容器样式
+3. card_class: 单个文章卡片样式
+   - 标题样式
+   - 更新时间样式
+   - 摘要区域样式
+   - 阅读按钮样式
+4. loading-indicator: 加载指示器样式
+-->
 <style scoped lang="less">
 .article_box {
     color: var(--txtColor);

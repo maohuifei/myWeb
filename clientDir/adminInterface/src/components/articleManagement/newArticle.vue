@@ -1,3 +1,25 @@
+<!-- 
+文章编辑/新建页面模板部分
+功能：提供文章编辑和创建的表单界面
+
+组件结构说明:
+1. page-container - 页面容器
+2. page-header - 页面标题区域
+   - page-title - 标题文本
+   - header-actions - 操作按钮区域
+     - cancel-button - 取消按钮
+     - save-button - 保存按钮
+3. article-form - 表单区域
+   - form-header - 表单头部
+     - el-input - 文章标题输入框
+     - el-select - 文章分类选择器
+   - abstract-input - 文章摘要输入框
+   - article-switches - 开关区域
+     - recommend-switch - 推荐开关
+     - state-switch - 状态开关
+   - editor-container - 编辑器容器
+     - html-editor - 文章内容编辑器
+-->
 <template>
     <div class="page-container">
         <div class="page-header">
@@ -83,11 +105,29 @@ import { ElMessage } from 'element-plus'
 import http from '@/axios'
 
 // 类型定义
+/**
+ * 分类数据结构
+ * @property {number} id - 分类ID
+ * @property {string} name - 分类名称
+ */
 interface Category {
     id: number
     name: string
 }
 
+/**
+ * 文章信息数据结构
+ * @property {number} [id] - 文章ID（编辑时存在）
+ * @property {string} title - 文章标题
+ * @property {number} categoryId - 分类ID
+ * @property {string} [category] - 分类名称
+ * @property {string} abstract - 文章摘要
+ * @property {boolean} recommend - 是否推荐
+ * @property {boolean} state - 是否上架
+ * @property {string} content - 文章内容
+ * @property {Date} [created_at] - 创建时间
+ * @property {Date} [updated_at] - 更新时间
+ */
 interface ArticleInfo {
     id?: number
     title: string
@@ -101,6 +141,12 @@ interface ArticleInfo {
     updated_at?: Date
 }
 
+/**
+ * API响应格式
+ * @property {boolean} success - 请求是否成功
+ * @property {T} data - 返回数据
+ * @property {string} [message] - 错误信息
+ */
 interface ApiResponse<T> {
     success: boolean
     data: T
@@ -108,22 +154,26 @@ interface ApiResponse<T> {
 }
 
 // 状态定义
-const store = myStore()
-const loading = ref(false)
-const isEdit = computed(() => !!store.articleNewOrEdit)
-const options = ref<Category[]>([])
+const store = myStore() // 全局状态管理
+const loading = ref(false) // 加载状态
+const isEdit = computed(() => !!store.articleNewOrEdit) // 是否为编辑模式
+const options = ref<Category[]>([]) // 分类选项列表
 
 // 文章信息
 const articleInfo = ref<ArticleInfo>({
-    title: '',
-    categoryId: 0,
-    abstract: '',
-    recommend: false,
-    state: true,
-    content: ''
+    title: '', // 文章标题
+    categoryId: 0, // 分类ID
+    abstract: '', // 文章摘要
+    recommend: false, // 是否推荐
+    state: true, // 是否上架
+    content: '' // 文章内容
 })
 
-// API 错误处理
+/**
+ * 处理API错误
+ * @param {any} error - 错误对象
+ * @param {string} message - 错误提示信息
+ */
 const handleApiError = (error: any, message: string) => {
     console.error(message, error)
     ElMessage.error(message)
@@ -163,7 +213,15 @@ const getConfigurationList = async () => {
     }
 }
 
-// 表单验证
+/**
+ * 表单验证
+ * @returns {boolean} 验证是否通过
+ * 验证规则:
+ * 1. 文章标题不能为空
+ * 2. 必须选择文章分类
+ * 3. 文章摘要不能为空
+ * 4. 文章内容不能为空
+ */
 const validateForm = (): boolean => {
     if (!articleInfo.value.title.trim()) {
         ElMessage.warning('请输入文章标题')
@@ -184,7 +242,17 @@ const validateForm = (): boolean => {
     return true
 }
 
-// 保存文章
+/**
+ * 保存文章
+ * 功能: 根据当前模式(编辑/新建)调用不同API保存文章
+ * 流程:
+ * 1. 验证表单
+ * 2. 设置加载状态
+ * 3. 根据模式准备参数
+ * 4. 调用对应API
+ * 5. 处理成功/失败结果
+ * 6. 重置加载状态
+ */
 const saveBtn = async () => {
     if (!validateForm()) return
     

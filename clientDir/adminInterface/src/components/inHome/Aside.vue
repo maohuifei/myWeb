@@ -1,12 +1,21 @@
+<!-- 
+ * Template部分注释：
+ * 1. sidebar: 侧边栏容器
+ * 2. logo: 顶部logo区域，包含图标和网站名称
+ * 3. el-menu: 主菜单容器，包含菜单项和子菜单
+ * 4. el-menu-item: 单个菜单项，绑定点击事件
+ * 5. el-sub-menu: 带子菜单的菜单项
+ * 6. el-menu-item-group: 子菜单项分组容器
+ -->
 <template>
     <aside class="sidebar">
-        <!-- Logo -->
+        
         <div class="logo">
             <el-icon size="24"><Monitor /></el-icon>
             <span>huafnegWeb管理面板</span>
         </div>
 
-        <!-- 导航菜单 -->
+        
         <el-menu 
             :default-active="store.mainState.toString()"
             class="sidebar-menu"
@@ -14,7 +23,7 @@
             background-color="var(--el-color-black)" 
             text-color="rgba(255,255,255,0.8)"
         >
-            <!-- 主要菜单项 -->
+            
             <el-menu-item 
                 v-for="item in menuItems"
                 :key="item.index"
@@ -25,7 +34,7 @@
                 <span>{{ item.label }}</span>
             </el-menu-item>
 
-            <!-- 系统管理子菜单 -->
+            
             <el-sub-menu :index="systemSubMenu.index">
                 <template #title>
                     <el-icon><component :is="systemSubMenu.icon" /></el-icon>
@@ -47,6 +56,13 @@
     </aside>
 </template>
 
+<!-- 
+ * Script部分注释：
+ * 1. store: 全局状态管理实例
+ * 2. menuItems: 主菜单项配置数组，包含index(唯一标识)、icon(图标)、label(显示文本)、action(点击事件)
+ * 3. systemSubMenu: 系统管理子菜单配置，包含children数组配置子菜单项
+ * 4. store.updataMainStateFun: 更新全局状态的函数
+ -->
 <script lang="ts" setup>
 import { myStore } from '@/stores'
 import { 
@@ -58,10 +74,10 @@ import {
     Monitor 
 } from '@element-plus/icons-vue'
 
-// 状态管理
+
 const store = myStore()
 
-// 菜单项配置
+
 const menuItems = [
     {
         index: '1',
@@ -89,6 +105,7 @@ const menuItems = [
     }
 ]
 
+
 const systemSubMenu = {
     index: '5',
     icon: setting,
@@ -104,6 +121,16 @@ const systemSubMenu = {
 }
 </script>
 
+<!-- 
+ * Style部分注释：
+ * 1. sidebar: 侧边栏基础样式，包括宽度、背景色等
+ * 2. logo: logo区域样式，包括高度、边框等
+ * 3. sidebar-menu: 菜单容器样式
+ * 4. el-menu-item: 菜单项基础样式和hover状态
+ * 5. el-menu-item.is-active: 激活菜单项的特殊样式
+ * 6. el-sub-menu: 子菜单容器样式
+ * 7. @media: 移动端响应式样式
+ -->
 <style lang="less" scoped>
 .sidebar {
     width: 240px;
@@ -182,7 +209,6 @@ const systemSubMenu = {
     color: rgba(255, 255, 255, 0.4);
 }
 
-// 响应式设计
 @media screen and (max-width: 768px) {
     .sidebar {
         width: 64px;

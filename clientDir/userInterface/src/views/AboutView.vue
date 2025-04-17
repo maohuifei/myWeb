@@ -1,3 +1,18 @@
+<!--
+关于页面 - 展示个人信息和联系方式
+1. about_box: 主容器，包含所有内容区块
+2. content_section: 内容区块，包含:
+   - 个人介绍
+   - 所在地信息
+   - 联系方式列表
+   - 参与项目展示
+3. contact_list: 联系方式列表，包含:
+   - Email链接
+   - GitHub链接
+   - 微信二维码
+   - X(Twitter)链接
+4. project_cards: 项目卡片展示区
+-->
 <template>
     <div class="about_box">
         <h1>关于我</h1>
@@ -80,6 +95,13 @@
     </div>
 </template>
 
+<!--
+脚本部分 - 处理页面交互逻辑
+1. 导入依赖:
+   - vue-router: 用于页面导航
+2. 方法:
+   - XClick: 处理X(Twitter)图标点击，跳转到维护页面
+-->
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 
@@ -91,6 +113,17 @@ const XClick = () => {
 }
 </script>
 
+<!--
+样式部分 - 页面特定样式
+1. about_box: 主容器样式
+2. content_section: 内容区块样式
+3. contact_list: 联系方式列表样式
+   - contact_item: 单个联系方式样式
+   - qrcode: 二维码容器样式
+4. project_cards: 项目卡片区域样式
+   - project_card: 单个项目卡片样式
+   - project_link: 项目链接样式
+-->
 <style scoped lang="less">
 .about_box {
     max-width: 900px;

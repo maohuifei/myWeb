@@ -1,19 +1,40 @@
+<!--
+ * NotFoundView.vue - 404页面视图组件
+ *
+ * 功能：
+ * 1. 显示404错误页面
+ * 2. 提供返回首页和浏览文章的操作按钮
+ *
+ * 设计要点：
+ * - 使用大号404错误码增强视觉冲击
+ * - 背景动画效果提升用户体验
+ * - 响应式布局适配不同设备
+-->
 <template>
+  <!-- 404页面主容器 -->
   <div class="not-found-container">
+    <!-- 404内容区域 -->
     <div class="not-found-content">
+      <!-- 404错误码显示 -->
       <div class="error-code">404</div>
+      <!-- 404标题 -->
       <h1>页面未找到</h1>
+      <!-- 404描述文本 -->
       <p>抱歉，您访问的页面不存在或已被移除。</p>
+      <!-- 操作按钮区域 -->
       <div class="action-buttons">
         <RouterLink to="/" class="button primary">返回首页</RouterLink>
         <RouterLink to="/article" class="button secondary">浏览文章</RouterLink>
       </div>
     </div>
+    <!-- 背景动画效果 -->
     <div class="background-animation"></div>
   </div>
 </template>
 
+<!-- 组件样式区域 -->
 <style scoped lang="less">
+/* 404页面主容器样式 */
 .not-found-container {
   min-height: calc(100vh - 180px);
   display: flex;
@@ -24,6 +45,7 @@
   overflow: hidden;
 }
 
+/* 404内容区域样式 */
 .not-found-content {
   text-align: center;
   max-width: 600px;
@@ -34,7 +56,8 @@
   backdrop-filter: blur(10px);
   z-index: 1;
 
-  .error-code {
+  /* 404错误码样式 */
+.error-code {
     font-size: 8rem;
     font-weight: 700;
     color: var(--elementColor);
@@ -57,6 +80,7 @@
   }
 }
 
+/* 操作按钮区域样式 */
 .action-buttons {
   margin-top: 2rem;
   display: flex;
@@ -86,6 +110,7 @@
   }
 }
 
+/* 背景动画效果样式 */
 .background-animation {
   position: absolute;
   top: 0;
@@ -102,6 +127,7 @@
   opacity: 0.5;
 }
 
+/* 背景滑动动画效果 */
 @keyframes slide {
   from {
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
@@ -111,15 +137,19 @@
   }
 }
 
+/* 移动端响应式样式 */
 @media (max-width: 768px) {
-  .not-found-container {
+  /* 404页面主容器样式 */
+.not-found-container {
     padding: 1rem;
   }
 
-  .not-found-content {
+  /* 404内容区域样式 */
+.not-found-content {
     padding: 2rem 1rem;
 
-    .error-code {
+    /* 404错误码样式 */
+.error-code {
       font-size: 6rem;
     }
 
@@ -132,7 +162,8 @@
     }
   }
 
-  .action-buttons {
+  /* 操作按钮区域样式 */
+.action-buttons {
     flex-direction: column;
     gap: 0.5rem;
 
@@ -141,4 +172,4 @@
     }
   }
 }
-</style> 
+</style>

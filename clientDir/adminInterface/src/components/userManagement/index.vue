@@ -1,3 +1,34 @@
+<!-- 
+个人信息管理页面模板部分
+功能：展示用户信息并提供编辑功能
+
+组件结构说明:
+1. page-container - 页面容器
+2. page-header - 头部区域
+   - page-title - 页面标题
+   - el-button - 编辑按钮
+3. page-content - 主要内容区域
+   - user-info - 用户信息展示区
+     - el-avatar - 用户头像
+     - info-content - 信息内容区
+       - info-item - 信息项
+         - label: 信息标签
+         - span: 信息值
+4. el-dialog - 编辑对话框
+   - el-form - 表单区域
+     - el-form-item - 表单项
+       - username: 用户名输入框
+       - password: 密码输入框
+       - nickname: 昵称输入框
+       - avatar: 头像URL输入框
+       - declaration: 个人简介输入框
+       - address: 地址输入框
+       - position: 职位输入框
+   - footer - 底部按钮区域
+
+方法绑定说明:
+- handleEdit(): 打开编辑对话框
+-->
 <template>
     <div class="page-container">
         <div class="page-header">
@@ -138,6 +169,41 @@
     </el-dialog>
 </template>
 
+<!-- 
+个人信息管理页面脚本部分
+功能：处理用户信息相关逻辑
+
+类型定义说明:
+- UserInfo: 用户信息数据结构
+  - id: 用户ID
+  - username: 用户名
+  - nickname: 昵称
+  - avatar: 头像URL
+  - declaration: 个人简介
+  - address: 地址
+  - position: 职位
+- EditForm: 编辑表单数据结构
+  - 继承UserInfo所有字段
+  - 新增password字段
+- ApiResponse: API响应格式
+
+主要方法说明:
+1. getUserIdFromToken(): 从token解析用户ID
+2. getUserInfo(): 获取用户信息
+3. handleEdit(): 初始化编辑表单
+4. handleCancel(): 取消编辑
+5. handleSubmit(): 提交编辑
+
+状态管理说明:
+- store: 全局状态
+- formRef: 表单引用
+- loading: 加载状态
+- submitting: 提交状态
+- editDialog: 对话框可见性
+- userInfo: 用户信息
+- editForm: 编辑表单
+- formRules: 表单验证规则
+-->
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
@@ -341,6 +407,23 @@ onMounted(() => {
 })
 </script>
 
+<!-- 
+个人信息管理页面样式部分
+功能：定义页面样式
+
+样式结构说明:
+1. page-container - 页面容器样式
+   - padding: 内边距
+   - height: 高度
+   - display: 布局方式
+   - flex-direction: 主轴方向
+   - background-color: 背景色
+2. page-header - 头部区域样式
+3. page-content - 内容区域样式
+4. user-info - 用户信息区域样式
+5. edit-dialog - 编辑对话框样式
+6. 响应式设计 - 移动端适配
+-->
 <style scoped lang="less">
 .page-container {
     padding: 20px;

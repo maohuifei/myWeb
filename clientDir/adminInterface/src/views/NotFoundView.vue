@@ -1,3 +1,13 @@
+<!-- 
+   404页面
+   Template部分注释:
+   - not-found-container: 404页面容器，设置全屏居中布局
+   - not-found-content: 404内容区域，包含错误码和操作按钮
+   - error-code: 404错误码显示
+   - h1: 404标题
+   - p: 404描述文本
+   - el-button: Element Plus按钮组件，提供返回操作
+-->
 <template>
   <div class="not-found-container">
     <div class="not-found-content">
@@ -14,6 +24,13 @@
   </div>
 </template>
 
+<!--
+   Style部分注释:
+   - not-found-container: 设置404页面全屏布局和背景
+   - not-found-content: 404卡片样式，包含边框和圆角
+   - error-code: 404错误码样式
+   - 响应式设计: 适配不同设备屏幕
+-->
 <style scoped lang="less">
 .not-found-container {
   min-height: 100vh;
@@ -82,4 +99,4 @@
     }
   }
 }
-</style> 
+</style>

@@ -1,3 +1,14 @@
+<!--
+首页视图 - 展示网站介绍、推荐文章和技术栈
+1. home_box: 主容器，包含所有内容区块
+2. web_introduction_box: 网站介绍区块
+3. middle_box: 推荐文章区块
+   - card_box: 文章卡片容器
+   - card_class: 单个文章卡片
+   - view-more-btn: 查看更多按钮
+4. technique_box: 技术栈展示区块
+   - 分为全局、后端和前端三部分技术展示
+-->
 <template>
     <div class="home_box">
         <div class="web_introduction_box">
@@ -94,6 +105,22 @@
     </div>
 </template>
 
+<!--
+脚本部分 - 处理首页数据和交互
+1. 导入依赖:
+   - Vue组合式API: ref, onMounted等
+   - Pinia状态管理
+   - vue-router
+2. 响应式数据:
+   - articleList: 文章列表数据
+   - overallList/serverList/clientList: 技术栈数据
+   - loading状态控制
+3. 方法:
+   - viewArticle: 查看文章详情
+   - viewMoreArticles: 查看更多文章
+   - checkTextOverflow: 检查文本溢出
+   - handleScroll: 滚动加载更多
+-->
 <script lang='ts'>
 import { ref, onMounted, nextTick } from 'vue';
 import { myStore } from '@/stores/counter';
@@ -278,6 +305,16 @@ export default {
 }
 </script>
 
+<!--
+样式部分 - 首页特定样式
+1. home_box: 主容器样式
+2. web_introduction_box: 网站介绍区块样式
+3. middle_box: 推荐文章区块样式
+   - card_box: 文章卡片容器样式
+   - card_class: 单个文章卡片样式
+4. technique_box: 技术栈展示区块样式
+   - 技术卡片样式和布局
+-->
 <style scoped lang="less">
 .home_box {
     display: flex;

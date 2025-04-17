@@ -1,19 +1,36 @@
+<!--
+ * PrivacyView.vue - 隐私声明页面视图组件
+ *
+ * 功能：
+ * 1. 展示网站声明和隐私政策内容
+ * 2. 提供开源项目链接
+ *
+ * 设计要点：
+ * - 分区块展示不同类型声明内容
+ * - 悬停效果增强交互体验
+ * - 响应式布局适配不同设备
+-->
 <template>
-    <div class="privacy_box">
-        <h1>网站声明</h1>
-        <div class="content_section">
+    <!-- 隐私声明主容器 -->
+<div class="privacy_box">
+        <!-- 主标题 -->
+<h1>网站声明</h1>
+        <!-- 内容区块 -->
+<div class="content_section">
             <h2>开源项目</h2>
             <p>此网站项目源代码已经在 GitHub 上开源，欢迎访问并参与贡献。</p>
             <a href="https://github.com/maohuifei/myWeb" target="_blank">前往 GitHub 查看项目</a>
         </div>
-        <div class="content_section">
+        <!-- 内容区块 -->
+<div class="content_section">
             <h2>关于本网站</h2>
             <p>本网站由我独立开发与维护，不会主动对外推广，主要记录我自己的学习历程和心得。</p>
             <p>网站内的所有资料均来源于互联网，经过我个人的整理、分析和总结得出。</p>
             <p>这些资料仅供学习记录之用，不具备任何商业性质，如果有涉及侵权之处，请及时与我联系。</p>
         </div>
 
-        <div class="content_section">
+        <!-- 内容区块 -->
+<div class="content_section">
             <h2>关于网站内容的使用</h2>
             <p>本网站的内容仅代表我个人的观点和理解，可能并不完全准确或完整。</p>
             <p>因此，在使用这些内容时，请务必自行判断其准确性和适用性。</p>
@@ -22,13 +39,15 @@
             <p>如果发现有人违反此规定，我将采取必要的反制措施。</p>
         </div>
 
-        <div class="content_section">
+        <!-- 内容区块 -->
+<div class="content_section">
             <h2>关于数据处理</h2>
             <p>本网站可能包含来自其他网站的嵌入内容。这些外部网站可能会收集您的数据、使用Cookies，并可能跟踪您与这些嵌入内容的交互。</p>
             <p>请注意，我无法控制这些外部网站的行为，亦不对其行为负责。</p>
         </div>
 
-        <div class="content_section">
+        <!-- 内容区块 -->
+<div class="content_section">
             <h2>更新日期</h2>
             <p>特此公告</p>
             <p>更新日期：2024年4月4日</p>
@@ -45,7 +64,9 @@ export default {
 }
 </script>
 
+<!-- 组件样式区域 -->
 <style scoped lang="less">
+/* 隐私声明主容器样式 */
 .privacy_box {
     max-width: 900px;
     margin: 0 auto;
@@ -72,7 +93,8 @@ export default {
         }
     }
 
-    .content_section {
+    /* 内容区块样式 */
+.content_section {
         margin: 50px 0;
         padding: 35px;
         background: white;

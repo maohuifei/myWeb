@@ -1,3 +1,32 @@
+<!-- 
+类别系统页面模板部分
+功能：展示类别列表并提供管理操作
+
+组件结构说明:
+1. page-container - 页面容器
+2. page-header - 头部区域
+   - page-title - 标题文本
+   - el-button - 添加类别按钮
+3. page-content - 主要内容区域
+   - table-container - 表格容器
+     - el-table - 类别表格
+       - el-table-column - 表格列定义
+         - name: 类别名称列
+         - type: 类别类型列
+         - 操作列: 包含删除按钮
+4. el-dialog - 添加类别弹窗
+   - el-form - 表单区域
+     - el-form-item - 表单项
+       - name: 类型名称输入框
+       - type: 类型类别输入框
+   - footer - 底部按钮区域
+
+方法绑定说明:
+- handleAdd(): 添加类别
+- handleDelete(row): 删除类别
+- handleCancel(): 取消添加
+- handleSubmit(): 提交添加
+-->
 <template>
     <div class="page-container">
         <div class="page-header">
@@ -85,18 +114,35 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import http from '@/axios';
 import type { FormInstance, FormRules } from 'element-plus'
 
-// 类型定义
+/**
+ * 类别数据结构
+ * @property {number} id - 类别ID
+ * @property {string} name - 类别名称
+ * @property {string} type - 类别类型
+ */
 interface Category {
     id: number
     name: string
     type: string
 }
 
+/**
+ * 类别表单数据结构
+ * @property {string} name - 类型名称
+ * @property {string} type - 类型类别
+ */
 interface CategoryForm {
     name: string
     type: string
 }
 
+/**
+ * API响应数据结构
+ * @template T - 数据类型
+ * @property {boolean} success - 请求是否成功
+ * @property {T} data - 返回数据
+ * @property {string} [message] - 可选错误信息
+ */
 interface ApiResponse<T> {
     success: boolean
     data: T
@@ -104,18 +150,26 @@ interface ApiResponse<T> {
 }
 
 // 状态管理
-const store = myStore()
-const formRef = ref<FormInstance>()
-const loading = ref(false)
-const submitting = ref(false)
-const tableData = ref<Category[]>([])
-const newSystemWin = ref(false)
-const addSystemData = ref<CategoryForm>({
+const store = myStore() // 全局状态管理
+const formRef = ref<FormInstance>() // 表单引用
+const loading = ref(false) // 表格加载状态
+const submitting = ref(false) // 表单提交状态
+const tableData = ref<Category[]>([]) // 表格数据
+const newSystemWin = ref(false) // 添加弹窗可见性
+const addSystemData = ref<CategoryForm>({ // 添加表单数据
     name: '',
     type: ''
 })
 
-// 表单验证规则
+/**
+ * 表单验证规则
+ * @property {Array} name - 名称验证规则
+ *   - 必填
+ *   - 长度2-20字符
+ * @property {Array} type - 类型验证规则
+ *   - 必填
+ *   - 长度2-20字符
+ */
 const rules: FormRules = {
     name: [
         { required: true, message: '请输入类型名称', trigger: 'blur' },
@@ -226,6 +280,34 @@ onMounted(() => {
 })
 </script>
 
+<!-- 
+类别系统页面样式部分
+功能：定义页面布局和样式
+
+样式说明:
+1. categories-table - 类别表格样式
+   - el-table__header: 表头背景色
+   - el-table__row: 行过渡动画
+2. category-name - 类别名称样式
+   - 字体粗细500
+   - 主要文本颜色
+3. operation-btns - 操作按钮区域
+   - flex布局
+   - 8px间距
+   - 居中对齐
+4. el-tag - 标签样式
+   - 固定高度32px
+   - 内边距0 12px
+5. el-dialog - 弹窗样式
+   - el-dialog__header: 头部样式
+     - 无外边距
+     - 内边距20px 24px
+     - 底部边框
+   - el-dialog__title: 标题样式
+     - 字体大小18px
+     - 字体粗细600
+     - 主要文本颜色
+-->
 <style scoped lang="less">
 .categories-table {
     :deep(.el-table__header) {

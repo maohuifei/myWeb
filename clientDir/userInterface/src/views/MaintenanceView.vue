@@ -1,15 +1,33 @@
+<!--
+ * MaintenanceView.vue - 维护页面视图组件
+ *
+ * 功能：
+ * 1. 显示系统维护状态信息
+ * 2. 提供返回首页和联系我们的操作按钮
+ *
+ * 设计要点：
+ * - 使用SVG图标展示维护状态
+ * - 响应式布局适配不同设备
+ * - 动画效果增强用户体验
+-->
 <template>
-  <div class="maintenance-container">
-    <div class="maintenance-content">
-      <div class="icon-wrapper">
+  <!-- 维护页面主容器 -->
+<div class="maintenance-container">
+    <!-- 维护内容区域 -->
+<div class="maintenance-content">
+      <!-- 维护图标容器 -->
+<div class="icon-wrapper">
         <svg class="maintenance-icon" viewBox="0 0 24 24">
           <path d="M21.67 18.17l-5.3-5.3h-.99l-2.54 2.54v.99l5.3 5.3c.39.39 1.02.39 1.41 0l2.12-2.12c.39-.38.39-1.02 0-1.41zm-2.83 1.42l-4.24-4.24.71-.71 4.24 4.24-.71.71z"/>
           <path d="M17.34 10.19l1.41-1.41 2.12 2.12c1.17-1.17 1.17-3.07 0-4.24l-3.54-3.54-1.41 1.41V1.71L15.22 1l-3.54 3.54.71.71h2.83l-1.41 1.41 1.06 1.06-2.89 2.89-4.13-4.13V5.06L4.83 2.04 2 4.87 5.03 7.9h1.41l4.13 4.13-.85.85H7.6l-5.3 5.3c-.39.39-.39 1.02 0 1.41l2.12 2.12c.39.39 1.02.39 1.41 0l5.3-5.3v-2.12l5.15-5.15 1.06 1.05z"/>
         </svg>
       </div>
-      <h1>维护中</h1>
-      <p>该功能正在进行维护或者升级</p>
-      <div class="action-buttons">
+      <!-- 维护标题 -->
+<h1>维护中</h1>
+      <!-- 维护描述文本 -->
+<p>该功能正在进行维护或者升级</p>
+      <!-- 操作按钮区域 -->
+<div class="action-buttons">
         <RouterLink to="/" class="button primary">返回首页</RouterLink>
         <RouterLink to="/about" class="button secondary">联系我们</RouterLink>
       </div>
@@ -17,7 +35,9 @@
   </div>
 </template>
 
+<!-- 组件样式区域 -->
 <style scoped lang="less">
+/* 维护页面主容器样式 */
 .maintenance-container {
   min-height: calc(100vh - 180px);
   display: flex;
@@ -27,6 +47,7 @@
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
 }
 
+/* 维护内容区域样式 */
 .maintenance-content {
   text-align: center;
   max-width: 600px;
@@ -50,10 +71,12 @@
   }
 }
 
+/* 图标容器样式 */
 .icon-wrapper {
   margin-bottom: 2rem;
 }
 
+/* 维护图标样式 */
 .maintenance-icon {
   width: 120px;
   height: 120px;
@@ -61,6 +84,7 @@
   animation: wrench 2.5s ease infinite;
 }
 
+/* 操作按钮区域样式 */
 .action-buttons {
   margin-top: 2rem;
   display: flex;
@@ -90,6 +114,7 @@
   }
 }
 
+/* 扳手图标动画效果 */
 @keyframes wrench {
   0% {
     transform: rotate(-12deg);
@@ -130,11 +155,13 @@
 }
 
 @media (max-width: 768px) {
-  .maintenance-container {
+  /* 维护页面主容器样式 */
+.maintenance-container {
     padding: 1rem;
   }
 
-  .maintenance-content {
+  /* 维护内容区域样式 */
+.maintenance-content {
     padding: 2rem 1rem;
 
     h1 {
@@ -146,12 +173,14 @@
     }
   }
 
-  .maintenance-icon {
+  /* 维护图标样式 */
+.maintenance-icon {
     width: 80px;
     height: 80px;
   }
 
-  .action-buttons {
+  /* 操作按钮区域样式 */
+.action-buttons {
     flex-direction: column;
     gap: 0.5rem;
 
@@ -160,4 +189,4 @@
     }
   }
 }
-</style> 
+</style>

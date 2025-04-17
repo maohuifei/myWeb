@@ -1,4 +1,14 @@
-<!-- 登录页 -->
+<!-- 
+  登录页
+  Template部分注释:
+  - login-container: 登录页面容器，设置全屏居中布局
+  - login-card: 登录卡片容器，包含登录表单
+  - login-header: 登录头部区域，包含logo和标题
+  - el-form: Element Plus表单组件，包含用户名和密码输入框
+  - el-form-item: 表单项，包含输入框和验证规则
+  - el-input: 输入框组件，用于用户名和密码输入
+  - el-button: 登录按钮，带加载状态
+-->
 <template>
     <div class="login-container">
         <div class="login-card">
@@ -47,6 +57,16 @@
 </template>
 
 <script setup lang="ts">
+/*
+  Script部分注释:
+  - reactive form: 响应式表单数据，包含username和password字段
+  - rules: 表单验证规则
+  - formRef: 表单引用，用于表单验证
+  - passwordInput: 密码输入框引用，用于焦点控制
+  - loading: 登录按钮加载状态
+  - focusPassword(): 将焦点切换到密码输入框
+  - loginFun(): 处理登录逻辑，包含表单验证、API调用和跳转
+*/
 import { reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 import { myStore } from '@/stores'
@@ -110,6 +130,13 @@ const loginFun = async () => {
 </script>
 
 <style lang="less" scoped>
+/*
+  Style部分注释:
+  - login-container: 设置登录页面全屏布局和背景
+  - login-card: 登录卡片样式，包含边框和圆角
+  - login-header: 头部区域样式，包含logo和标题
+  - el-form相关样式: 自定义表单元素样式
+*/
 .login-container {
     width: 100%;
     height: 100vh;

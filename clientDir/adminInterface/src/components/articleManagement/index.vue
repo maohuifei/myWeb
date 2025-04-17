@@ -1,3 +1,30 @@
+<!-- 
+文章管理页面模板部分
+功能：展示文章列表并提供管理操作
+
+组件结构说明:
+1. page-container - 页面容器
+2. page-header - 页面标题区域
+   - page-title - 标题文本
+   - el-button - 新建文章按钮
+3. page-content - 主要内容区域
+   - el-table - 文章表格
+     - el-table-column - 表格列定义
+       - title: 文章标题列
+       - category: 文章分类列
+       - state: 文章状态列
+       - recommend: 推荐状态列
+       - 操作列: 包含四个操作按钮
+4. table-pagination - 分页器区域
+5. delete-dialog - 删除确认对话框
+
+方法绑定说明:
+- viewArticle(): 新建/编辑文章
+- recommendBtn(): 推荐/取消推荐
+- stateBtn(): 上架/下架
+- deleBtn(): 删除文章
+- handleCurrentChange(): 分页切换
+-->
 <template>
     <div class="page-container">
         <div class="page-header">
@@ -115,6 +142,38 @@
     </div>
 </template>
 
+<!-- 
+文章管理页面脚本部分
+功能：处理文章管理相关逻辑
+
+类型定义说明:
+- Category: 分类数据结构
+- Article: 文章数据结构
+- PaginationParams: 分页参数
+- ApiResponse: API响应格式
+
+主要方法说明:
+1. getActive(): 获取文章列表
+2. getCategoryList(): 获取分类列表
+3. updateCategoryNames(): 更新分类名称
+4. viewArticle(article?: Article): 跳转编辑页面
+5. deleBtn(article: Article): 显示删除确认
+6. updateArticleStatus(article, field): 更新状态
+7. stateBtn(article): 切换上架/下架
+8. recommendBtn(article): 切换推荐状态
+9. handleCurrentChange(page): 分页切换
+10. handleConfirm(): 确认删除
+
+状态管理说明:
+- loading: 加载状态
+- tableData: 表格数据
+- articleList: 原始文章数据
+- categoryList: 分类数据
+- parameter: 分页参数
+- totalCount: 总条数
+- dialogVisible: 对话框可见性
+- deleteArticle: 待删除文章
+-->
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -285,6 +344,27 @@ const handleConfirm = async () => {
 };
 </script>
 
+<!-- 
+文章管理页面样式部分
+功能：定义页面布局和组件样式
+
+样式作用域说明:
+1. page-container: 页面整体布局
+2. page-header: 标题区域样式
+3. page-content: 内容区域样式
+4. table-container: 表格容器样式
+5. el-table: 表格全局样式
+6. el-tag: 标签样式
+7. operation-btns: 操作按钮组
+8. table-pagination: 分页器样式
+9. delete-dialog: 删除对话框样式
+10. dialog-content: 对话框内容
+11. cancel-button: 取消按钮
+
+特殊样式说明:
+- :deep(.el-table): 深度选择器修改element-plus表格样式
+- var(--xxx): 使用CSS变量统一主题
+-->
 <style scoped lang="less">
 .page-container {
     padding: 0;
